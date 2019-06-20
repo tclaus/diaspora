@@ -120,6 +120,10 @@ app.views.Base = Backbone.View.extend({
       item_type: form.dataset.reportType,
       text: textarea.value
     };
+    document.getElementById("report-content-form").addEventListener("submit", function(ev) {
+      if (ev) { ev.preventDefault(); }
+      $("#reportModal").modal("hide");
+      report.text = document.getElementById("report-reason-field").value;
 
     new app.models.Report().save({report: report}, {
       success: function() {
@@ -129,6 +133,7 @@ app.views.Base = Backbone.View.extend({
         app.flashMessages.error(Diaspora.I18n.t("report.status.exists"));
       }
     });
+    $("#reportModal").modal();
   },
 
   report: function(evt) {
