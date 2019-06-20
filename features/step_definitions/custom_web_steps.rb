@@ -96,12 +96,6 @@ And /^I accept the alert after (.*)$/ do |action|
   end
 end
 
-And /^I confirm the prompt after (.*)$/ do |action|
-  accept_prompt do
-    step action
-  end
-end
-
 And /^I reject the alert after (.*)$/ do |action|
   dismiss_confirm do
     step action
@@ -211,6 +205,16 @@ Then /^I should see a flash message with a warning$/ do
 end
 
 Then /^I should see a flash message containing "(.+)"$/ do |text|
+  flash_message_containing? text
+end
+
+Then /^I should see a success flash message containing "(.+)"$/ do |text|
+  flash_message_success?.should be true
+  flash_message_containing? text
+end
+
+Then /^I should see an error flash message containing "(.+)"$/ do |text|
+  flash_message_failure?.should be true
   flash_message_containing? text
 end
 

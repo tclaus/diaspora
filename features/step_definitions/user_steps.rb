@@ -177,6 +177,12 @@ Then /^I should( not)? see "([^\"]*)" in the last sent email$/ do |negate, text|
   end
 end
 
+Then /^"([^"]*)" should have received an email with subject "([^"]*)"$/ do |user_email, subject|
+  email = ActionMailer::Base.deliveries.last
+  expect(email.to).to have_content(user_email)
+  expect(email.subject).to have_content(subject)
+end
+
 When /^"([^\"]+)" has posted a (public )?status message with a photo$/ do |email, public_status|
   user = User.find_for_database_authentication(username: email)
   post = FactoryBot.create(
