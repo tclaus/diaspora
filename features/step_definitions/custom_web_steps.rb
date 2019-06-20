@@ -96,12 +96,6 @@ And /^I accept the alert after (.*)$/ do |action|
   end
 end
 
-And /^I confirm the prompt after (.*)$/ do |action|
-  accept_prompt do
-    step action
-  end
-end
-
 And /^I reject the alert after (.*)$/ do |action|
   dismiss_confirm do
     step action
