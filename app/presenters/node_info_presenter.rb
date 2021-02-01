@@ -69,6 +69,10 @@ class NodeInfoPresenter
     AppConfig.settings.enable_registrations?
   end
 
+  def translation?
+    AppConfig.deepl.enable?
+  end
+
   def camo_config
     {
       markdown:   AppConfig.privacy.camo.proxy_markdown_images?,

@@ -15,7 +15,7 @@ app.views.Content = app.views.Base.extend({
         if (this.translatedText) {
           return app.helpers.textFormatter(this.translatedText, this.mentioned_people);
         }
-        return;
+        return undefined;
       }
     });
   },

@@ -14,8 +14,8 @@ class TranslationService
   def translate_for_post(post)
     translation = translate_text(post.text.to_s, @user.language)
     {
-      translatedText:           translation.text,
-      detectedSourceLanguage:   translation.detected_source_language
+      translatedText:         translation.text,
+      detectedSourceLanguage: translation.detected_source_language
     }
   end
 
