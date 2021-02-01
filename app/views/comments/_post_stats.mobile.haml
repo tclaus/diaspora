@@ -1,4 +1,7 @@
 .post-stats
+  .post-action
+    = mobile_translate_icon(post)
+
   - if post.public?
     .post-action
       = mobile_reshare_icon(post)

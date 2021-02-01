@@ -520,6 +520,13 @@
 #wordpress.client_id = "change_me"
 #wordpress.secret = "change_me"
 
+## Deepl Translations
+## You need a API token and subscription on https://www.deepl.com/translator
+## Take care about costs.
+[configuration.deepl]
+#enable = true
+#auth_key = "change_me"
+
 ## Allow your pod to send emails for notifications, password recovery
 ## and other purposes (disabled by default).
 [configuration.mail]

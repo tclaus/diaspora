@@ -1206,6 +1206,7 @@ de:
     services: "Dienste"
     total_users: "Gesamtzahl Benutzer"
     version: "Version"
+    translation: "Übersetzer"
   status_messages:
     bad_aspects: "Die angegebenen Aspekt-IDs sind nicht gültig (existieren nicht oder gehören dir nicht)"
     new:
