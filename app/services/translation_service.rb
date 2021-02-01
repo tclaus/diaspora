@@ -14,8 +14,8 @@ class TranslationService
   def translate_for_post(post)
     translation = translate_text(post.text.to_s, @user.language)
     {
-      translatedText:           translation.text,
-      detected_source_language: translation.detected_source_language
+      translatedText:         translation.text,
+      detectedSourceLanguage: translation.detected_source_language
     }
   end
 
@@ -37,5 +37,4 @@ class TranslationService
   rescue DeepL::Exceptions::RequestError
     I18n.t("translation.translation.error")
   end
-
 end

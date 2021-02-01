@@ -33,10 +33,12 @@
     {{/unless}}
 
     <div class="post-content"> </div>
-    {{#if translatedText}}
-      <a class ="post-translate" href="#">Original anzeigen ({{detectedSourceLanguage}})</a> <!-- TODO: Translate action -->
-    {{else}}
-    <a class="post-translate" href="#">Übersetzen</a> <!-- TODO: Translate action -->
+    {{#if shouldTranslate}}
+      {{#if translatedText}}
+        <a class ="post-translate" href="#">{{t "stream.backToOriginal" lang=detectedSourceLanguage}}</a>
+      {{else}}
+        <a class="post-translate" href="#">{{t "stream.translate"}}</a>
+      {{/if}}
     {{/if}}
     <div class="status-message-location nsfw-hidden"> </div>
 
