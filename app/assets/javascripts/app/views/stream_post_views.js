@@ -4,7 +4,7 @@ app.views.StreamPost = app.views.Post.extend({
   templateName: "stream-element",
   className: "stream-element loaded",
 
-  subviews : {
+  subviews: {
     ".feedback": "feedbackView",
     ".comments": "commentStreamView",
     ".likes": "likesInfoView",
@@ -20,41 +20,45 @@ app.views.StreamPost = app.views.Post.extend({
   events: {
     "click .focus_comment_textarea": "focusCommentTextarea",
     "click .show_nsfw_post": "removeNsfwShield",
-    "click .toggle_nsfw_state": "toggleNsfwState"
+    "click .toggle_nsfw_state": "toggleNsfwState",
+    "click .post-translate": "translatePost"
   },
 
-  tooltipSelector : [".timeago",
-                     ".post_scope",
-                     ".permalink"].join(", "),
+  tooltipSelector: [".timeago", ".post_scope", ".permalink"].join(", "),
 
-  initialize : function(){
+  initialize: function() {
     // If we are on a user page, we don't want to remove posts on block
     if (!app.page.model.has("profile")) {
       var personId = this.model.get("author").id;
       app.events.on("person:block:" + personId, this.remove, this);
+      if (this.model) {
+        this.model.on("change", this.render, this);
+      }
     }
     //subviews
-    this.commentStreamView = new app.views.CommentStream({model : this.model});
-    this.oEmbedView = new app.views.OEmbed({model : this.model});
-    this.openGraphView = new app.views.OpenGraph({model : this.model});
-    this.pollView = new app.views.Poll({model : this.model});
+    this.commentStreamView = new app.views.CommentStream({model: this.model});
+    this.oEmbedView = new app.views.OEmbed({model: this.model});
+    this.openGraphView = new app.views.OpenGraph({model: this.model});
+    this.pollView = new app.views.Poll({model: this.model});
   },
 
   postControlsView: function() {
     return new app.views.PostControls({model: this.model, post: this});
   },
 
-  likesInfoView : function(){
-    return new app.views.LikesInfo({model : this.model});
+  likesInfoView: function() {
+    return new app.views.LikesInfo({model: this.model});
   },
 
-  resharesInfoView : function(){
-    return new app.views.ResharesInfo({model : this.model});
+  resharesInfoView: function() {
+    return new app.views.ResharesInfo({model: this.model});
   },
 
-  feedbackView : function(){
-    if(!app.currentUser.authenticated()) { return null }
-    return new app.views.Feedback({model : this.model});
+  feedbackView: function() {
+    if (!app.currentUser.authenticated()) {
+      return null;
+    }
+    return new app.views.Feedback({model: this.model});
   },
 
   postContentView: function(){
@@ -64,28 +68,67 @@ app.views.StreamPost = app.views.Post.extend({
     return new postClass({ model : this.model });
   },
 
-  postLocationStreamView : function(){
-    return new app.views.LocationStream({ model : this.model});
+  postLocationStreamView: function() {
+    return new app.views.LocationStream({model: this.model});
   },
 
-  removeNsfwShield: function(evt){
-    if(evt){ evt.preventDefault(); }
-    this.model.set({nsfw : false});
+  removeNsfwShield: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
+    this.model.set({nsfw: false});
     this.render();
   },
 
-  toggleNsfwState: function(evt){
-    if(evt){ evt.preventDefault(); }
+  toggleNsfwState: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
     app.currentUser.toggleNsfwState();
   },
 
-  remove : function() {
-    $(this.el).slideUp(400, _.bind(function(){this.$el.remove()}, this));
+  translatePost: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
+    if (this.hasTranslation()) {
+      this.removeTranslation();
+    } else {
+      this.model.translate();
+    }
+  },
+
+  removeTranslation: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
+    this.model.removeTranslation();
+  },
+
+  hasTranslation: function() {
+    return !(this.model.translatedText() == undefined);
+  },
+
+  translatedText: function() {
+    return this.model.translatedText();
+  },
+
+  detectedSourceLanguage: function() {
+    return this.model.detected_source_language();
+  },
+
+  remove: function() {
+    $(this.el).slideUp(
+      400,
+      _.bind(function() {
+        this.$el.remove();
+      }, this)
+    );
     app.stream.remove(this.model);
     return this;
   },
 
-  focusCommentTextarea: function(evt){
+  focusCommentTextarea: function(evt) {
     evt.preventDefault();
     this.$(".new-comment-form-wrapper").removeClass("hidden");
     this.$(".comment-box").focus();

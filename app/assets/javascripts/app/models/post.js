@@ -4,15 +4,15 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
   urlRoot : "/posts",
 
   initialize : function() {
-    this.interactions = new app.models.Post.Interactions(_.extend({post : this}, this.get("interactions")));
+    this.interactions = new app.models.Post.Interactions(_.extend({post: this}, this.get("interactions")));
+    this.translation = new app.models.Translation(this.get("translation"), {post: this});
     this.delegateToInteractions();
   },
 
   delegateToInteractions : function(){
     this.comments = this.interactions.comments;
     this.likes = this.interactions.likes;
-
-    this.comment = function(){
+    this.comment = function() {
       this.interactions.comment.apply(this.interactions, arguments);
     };
   },
@@ -24,6 +24,29 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
   reshare : function(){
     this._reshare = this._reshare || new app.models.Reshare({root_guid : this.get("guid")});
     return this._reshare;
+  },
+
+  translate : function() {
+    var self = this;
+    self.translation.fetch({
+      success: function(response) {
+        self.set("translatedText", response.get("translatedText"));
+        self.set("detected_source_language", response.get("detected_source_language"));
+        self.translation.trigger("change");
+        self.trigger("change");
+      },
+      error: function(model, response) {
+        this.app.flashMessages.handleAjaxError(response);
+      }
+    });
+  },
+
+  translatedText: function() {
+    return this.get("translatedText");
+  },
+
+  removeTranslation: function() {
+    this.unset("translatedText");
   },
 
   reshareAuthor : function(){
