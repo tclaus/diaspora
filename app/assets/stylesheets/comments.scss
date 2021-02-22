@@ -89,10 +89,4 @@
   &:not(.open) .md-header {
     display: none;
   }
-
-  // The rule for .md-preview is required until we switch to the newer release of bootstrap-markdown with
-  // the following commit in:
-  // https://github.com/toopay/bootstrap-markdown/commit/14a21c3837140144b27efc19c795d1a37fad70fb
-  .md-preview,
-  &.open .md-editor textarea { min-height: 70px; }
 }

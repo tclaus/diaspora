@@ -2,6 +2,7 @@
 
 # Be sure to restart your server when you modify this file.
 
+# Remark: bootstrap plugin is now included
 # bootstrap-markdown plugin relies on rails-assets-bootstrap gem but we use
 # bootstrap-sass this line makes sure we exclude every asset comming
 # from rails-assets-bootstrap to prevent conflicts with bootstrap-sass

@@ -43,7 +43,7 @@
 //= require blueimp-gallery/blueimp-gallery-indicator
 //= require leaflet
 //= require api/authorization_page
-//= require bootstrap-markdown/bootstrap-markdown
+//= require bootstrap-markdown
 //= require helpers/markdown_editor
 //= require helpers/protocol_handler
 //= require jquery.are-you-sure
