@@ -97,7 +97,7 @@
   }
 
   .comment-action {
-    @extend .post-action;
+    @extend %action;
   }
 
   .post-action {
