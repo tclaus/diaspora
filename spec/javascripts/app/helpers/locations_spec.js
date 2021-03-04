@@ -1,6 +1,5 @@
 describe("app.helpers.locations", function() {
   describe("getTiles", function() {
-    
     context("with mapbox enabled", function() {
       beforeEach(function() {
         /* eslint-disable camelcase */

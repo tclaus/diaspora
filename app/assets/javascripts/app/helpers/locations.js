@@ -14,7 +14,7 @@
               "Imagery © <a href='https://www.mapbox.com'>Mapbox</a>",
             maxZoom: 18,
             tileSize: 512,
-            zoomOffset: -1,
+            zoomOffset: -1
           }
         );
       }
