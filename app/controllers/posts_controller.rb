@@ -32,6 +32,11 @@ class PostsController < ApplicationController
     end
   end
 
+  def translation
+    post = post_service.find!(params[:post_id])
+    render json: translation_service.translate_for_post(post), status: :ok
+  end
+
   def oembed
     post_id = OEmbedPresenter.id_from_url(params.delete(:url))
     post = post_service.find!(post_id)
@@ -68,6 +73,10 @@ class PostsController < ApplicationController
 
   def post_service
     @post_service ||= PostService.new(current_user)
+  end
+
+  def translation_service
+    @translation_service ||= TranslationService.new(current_user)
   end
 
   def set_format_if_malformed_from_status_net
