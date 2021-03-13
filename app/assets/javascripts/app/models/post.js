@@ -31,7 +31,7 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
     self.translation.fetch({
       success: function(response) {
         self.set("translatedText", response.get("translatedText"));
-        self.set("detected_source_language", response.get("detected_source_language"));
+        self.set("detectedSourceLanguage", response.get("detected_source_language"));
         self.translation.trigger("change");
         self.trigger("change");
       },

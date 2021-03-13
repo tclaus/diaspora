@@ -35,6 +35,13 @@ app.views.StreamPost = app.views.Post.extend({
         this.model.on("change", this.render, this);
       }
     }
+
+    this.model.set("shouldTranslate", this.shouldTranslate());
+
+    if (this.model) {
+      this.model.on("change", this.render, this);
+    }
+
     //subviews
     this.commentStreamView = new app.views.CommentStream({model: this.model});
     this.oEmbedView = new app.views.OEmbed({model: this.model});
@@ -96,6 +103,13 @@ app.views.StreamPost = app.views.Post.extend({
     } else {
       this.model.translate();
     }
+  },
+
+
+  shouldTranslate: function() {
+    // if users language is not in list as supported languages, post should not show a 'translation' button
+    // In settings a user may select a 'translation laguage'
+    return true;
   },
 
   removeTranslation: function(evt) {
