@@ -26,12 +26,12 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
     return this._reshare;
   },
 
-  translate : function() {
+  translate: function() {
     var self = this;
     self.translation.fetch({
       success: function(response) {
         self.set("translatedText", response.get("translatedText"));
-        self.set("detectedSourceLanguage", response.get("detected_source_language"));
+        self.set("detectedSourceLanguage", response.get("detectedSourceLanguage"));
         self.translation.trigger("change");
         self.trigger("change");
       },

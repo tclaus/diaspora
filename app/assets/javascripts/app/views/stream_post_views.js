@@ -105,7 +105,6 @@ app.views.StreamPost = app.views.Post.extend({
     }
   },
 
-
   shouldTranslate: function() {
     // if users language is not in list as supported languages, post should not show a 'translation' button
     // In settings a user may select a 'translation laguage'
@@ -120,7 +119,7 @@ app.views.StreamPost = app.views.Post.extend({
   },
 
   hasTranslation: function() {
-    return !(this.model.translatedText() == undefined);
+    return !(this.model.translatedText() === undefined);
   },
 
   translatedText: function() {
@@ -128,7 +127,7 @@ app.views.StreamPost = app.views.Post.extend({
   },
 
   detectedSourceLanguage: function() {
-    return this.model.detected_source_language();
+    return this.model.detectedSourceLanguage();
   },
 
   remove: function() {
