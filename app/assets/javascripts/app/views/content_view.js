@@ -5,15 +5,20 @@ app.views.Content = app.views.Base.extend({
     "click .expander": "expandPost"
   },
 
-  presenter : function(){
+  presenter: function() {
     return _.extend(this.defaultPresenter(), {
-      text : app.helpers.textFormatter(this.model.get("text"), this.model.get("mentioned_people")),
-      largePhoto : this.largePhoto(),
-      smallPhotos : this.smallPhotos(),
-      isReshare : this.model.get("post_type") === "Reshare"
+      text: app.helpers.textFormatter(this.model.get("text"), this.model.get("mentioned_people")),
+      largePhoto: this.largePhoto(),
+      smallPhotos: this.smallPhotos(),
+      isReshare: this.model.get("post_type") === "Reshare",
+      translatedFormattedText: function() {
+        if (this.translatedText) {
+          return app.helpers.textFormatter(this.translatedText, this.mentioned_people);
+        }
+        return;
+      }
     });
   },
-
 
   largePhoto : function() {
     var photos = this.model.get("photos");
