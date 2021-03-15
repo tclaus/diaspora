@@ -5,6 +5,10 @@ module AspectCukeHelpers
     find(".aspect-dropdown .dropdown-toggle").trigger "click"
   end
 
+  def click_share_button
+    find("#submit_new_message").trigger "click"
+  end
+
   def toggle_aspect(a_name)
     a_id = if "Public" == a_name
              "public"
@@ -110,6 +114,12 @@ end
 
 When /^I press the aspect dropdown$/ do
   click_aspect_dropdown
+end
+
+When /^I press the share button$/ do
+  # There were issues 'clicking' the share button on mobile
+  click_share_button
+  sleep 1 # Wait a little bit - especially on mobile views shaing dont works every time
 end
 
 When /^(.*) in the aspect creation modal$/ do |action|
