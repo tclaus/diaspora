@@ -1,0 +1,147 @@
+-# This is a default template ToS and Privacy Policy for diaspora* pods.
+-# If you want to modify (or completely rewrite) these terms, create a
+-# file called app/views/terms/terms.haml or app/views/terms/terms.erb
+-# Once created, that file will be used automatically instead of this one.
+-#
+-# NOTE! The default terms have not been checked over by a lawyer and
+-# thus are unlikely to provide full legal protection for all situations
+-# for a podmin using them. They are also not specific to all countries
+-# and jurisdictions. If you are unsure, please check with a lawyer.
+-# We provide these for podmins as some basic rules that podmins
+-# can communicate to users easily via the diaspora* server software.
+
+/ These terms of service and privacy policy documents have been forked
+/ from the App.Net ToS repository (https://github.com/appdotnet/terms-of-service).
+/ The terms of use and privacy policy are available to you under the
+/ CC BY-SA 3.0 Creative Commons license.
+/ If you modify or copy this file, please do not remove this license text.
+
+.container#terms
+  %div{role: "tabpanel"}
+    .row
+      .col-md-8.col-md-offset-2
+        %ul.nav.nav-tabs.nav-justified{role: "tablist"}
+          %li.active{role: "presentation"}
+            %a{href: "#tos", role: "tab", aria: {controls: "tos"}, data: {toggle: "tab"}}
+              Terms of Service
+          %li{role: "presentation"}
+            %a{href: "#privacy", role: "tab", aria: {controls: "privacy"}, data: {toggle: "tab"}}
+              Privacy Policy
+
+    .row
+      .col-md-8.col-md-offset-2.tab-content
+        .tab-pane.active#tos{role: "tabpanel"}
+          :markdown
+            #{render "terms.#{I18n.locale}.md"}
+        .tab-pane#privacy{role: "tabpanel"}
+          .page-header
+            %h1
+              #{AppConfig.settings.pod_name} - Privacy Policy
+
+          %p
+            Our privacy policy applies to information we collect when you use or access our website located at #{AppConfig.environment.url} and social networking services, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective six (6) weeks after we post the revised privacy policy to our website (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.
+
+          %h2
+            Collection of Information
+
+          %h3
+            Information You Provide to Us
+
+          %p
+            We collect information you provide directly to us. For example, we collect information when you create an account, subscribe, participate in any interactive features of our services, fill out a form, request customer support or otherwise communicate with us. The types of information we may collect include your name (real of fake), email address and other contact or identifying information you choose to provide.
+
+          %h3
+            Information We Collect Automatically When You Use the Services
+
+          %p
+            When you access or use our services, we automatically collect information about you, including:
+
+          %dl
+            %dt
+              Log Information
+            %dd
+              We may log information about your use of our services, including the type of browser you use, access times, pages viewed, your IP address and the page you visited before navigating to our services.
+            %dt
+              Device Information
+            %dd
+              We may collect information about the computer you use to access our services, including the hardware model, and operating system and version.
+
+          %h2
+            Use of Information
+
+          %p
+            We do not use your information for serving up ads.
+
+          %p
+            We may use information about you for various purposes, including to:
+
+          %ul
+            %li
+              Provide, maintain and improve our services;
+            %li
+              Send you technical notices, updates, security alerts and support and administrative messages;
+            %li
+              Respond to your comments, questions and requests;
+            %li
+              Communicate with you about <strong>#{AppConfig.settings.pod_name}</strong>-related news and information;
+            %li
+              Monitor and analyze trends, usage and activities in connection with our services; and
+            %li
+              Personalize and improve our services.
+
+          %h2
+            Sharing of Information
+
+          %p
+            Remember, we don't share your information with advertisers.
+
+          %p
+            We may share personal information about you as follows:
+
+          %ul
+            %li
+              If we believe disclosure is reasonably necessary to comply with any applicable law, regulation, legal process or governmental request;
+            %li
+              To enforce applicable user agreements or policies, including our <a href="/terms#terms">terms of service</a>; and to protect <strong>#{AppConfig.settings.pod_name}</strong>, our users or the public from harm or illegal activities;
+            %li
+              In connection with any merger, sale of <strong>#{AppConfig.settings.pod_name}</strong> assets, financing or acquisition of all or a portion of our business to another company or individual; and
+            %li
+              If we notify you through our services (or in our privacy policy) that the information you provide will be shared in a particular manner and you provide such information.
+
+          %p
+            We may also share aggregated or anonymized information that does not directly identify you.
+
+          %h2
+            Third Party Analytics
+
+          %p
+            We may allow third parties to provide analytics services. These third parties may use cookies, web beacons and other technologies to collect information about your use of the services and other websites, including your IP address, web browser, pages viewed, time spent on pages, links clicked and conversion information. This information may be used by the Service and third parties to, among other things, analyze and track data, determine the popularity of certain content and other websites and better understand your online activity. Our privacy policy does not apply to, and we are not responsible for, third party cookies, web beacons or other tracking technologies and we encourage you to check the privacy policies of these third parties to learn more about their privacy practices.
+
+          %h2
+            Security
+
+          %p
+            <strong>#{AppConfig.settings.pod_name}</strong> takes reasonable measures to help protect personal information from loss, theft, misuse and unauthorized access, disclosure, alteration and destruction.
+
+          %h2
+            Your Information Choices
+
+          %h3
+            Account Information
+
+          %p
+            You may update, correct or delete information about you at any time by logging into your online account and modifying your personal profile. You may also delete your account at will via the settings page, but note that we may retain certain information as required by law or for legitimate business purposes. We may also retain cached or archived copies of your information for a certain period of time, for example in backup archives.
+
+          %h3
+            Cookies
+
+          %p
+            Most web browsers are set to accept cookies by default. If you prefer, you can usually choose to set your browser to remove or reject browser cookies. Please note that if you choose to remove or reject cookies, this could affect the availability and functionality of our services.
+
+          - if AppConfig.admins.podmin_email?
+            %h2
+              Contact Us
+
+            %p
+              If you have any questions about this privacy policy, please contact us at the email address <a href="mailto:#{AppConfig.admins.podmin_email}">#{AppConfig.admins.podmin_email}</a>.
+
