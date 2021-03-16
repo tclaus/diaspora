@@ -23,7 +23,8 @@ Feature: posting from the mobile main page
     And I append "I am eating yogurt" to the publisher
     And I press the aspect dropdown
     And I toggle the aspect "Unicorns"
-    And I press "Share"
+    And I press the aspect dropdown
+    And I press the share button
     When I go to the stream page
     Then I should see "I am eating yogurt"
     When I confirm the alert after I click on selector "a.remove"
