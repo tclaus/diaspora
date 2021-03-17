@@ -12,7 +12,7 @@ Email: [thorsten.claus@claus-software.de](mailto:thorsten.claus@claus-software.d
 
 ## 1. prefazione
 
-{{nome del pod}} è un'installazione del software del progetto diaspora\*. Il codice sorgente del software è apertamente disponibile per chiunque per vedere, scaricare, usare e distribuire.
+Societas-Diaspora è un'installazione del software del progetto diaspora\*. Il codice sorgente del software è apertamente disponibile per chiunque per vedere, scaricare, usare e distribuire.
 
 diaspora\* è un social network decentralizzato che permette agli utenti di condividere contenuti, scambiare informazioni e divertirsi.
 

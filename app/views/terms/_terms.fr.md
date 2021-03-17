@@ -12,7 +12,7 @@ Courriel : [thorsten.claus@claus-software.de](mailto:thorsten.claus@claus-softwa
  
 ## 1. Préface
 
-{{pod-name}} est une installation des logiciels du projet diaspora\*. Le code source du logiciel est ouvertement disponible pour que chacun puisse le voir, le télécharger, l'utiliser et le distribuer.
+Societas-Diaspora est une installation des logiciels du projet diaspora\*. Le code source du logiciel est ouvertement disponible pour que chacun puisse le voir, le télécharger, l'utiliser et le distribuer.
 
 diaspora\* est un réseau social décentralisé qui permet aux utilisateurs de partager du contenu, d'échanger des informations et de s'amuser.
 

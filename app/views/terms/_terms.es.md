@@ -12,7 +12,7 @@ Correo electrónico: [thorsten.claus@claus-software.de](mailto:thorsten.claus@cl
 
 ## 1. prefacio
 
-{{nombre-del-pod}} es una instalación del software del proyecto diáspora*. El código fuente del software está disponible abiertamente para que cualquiera pueda verlo, descargarlo, utilizarlo y distribuirlo.
+Societas-Diaspora es una instalación del software del proyecto diáspora*. El código fuente del software está disponible abiertamente para que cualquiera pueda verlo, descargarlo, utilizarlo y distribuirlo.
 
 diaspora\* es una red social descentralizada que permite a los usuarios compartir contenidos, intercambiar información y divertirse.
 
