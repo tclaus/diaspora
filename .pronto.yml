@@ -1,4 +1,5 @@
 all:
   exclude:
     - "vendor/**/*"
+    - "app/views/terms/**/*"
 consolidate_comments: true

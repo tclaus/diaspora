@@ -23,11 +23,6 @@ Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
 
 Capybara.server = :webrick
 
-options = {
-  window_size: [1920, 1080],
-  timeout: 30
-}
-
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, timeout: 30)
 end
