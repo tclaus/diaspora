@@ -19,8 +19,6 @@ class TranslationService
     }
   end
 
-  # Translate the translate Button
-  # Fix eventhanding in UI
   # Show 'translation-button' only if enabled
   # In Admin-View: show statistics? -> New Task
 

@@ -70,7 +70,7 @@ class NodeInfoPresenter
   end
 
   def translation?
-    AppConfig.deepl.enable?
+    AppConfig.deepl.enable
   end
 
   def camo_config

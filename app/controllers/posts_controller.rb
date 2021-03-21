@@ -34,7 +34,20 @@ class PostsController < ApplicationController
 
   def translation
     post = post_service.find!(params[:post_id])
-    render json: translation_service.translate_for_post(post), status: :ok
+    translation = if params[:reset] != "true"
+                    translation_service.translate_for_post(post)
+                  else
+                    reset_translation(post)
+                  end
+    respond_to do |format|
+      format.json { render json: translation, status: :ok }
+      format.mobile {
+        render json: {
+          translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
+          detectedSourceLanguage: translation[:detectedSourceLanguage]
+        }, status: :ok
+      }
+    end
   end
 
   def oembed
@@ -70,6 +83,13 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def reset_translation(post)
+    {
+      translatedText:         post.text.to_s,
+      detectedSourceLanguage: ""
+    }
+  end
 
   def post_service
     @post_service ||= PostService.new(current_user)

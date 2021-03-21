@@ -26,7 +26,7 @@ module MobileHelper
   end
 
   def mobile_like_icon(post)
-    if current_user&.liked?(post)
+    if current_user && current_user.liked?(post)
       link_to content_tag(:span, post.likes.size, class: "count like-count"),
               "#",
               data:  {url: post_like_path(post.id, current_user.like_for(post).id)},
@@ -37,6 +37,13 @@ module MobileHelper
               data:  {url: post_likes_path(post.id)},
               class: "entypo-heart like-action inactive"
     end
+  end
+
+  def mobile_translate_icon(post)
+    link_to "",
+            "#",
+            data:  {url: post_translation_path(post.id)},
+            class: "entypo-share translate-action active"
   end
 
   def mobile_like_comment_icon(comment)
