@@ -23,6 +23,7 @@ de:
         no_info: "Zurzeit keine weiteren Informationen verfügbar"
         not_available: "nicht verfügbar"
         offline_since: "offline seit:"
+        blocked: "Blockiert"
         pod: "Pod"
         recheck:
           failure: "Die Überprüfung wurde nicht durchgeführt."

@@ -7,12 +7,15 @@ app.views.PodEntry = app.views.Base.extend({
 
   events: {
     "click .more": "toggleMore",
-    "click .recheck": "recheckPod"
+    "click .recheck": "recheckPod",
+    "click .pod-unblock": "unblockPod",
+    "click .pod-block": "blockPod"
   },
 
   tooltipSelector: ".ssl-status i, .actions i",
 
   className: function() {
+    if( this.model.get("blocked")===true) { return "bg-light"; }
     if( this.model.get("offline") ) { return "bg-danger"; }
     if( this.model.get("status")==="version_failed" ) { return "bg-warning"; }
     if( this.model.get("status")==="no_errors" ) { return "bg-success"; }
@@ -30,6 +33,7 @@ app.views.PodEntry = app.views.Base.extend({
       is_unchecked: (this.model.get("status")==="unchecked"),
       has_no_errors: (this.model.get("status")==="no_errors"),
       has_errors: (this.model.get("status")!=="no_errors"),
+      is_blocked: (this.model.get("blocked")),
       status_text: Diaspora.I18n.t("admin.pods.states."+this.model.get("status")),
       pod_url: (this.model.get("ssl") ? "https" : "http") + "://" + this.model.get("host") +
                  (this.model.get("port") ? ":" + this.model.get("port") : ""),
@@ -50,6 +54,18 @@ app.views.PodEntry = app.views.Base.extend({
   toggleMore: function() {
     this.$(".details").toggle();
     return false;
+  },
+
+  blockPod: function() {
+    var self  = this;
+    this.model.set("blocked", true);
+    this.model.save();
+  },
+
+  unblockPod: function() {
+    var self  = this;
+    this.model.set("blocked", false);
+    this.model.save();
   },
 
   recheckPod: function() {

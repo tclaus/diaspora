@@ -70,7 +70,7 @@ class Pod < ApplicationRecord
   end
 
   def offline?
-    Pod.offline_statuses.include?(Pod.statuses[status])
+    Pod.offline_statuses.include?(Pod.statuses[status]) || blocked
   end
 
   # a pod is active if it is online or was online less than 14 days ago

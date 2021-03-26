@@ -22,6 +22,17 @@ module Admin
       end
     end
 
+    def update
+      permitted = params.permit(:blocked)
+      pod = Pod.find(params[:id])
+      pod.update!(permitted)
+
+      respond_with do |format|
+        format.html { redirect_to admin_pods_path }
+        format.json { render json: PodPresenter.new(pod).as_json }
+      end
+    end
+
     def recheck
       pod = Pod.find(params[:pod_id])
       pod.test_connection!

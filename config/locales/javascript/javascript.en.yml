@@ -55,6 +55,7 @@ en:
           unknown_error: "An unspecified error has happened during the check"
         actions: "Actions"
         offline_since: "offline since:"
+        blocked: "Blocked"
         last_check: "last check:"
         more_info: "show more information"
         check: "perform connection test"
