@@ -371,13 +371,24 @@ class Person < ApplicationRecord
 
     # exiting person?
     person = by_account_identifier(diaspora_id)
-    return person if person.present? && person.profile.present?
+    if person.present? && person.profile.present?
+      # Return if pod is not blocked
+      return person if person.pod.nil?
+      return person unless person.pod.blocked
 
+      nil
+    end
     # create or update person from webfinger
     logger.info "webfingering #{diaspora_id}, it is not known or needs updating"
     DiasporaFederation::Discovery::Discovery.new(diaspora_id).fetch_and_save
+    person = by_account_identifier(diaspora_id)
+    return person if person.pod.nil?
+    return person unless person.pod.blocked
 
-    by_account_identifier(diaspora_id)
+    nil
+  rescue DiasporaFederation::Discovery::InvalidDocument
+    logger.info "#{diaspora_id} returns not as a valid document"
+    nil
   end
 
   def self.by_account_identifier(diaspora_id)
