@@ -11,8 +11,13 @@ module Workers
     def perform(account)
       person = Person.find_or_fetch_by_identifier(account)
 
-      # also, schedule to fetch a few public posts from that person
+      unless person.pod.nil?
+        return if person.pod.blocked
+      end
+
+      # also, schedule to fetch a few public posts from that person if its pod is not blocked
       Diaspora::Fetcher::Public.queue_for(person)
+
     rescue DiasporaFederation::Discovery::DiscoveryError
       # Ignored
     end

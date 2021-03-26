@@ -52,6 +52,8 @@ class Pod < ApplicationRecord
     where(["offline_since is null or offline_since > ?", DateTime.now.utc - ACTIVE_DAYS])
   }
 
+  scope :blocked, -> { where(blocked: true) }
+
   validate :not_own_pod
 
   class << self
@@ -83,7 +85,7 @@ class Pod < ApplicationRecord
   end
 
   def offline?
-    Pod.offline_statuses.include?(Pod.statuses[status])
+    Pod.offline_statuses.include?(Pod.statuses[status]) || blocked
   end
 
   # a pod is active if it is online or was online recently
@@ -106,6 +108,10 @@ class Pod < ApplicationRecord
     transaction do
       update_from_result(result)
     end
+  rescue URI::InvalidComponentError
+    logger.error "Invalid pod host: #{host}"
+  rescue StandardError => e
+    logger.error "While updating pod: #{host}, #{e.inspect}"
   end
 
   # @param path [String]

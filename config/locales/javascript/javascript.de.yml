@@ -107,6 +107,13 @@ de:
         errors:
           one: Der Verbindungstest meldete für einen Pod einen Fehler.
           other: Der Verbindungstest meldete für <%= count %> Pods einen Fehler.
+        is_blocked: "Der Pod wurde blockiert"
+        blocked:
+          one: "Ein Pod wurde blockiert"
+          other: "<%= count %> Pods wurden blockiert"
+        total_pods:
+          one: "Es gibt genau einen Pod."
+          other: "Es gibt insgesamt <%= count %> Pods."
     aspects:
       name: Name
       create:

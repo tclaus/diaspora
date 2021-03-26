@@ -83,6 +83,7 @@ de_moo:
           unknown_error: Während der Überprüfung ist ein nicht angegebener Fehler aufgetreten
         actions: Aktionen
         offline_since: 'offline seit:'
+        blocked: 'Blockiert'
         last_check: 'letzte Überprüfung:'
         more_info: zeige weitere Informationen
         check: Verbindungstest durchführen
