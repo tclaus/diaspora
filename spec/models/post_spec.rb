@@ -80,7 +80,6 @@ describe Post, :type => :model do
       before do
         @post = FactoryGirl.create(:status_message, :author => alice.person)
         @other_post = FactoryGirl.create(:status_message, :author => eve.person)
-
         bob.blocks.create(:person => alice.person)
       end
 

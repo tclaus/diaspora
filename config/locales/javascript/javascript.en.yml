@@ -80,7 +80,13 @@ en:
         errors:
           one: "The connection test returned an error for one pod."
           other: "The connection test returned an error for <%= count %> pods."
-
+        is_blocked: "Pod is blocked"
+        blocked:
+          one: "One pod is blocked"
+          other: "<%= count %> pods are blocked"
+        total_pods:
+          one: "There is only one pod."
+          other: "There are <%= count %> pods total."
     aspects:
       name: "Name"
       create:
