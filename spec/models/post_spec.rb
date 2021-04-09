@@ -58,6 +58,23 @@ describe Post, :type => :model do
       end
     end
 
+    describe ".all_local_public" do
+      it "includes all public posts from local" do
+        post1 = FactoryGirl.create(:status_message, author: alice.person, public: true)
+        post2 = FactoryGirl.create(:status_message, author: bob.person, public: true)
+        expect(Post.all_local_public.ids).to match_array([post1.id, post2.id])
+      end
+
+      it "doesn't include any posts from other pods" do
+        pod = FactoryGirl.create(:pod)
+        external_person = FactoryGirl.create(:person, pod: pod)
+        FactoryGirl.create(:status_message, author: alice.person, public: true)
+        FactoryGirl.create(:status_message, author: bob.person, public: true)
+        post_from_extern = FactoryGirl.create(:status_message, author: external_person, public: true)
+        expect(Post.all_local_public.ids).not_to match_array([post_from_extern.id])
+      end
+    end
+
     describe '.for_a_stream' do
       it 'calls #for_visible_shareable_sql' do
         time, order = double, double
