@@ -96,16 +96,10 @@ describe Post, type: :model do
 
     describe ".excluding_blocks" do
       before do
-<<<<<<< HEAD
-        @post = FactoryBot.create(:status_message, :author => alice.person)
-        @other_post = FactoryBot.create(:status_message, :author => eve.person)
-        bob.blocks.create(:person => alice.person)
-=======
         @post = FactoryBot.create(:status_message, author: alice.person)
         @other_post = FactoryBot.create(:status_message, author: eve.person)
 
         bob.blocks.create(person: alice.person)
->>>>>>> upstream/develop
       end
 
       it "does not included blocked users posts" do
