@@ -4,11 +4,10 @@
 #   licensed under the Affero General Public License version 3 or later.  See
 #   the COPYRIGHT file.
 
-describe Report, :type => :model do
+describe Report, type: :model do
   before do
-    #:report => { :item_id => @message.id, :item_type => "post", :text => "offensive content" }
     @user = bob
-    @bob_post = @user.post(:status_message, :text => "hello", :to => @user.aspects.first.id)
+    @bob_post = @user.post(:status_message, text: "hello", to: @user.aspects.first.id)
     @bob_comment = @user.comment!(@bob_post, "welcome")
 
     @valid_post_report = {
@@ -36,13 +35,13 @@ describe Report, :type => :model do
 
     it "validates that post does exist" do
       report = @valid_post_report
-      report[:item_id] = 0;
+      report[:item_id] = 0
       expect(@user.reports.build(report)).not_to be_valid
     end
 
     it "validates that comment does exist" do
       report = @valid_comment_report
-      report[:item_id] = 0;
+      report[:item_id] = 0
       expect(@user.reports.build(report)).not_to be_valid
     end
 
@@ -78,7 +77,7 @@ describe Report, :type => :model do
       it "should set an action text on destroy item" do
         @post_report.destroy_reported_item
         @post_report.reload
-        expect(@post_report.action_deleted?).to be_truthy
+        expect(@post_report.action).eq Report::STATUS_DELETED
       end
     end
 
@@ -98,7 +97,7 @@ describe Report, :type => :model do
       it "should set an action text on destroy item" do
         @post_report.destroy_reported_item
         @post_report.reload
-        expect(@post_report.action_deleted?).to be_truthy
+        expect(@post_report.action).to eq Report::STATUS_DELETED
       end
     end
   end
