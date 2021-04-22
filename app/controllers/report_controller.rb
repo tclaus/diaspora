@@ -9,18 +9,21 @@ class ReportController < ApplicationController
   before_action :redirect_unless_moderator, except: [:create]
 
   def index
-    @reports = Report.where(reviewed: false)
+    @reports = Report.all
+    @reports_by_reporter = reports_by_reporter
   end
 
   def update
     if report = Report.where(id: params[:id]).first
       report.mark_as_reviewed
+      report.update(action: "No Action")
     end
     redirect_to :action => :index
   end
 
   def destroy
     if (report = Report.where(id: params[:id]).first) && report.destroy_reported_item
+      report.update(action: "Deleted")
       flash[:notice] = I18n.t "report.status.destroyed"
     else
       flash[:error] = I18n.t "report.status.failed"
@@ -38,7 +41,14 @@ class ReportController < ApplicationController
   end
 
   private
-    def report_params
-      params.require(:report).permit(:item_id, :item_type, :text)
-    end
+  def report_params
+    params.require(:report).permit(:item_id, :item_type, :text)
+  end
+
+  def reports_by_reporter
+    sql = "select count(*), user_id, diaspora_handle, guid from reports
+           join people on reports.user_id = people.id
+           group by user_id, guid, diaspora_handle order by count(*) desc;"
+    ActiveRecord::Base.connection.exec_query sql
+  end
 end
