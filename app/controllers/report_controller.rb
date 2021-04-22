@@ -18,7 +18,6 @@ class ReportController < ApplicationController
   def update
     if report = Report.where(id: params[:id]).first
       report.mark_as_reviewed
-      report.update(action: "No Action")
     end
     redirect_to action: :index
   end

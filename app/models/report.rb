@@ -27,11 +27,6 @@ class Report < ApplicationRecord
       .select("reports.*, people.guid as originator_guid")
   }
 
-  scope :join_originator, -> {
-    joins("LEFT JOIN people ON originator_diaspora_handle = people.diaspora_handle ")
-      .select("reports.*, people.guid as originator_guid")
-  }
-
   def reported_author
     item&.author
   end
