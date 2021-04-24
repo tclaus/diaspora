@@ -9,8 +9,10 @@ class ReportController < ApplicationController
   before_action :redirect_unless_moderator, except: [:create]
 
   def index
-    @reports = Report.all
-    @reports_by_reporter = reports_by_reporter
+    @unreviewed_reports = Report.join_originator.where(reviewed: false).order(created_at: :desc)
+    @reviewed_reports = Report.join_originator.where(reviewed: true).order(created_at: :desc)
+    @statistics_by_reporter = statistics_by_reporter
+    @statistics_by_originator = statistics_by_originator
   end
 
   def update
@@ -23,7 +25,6 @@ class ReportController < ApplicationController
 
   def destroy
     if (report = Report.where(id: params[:id]).first) && report.destroy_reported_item
-      report.update(action: "Deleted")
       flash[:notice] = I18n.t "report.status.destroyed"
     else
       flash[:error] = I18n.t "report.status.failed"
@@ -42,14 +43,23 @@ class ReportController < ApplicationController
   end
 
   private
+
   def report_params
     params.require(:report).permit(:item_id, :item_type, :text)
   end
 
-  def reports_by_reporter
-    sql = "select count(*), user_id, diaspora_handle, guid from reports
-           join people on reports.user_id = people.id
-           group by user_id, guid, diaspora_handle order by count(*) desc;"
+  def statistics_by_reporter
+    sql = "select count(*), diaspora_handle, guid from reports
+           join people on reports.user_id = people.owner_id
+           group by diaspora_handle, guid order by 1 desc"
+    ActiveRecord::Base.connection.exec_query sql
+  end
+
+  def statistics_by_originator
+    sql = "select count(*), originator_diaspora_handle, guid from reports
+           left join people on originator_diaspora_handle = people.diaspora_handle
+           where originator_diaspora_handle is not null
+           group by originator_diaspora_handle, guid order by 1 desc"
     ActiveRecord::Base.connection.exec_query sql
   end
 end
