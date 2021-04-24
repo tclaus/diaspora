@@ -32,6 +32,11 @@
                   != t("report.reported_label", person: link_to(username, user_profile_path(username)))
                 .reason
                   %span.reason-label
+                    = t("report.created_at")
+                  %span
+                    = I18n.l(report.created_at, format: :short)
+                .reason
+                  %span.reason-label
                     = t("report.reason_label")
                   %span
                     = report.text
@@ -70,6 +75,8 @@
           %th
             = t("report.type")
           %th
+            = t("report.originator")
+          %th
             = t("report.decision")
           %th
             Action
@@ -83,6 +90,8 @@
               = report.text
             %td
               = report.item_type
+            %td
+              = report.reported_diaspora_handle
             %td
               = report.action
             %td

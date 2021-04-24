@@ -9,7 +9,7 @@ class ReportController < ApplicationController
   before_action :redirect_unless_moderator, except: [:create]
 
   def index
-    @reports = Report.all
+    @reports = Report.all.order(created_at: :desc)
     @reports_by_reporter = reports_by_reporter
   end
 
@@ -23,7 +23,6 @@ class ReportController < ApplicationController
 
   def destroy
     if (report = Report.where(id: params[:id]).first) && report.destroy_reported_item
-      report.update(action: "Deleted")
       flash[:notice] = I18n.t "report.status.destroyed"
     else
       flash[:error] = I18n.t "report.status.failed"
@@ -33,6 +32,7 @@ class ReportController < ApplicationController
 
   def create
     report = current_user.reports.new(report_params)
+    report.reported_diaspora_handle = report.reported_author.diaspora_handle
     if report.save
       render json: true, status: 200
     else
