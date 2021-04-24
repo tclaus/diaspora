@@ -50,12 +50,21 @@ class Report < ApplicationRecord
         item.destroy
       end
     end
-    mark_as_reviewed
+    mark_as_reviewed_and_deleted
+  end
+
+  # rubucop:disable Rails/SkipsModelValidations
+
+  def mark_as_reviewed_and_deleted
+    Report.where(item_id: item_id, item_type: item_type)
+          .update_all(reviewed: true, action: "Deleted")
   end
 
   def mark_as_reviewed
-    Report.where(item_id: item_id, item_type: item_type).update_all(reviewed: true)
+    Report.where(item_id: item_id, item_type: item_type)
+          .update_all(reviewed: true, action: "No Action")
   end
+  # rubucop:enable Rails/SkipsModelValidations
 
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)
