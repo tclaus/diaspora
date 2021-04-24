@@ -9,12 +9,12 @@
     %th
       = t("report.type")
     %th
-      = t("report.author")
+      = t("report.originator")
     %th
       = t("report.decision")
     %th
-      = t("report.action")
-  - @reviewed_reports.each do |report|
+      Action
+  - @reports.each do |report|
     %tr
       %td
         = I18n.l(report.created_at, format: :short)
@@ -28,8 +28,7 @@
         - unless report.originator_diaspora_handle.nil?
           = link_to(report.originator_diaspora_handle, "/people/#{report.originator_guid}")
       %td
-        = t("report.item_deleted") if report.action_deleted?
-        = t("report.item_no_action") if report.action_no_action?
+        = report.action
       %td
         - unless report.item.nil?
           = link_to_content(report)

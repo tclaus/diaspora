@@ -77,8 +77,8 @@ describe Report, :type => :model do
 
       it "should set an action text on destroy item" do
         @post_report.destroy_reported_item
-        @post_report.reload
-        expect(@post_report.action_deleted?).to be_truthy
+        action = @post_report.reload.action
+        expect(action).to eq "Deleted"
       end
     end
 
@@ -97,8 +97,8 @@ describe Report, :type => :model do
 
       it "should set an action text on destroy item" do
         @post_report.destroy_reported_item
-        @post_report.reload
-        expect(@post_report.action_deleted?).to be_truthy
+        action = @post_report.reload.action
+        expect(action).to eq "Deleted"
       end
     end
   end
