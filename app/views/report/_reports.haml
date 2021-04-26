@@ -9,15 +9,15 @@
       = t("report.unreviewed_reports", count: 0)
   %ul.nav.nav-tabs{role: "tablist"}
     %li.nav-item.active{role: "presentation"}
-      %a{href: "#reports", title: "New incomming reports",
+      %a{href: "#reports", title: t("report.tooltip_incomming"),
         aria: {controls: "reports", selected: true}, data: {toggle: "tab"}}
         = t("report.reported_tab")
     %li.nav-item{role: "presentation"}
-      %a{href: "#checked", title: "Already Reviewd reports",
+      %a{href: "#checked", title: t("report.tooltip_reviewed"),
         aria: {controls: "checked", selected: false}, data: {toggle: "tab"}}
         = t("report.reviewed_tab")
     %li.nav-item{role: "presentation"}
-      %a{href: "#statistics", title: "Statistics about reporter and reporting items",
+      %a{href: "#statistics", title: t("report.tooltip_statistics"),
         aria: {controls: "statistics", selected: false}, data: {toggle: "tab"}}
         = t("report.statistics_tab")
   .tab-content
@@ -32,7 +32,7 @@
                   != t("report.reported_label", person: link_to(username, user_profile_path(username)))
                 .reason
                   %span.reason-label
-                    = t("report.created_at")
+                    != "#{t('report.created_at')}:"
                   %span
                     = I18n.l(report.created_at, format: :short)
                 .reason
@@ -64,54 +64,6 @@
                 = button_to t("report.review_link"), report_path(report.id, type: report.item_type),
                   class: "btn pull-left btn-info btn-small", method: :put
     .tab-pane#checked{role: "tabpanel"}
-      %table.table
-        %tr
-          %th
-            = t("report.created_at")
-          %th
-            = t("report.reported_by")
-          %th
-            = t("report.reason")
-          %th
-            = t("report.type")
-          %th
-            = t("report.originator")
-          %th
-            = t("report.decision")
-          %th
-            Action
-        - @reports.each do |report|
-          %tr
-            %td
-              = I18n.l(report.created_at, format: :short)
-            %td
-              = link_to(report.user.username, user_profile_path(report.user.username))
-            %td
-              = report.text
-            %td
-              = report.item_type
-            %td
-              = report.reported_diaspora_handle
-            %td
-              = report.action
-            %td
-              - if report.action.nil?
-                = link_to_content(report)
-                = link_to(report_path(report.id, type: report.item_type),
-                    data: {confirm: t("report.confirm_deletion")},
-                    title: t("report.delete_link"),
-                    class: "delete", method: :delete) do
-                  %i.entypo-trash
+      = render partial: "report/checked"
     .tab-pane#statistics{role: "tabpanel"}
-      %table.table
-        %tr
-          %th
-            = t("report.count")
-          %th
-            != t("report.reported_by")
-        - @reports_by_reporter.rows.each do |count, _user_id, handle, guid|
-          %tr
-            %td
-              = count
-            %td
-              = link_to handle, "/people/#{guid}"
+      = render partial: "report/statistics"

@@ -9,8 +9,9 @@ class ReportController < ApplicationController
   before_action :redirect_unless_moderator, except: [:create]
 
   def index
-    @reports = Report.all.order(created_at: :desc)
-    @reports_by_reporter = reports_by_reporter
+    @reports = Report.join_originator.order(created_at: :desc)
+    @statistics_by_reporter = statistics_by_reporter
+    @statistics_by_originator = statistics_by_originator
   end
 
   def update
@@ -32,7 +33,7 @@ class ReportController < ApplicationController
 
   def create
     report = current_user.reports.new(report_params)
-    report.reported_diaspora_handle = report.reported_author.diaspora_handle
+    report.originator_diaspora_handle = report.reported_author.diaspora_handle
     if report.save
       render json: true, status: 200
     else
@@ -45,10 +46,18 @@ class ReportController < ApplicationController
     params.require(:report).permit(:item_id, :item_type, :text)
   end
 
-  def reports_by_reporter
-    sql = "select count(*), user_id, diaspora_handle, guid from reports
-           join people on reports.user_id = people.id
-           group by user_id, guid, diaspora_handle order by count(*) desc;"
+  def statistics_by_reporter
+    sql = "select count(*), diaspora_handle, guid from reports
+           join people on reports.user_id = people.owner_id
+           group by diaspora_handle, guid order by 1 desc"
+    ActiveRecord::Base.connection.exec_query sql
+  end
+
+  def statistics_by_originator
+    sql = "select count(*), originator_diaspora_handle, guid from reports
+           left join people on originator_diaspora_handle = people.diaspora_handle
+           where originator_diaspora_handle is not null
+           group by originator_diaspora_handle, guid order by 1 desc"
     ActiveRecord::Base.connection.exec_query sql
   end
 end
