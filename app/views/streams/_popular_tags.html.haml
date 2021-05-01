@@ -1,0 +1,13 @@
+-#   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+
+%h4c
+  Popular tags for this day
+.list-group
+  - tags.each do |tag|
+    = link_to "/tags/#{tag.name}", class: "list-group-item" do
+      %h4.list-group-item-heading
+        = "\##{tag.name}"
+      %p.list-group-item-text
+        = "#{tag.count} Posts"

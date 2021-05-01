@@ -64,6 +64,7 @@ class StreamsController < ApplicationController
       @stream ||= stream_klass.new(current_user, :max_time => max_time)
     end
 
+    @popular_tags = popular_tags
     respond_with do |format|
       format.html { render 'streams/main_stream' }
       format.mobile { render 'streams/main_stream' }
@@ -75,5 +76,15 @@ class StreamsController < ApplicationController
     if params[:a_ids].present?
       session[:a_ids] = params[:a_ids]
     end
+  end
+
+  def popular_tags
+    ActsAsTaggableOn::Tagging.joins(:tag)
+                             .limit(10)
+                             .where("taggable_type = ? and created_at >= ?",'Post', Date.today - 1.day)
+                             .order(count: :desc)
+                             .group(:name)
+                             .having("count(*) > 1") # Not showing single tags
+                             .select("count(*) as count, tags.name")
   end
 end
