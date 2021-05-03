@@ -1043,6 +1043,7 @@ en:
     post_label: "<strong>Post</strong>: %{content}"
     comment_label: "<strong>Comment</strong>: %{data}"
     reported_label: "<strong>Reported by</strong> %{person}"
+    no_pending_reports: "No pending reports"
     reported_tab: "Reported"
     reviewed_tab: "Reviewed"
     originator: "Originator"
@@ -1055,6 +1056,7 @@ en:
     reason: "Reason"
     type: "Type"
     decision: "Decision"
+    action: "Action"
     count: "Count"
     reason_label: "Reason:"
     review_link: "Mark as reviewed"
@@ -1069,7 +1071,9 @@ en:
       zero: "There are no unreviewed reports."
       one: "There is one unreviewed report."
       other: "There are %{count} unreviewed reports."
-
+    by_reporter: "By Reporter"
+    by_originator: "By Originator"
+    originator: "Originator"
   profiles:
     edit:
       basic: "My basic profile"
