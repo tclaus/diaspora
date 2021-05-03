@@ -9,7 +9,8 @@ class ReportController < ApplicationController
   before_action :redirect_unless_moderator, except: [:create]
 
   def index
-    @reports = Report.join_originator.order(created_at: :desc)
+    @unreviewed_reports = Report.join_originator.where(reviewed: false).order(created_at: :desc)
+    @reviewed_reports = Report.join_originator.where(reviewed: true).order(created_at: :desc)
     @statistics_by_reporter = statistics_by_reporter
     @statistics_by_originator = statistics_by_originator
   end
@@ -42,6 +43,7 @@ class ReportController < ApplicationController
   end
 
   private
+
   def report_params
     params.require(:report).permit(:item_id, :item_type, :text)
   end
