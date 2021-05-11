@@ -36,7 +36,7 @@ app.views.StreamPost = app.views.Post.extend({
       }
     }
 
-    this.model.set("shouldTranslate", this.shouldTranslate());
+    this.model.set("translationEnabled", this.translationEnabled());
 
     if (this.model) {
       this.model.on("change", this.render, this);
@@ -105,10 +105,8 @@ app.views.StreamPost = app.views.Post.extend({
     }
   },
 
-  shouldTranslate: function() {
-    // if users language is not in list as supported languages, post should not show a 'translation' button
-    // In settings a user may select a 'translation laguage'
-    return true;
+  translationEnabled: function() {
+    return gon.translationEnabled;
   },
 
   removeTranslation: function(evt) {

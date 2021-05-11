@@ -33,7 +33,7 @@
     {{/unless}}
 
     <div class="post-content"> </div>
-    {{#if shouldTranslate}}
+    {{#if translationEnabled}}
       {{#if translatedText}}
         <a class ="post-translate" href="#">{{t "stream.backToOriginal" lang=detectedSourceLanguage}}</a>
       {{else}}

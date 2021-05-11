@@ -205,7 +205,7 @@ gem "logging-rails", "0.6.0", require: "logging/rails"
 gem "rubyzip", "2.3.0", require: "zip"
 
 # Post translations
-gem 'deepl-rb', '~> 2.2', '>= 2.2.4'
+gem "deepl-rb", "~> 2.2", ">= 2.2.4"
 
 # Prevent occasions where minitest is not bundled in
 # packaged versions of ruby. See following issues/prs:
