@@ -91,6 +91,7 @@
         beforeSend: function() {
           Diaspora.Mobile.PostActions.showLoader(link);
         },
+
         success: function(response) {
           Diaspora.Mobile.PostActions.toggleActive(link);
           var el = link.closest(".stream-element").find(".mobile-content").first();
@@ -98,12 +99,12 @@
           el.prepend(response.translatedText);
 
           if (resetTextMarker === "") {
-            link.append("<span class='count'>"+ response.detectedSourceLanguage +"</span>");
+            link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
           } else {
             link.children().remove();
           }
-
         },
+
         complete: function() {
           Diaspora.Mobile.PostActions.hideLoader(link);
         }

@@ -806,6 +806,7 @@ DEPENDENCIES
   cucumber-api-steps (= 0.14)
   cucumber-rails (= 2.3.0)
   database_cleaner-active_record (= 1.8.0)
+  deepl-rb (~> 2.2, >= 2.2.4)
   devise (= 4.7.3)
   devise-two-factor (= 4.0.0)
   devise_lastseenable (= 0.0.6)

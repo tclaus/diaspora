@@ -96,7 +96,7 @@ class PostsController < ApplicationController
   end
 
   def translation_service
-    @translation_service ||= TranslationService.new(current_user)
+    @translation_service ||= TranslationService.new
   end
 
   def set_format_if_malformed_from_status_net
