@@ -4,12 +4,7 @@ class TranslationService
   require "deepl"
   require "digest"
 
-<<<<<<< HEAD
-  def initialize(user=nil)
-    @user = user
-=======
   def initialize
->>>>>>> post_translations
     DeepL.configure do |config|
       config.auth_key = AppConfig.deepl.auth_key
     end
