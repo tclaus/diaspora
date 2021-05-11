@@ -10,4 +10,5 @@
       %h4.list-group-item-heading
         = "\##{tag.name}"
       %p.list-group-item-text
-        = "#{tag.count} Posts"
+        - if tag.count > 5
+          = "#{tag.count} Individual poster"
