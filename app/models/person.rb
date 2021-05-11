@@ -445,7 +445,8 @@ class Person < ApplicationRecord
   def self.diaspora_handle_from_blocked_pod?(diaspora_handle)
     host = diaspora_handle.split('@').last
     pod = Pod.find_by_host(host)
-    return !pod.nil? && pod.blocked
+    return false if pod.nil?
+    pod.blocked
   end
 
 end
