@@ -9,6 +9,8 @@ module Services
     end
 
     def post(post, url="") # rubocop:disable Metrics/AbcSize
+      return true if post.nil? # return if post is deleted while waiting in queue
+
       body = build_tumblr_post(post, url)
       user_info = JSON.parse(client.get("/v2/user/info").body)
       blogs = user_info["response"]["user"]["blogs"]
@@ -59,7 +61,7 @@ module Services
 
     def request_to_external_blog(blogurl, body)
       resp = client.post("/v2/blog/#{blogurl.host}/post", body)
-      JSON.parse(resp.body)["response"]["id"] if resp.code == "201"
+      JSON.parse(resp.body)["response"]["id"] if resp.code == 201
     end
 
     def consumer_key
