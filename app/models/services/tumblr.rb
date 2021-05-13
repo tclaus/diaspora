@@ -8,16 +8,18 @@ module Services
       "tumblr"
     end
 
-    def post(post, url="")
+    def post(post, url="") # rubocop:disable Metrics/AbcSize
       body = build_tumblr_post(post, url)
       user_info = JSON.parse(client.get("/v2/user/info").body)
       blogs = user_info["response"]["user"]["blogs"]
       primaryblog = blogs.find {|blog| blog["primary"] } || blogs[0]
+
       tumblr_ids = {}
 
       blogurl = URI.parse(primaryblog["url"])
       tumblr_ids[blogurl.host.to_s] = request_to_external_blog(blogurl, body)
 
+      logger.debug "event=post_to_service type=tumblr sender_id=#{user_id} post=#{post.guid}"
       post.tumblr_ids = tumblr_ids.to_json
       post.save
     end
@@ -41,7 +43,7 @@ module Services
     private
 
     def client
-      @consumer ||= OAuth::Consumer.new(consumer_key, consumer_secret, site: "http://api.tumblr.com")
+      @consumer ||= OAuth::Consumer.new(consumer_key, consumer_secret, site: "https://api.tumblr.com")
       @client ||= OAuth::AccessToken.new(@consumer, access_token, access_secret)
     end
 
