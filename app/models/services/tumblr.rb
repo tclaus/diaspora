@@ -39,7 +39,7 @@ module Services
     end
 
     def build_tumblr_post(post, url)
-      {type: "text", format: "markdown", body: tumblr_template(post, url)}
+      {type: "text", format: "markdown", body: tumblr_template(post, url), tags: tags(post), native_inline_images: true}
     end
 
     private
@@ -53,6 +53,10 @@ module Services
       photo_html = post.photos.map {|photo| "![photo](#{photo.url(:scaled_full)})\n\n" }.join
 
       "#{photo_html}#{post.message.html(mentioned_people: [])}\n\n[original post](#{url})"
+    end
+
+    def tags(post)
+      post.tags.pluck(:name).join(",").to_s
     end
 
     def delete_from_tumblr(blog_name, service_post_id)
