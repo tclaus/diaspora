@@ -82,9 +82,7 @@ DiasporaFederation.configure do |config|
 
     on :fetch_public_key do |diaspora_id|
       person = Person.find_or_fetch_by_identifier(diaspora_id)
-      if person
-        person.public_key unless person.pod&.blocked
-      end
+      person.public_key unless person.nil? || person.pod&.blocked
     end
 
     on :fetch_related_entity do |entity_type, guid|
