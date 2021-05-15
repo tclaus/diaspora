@@ -10,10 +10,8 @@ module Workers
 
     def perform(account)
       person = Person.find_or_fetch_by_identifier(account)
-
-      unless person.pod.nil?
-        return if person.pod.blocked
-      end
+      return if person.nil?
+      return if person.pod&.blocked
 
       # also, schedule to fetch a few public posts from that person if its pod is not blocked
       Diaspora::Fetcher::Public.queue_for(person)
