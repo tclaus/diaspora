@@ -360,7 +360,6 @@ class Person < ApplicationRecord
 
   # discovery (webfinger)
   def self.find_or_fetch_by_identifier(diaspora_id)
-
     return nil if diaspora_handle_from_blocked_pod?(diaspora_id)
 
     # exiting person?
@@ -380,7 +379,6 @@ class Person < ApplicationRecord
     return person unless person.pod.blocked
 
     by_account_identifier(diaspora_id)
-
   rescue DiasporaFederation::Discovery::InvalidDocument
     logger.info "#{diaspora_id} returns not as a valid document"
     nil
@@ -425,6 +423,12 @@ class Person < ApplicationRecord
     self
   end
 
+  def self.diaspora_handle_from_blocked_pod?(diaspora_handle)
+    host = diaspora_handle.split("@").last
+    pod = Pod.find_by(host: host)
+    !pod.nil? && pod.blocked
+  end
+
   private
 
   def fix_profile
@@ -441,12 +445,4 @@ class Person < ApplicationRecord
     diaspora_id = Person.where(guid: guid).where.not(diaspora_handle: diaspora_handle).pluck(:diaspora_handle).first
     errors.add(:base, "Person with same GUID already exists: #{diaspora_id}") if diaspora_id
   end
-
-  def self.diaspora_handle_from_blocked_pod?(diaspora_handle)
-    host = diaspora_handle.split('@').last
-    pod = Pod.find_by_host(host)
-    return false if pod.nil?
-    pod.blocked
-  end
-
 end
