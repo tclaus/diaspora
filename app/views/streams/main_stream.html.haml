@@ -41,7 +41,7 @@
               = link_to t("streams.public.title"), public_stream_path, rel: "backbone", class: "hoverable"
         
       .sidebar.info-bar.left-navbar.hidden-xs
-        = render "popular_tags", tags: @popular_tags
+        = render "tags/popular_tags", tags: @popular_tags
       - if user_signed_in?
         .sidebar.info-bar.hidden-xs
           - if AppConfig.settings.invitations.open?
