@@ -37,7 +37,7 @@ describe "diaspora federation callbacks" do
 
     it "returns nil for a closed account" do
       user = FactoryBot.create(:user)
-      user.person.lock_access!
+      user.person.close_account!
       wf = DiasporaFederation.callbacks.trigger(:fetch_person_for_webfinger, user.diaspora_handle)
       expect(wf).to be_nil
     end
@@ -82,7 +82,7 @@ describe "diaspora federation callbacks" do
 
     it "returns nil for a closed account" do
       user = FactoryBot.create(:user)
-      user.person.lock_access!
+      user.person.close_account!
       hcard = DiasporaFederation.callbacks.trigger(:fetch_person_for_hcard, user.guid)
       expect(hcard).to be_nil
     end
