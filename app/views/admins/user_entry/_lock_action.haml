@@ -1,4 +1,4 @@
-- if person.owner.present? && person != @current_user.person
+- if person.owner.present? && person != @current_user.person && !person.closed_account?
   - if person.locked_access?
     = link_to t("admins.user_search.unlock_account"),
       admin_unlock_account_path(person.user_id),

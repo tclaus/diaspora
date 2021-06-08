@@ -1,4 +1,4 @@
-- if person.owner.present?
+- if person.owner.present? && !person.closed_account?
   - if Role.spotlight?(person)
     = link_to t("admins.user_search.remove_spotlight"),
       admin_remove_spotlight_path(person.user_id),

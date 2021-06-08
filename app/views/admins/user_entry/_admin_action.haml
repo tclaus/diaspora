@@ -1,4 +1,4 @@
-- if person.owner.present? && person != @current_user.person
+- if person.owner.present? && person != @current_user.person && !person.closed_account?
   - if Role.is_admin?(person)
     = link_to t("admins.user_search.remove_admin"),
       admin_remove_admin_path(person.user_id),
