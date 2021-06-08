@@ -9,6 +9,17 @@
           = person.diaspora_handle
         = t(".remote") if person.remote?
         = t(".local") if person.local?
+        %br
+        - if person.closed_account?
+          .label.label-danger
+            Closed
+        - else 
+          -if person.locked_access?
+            .label.label-warning
+              Locked
+        - if !person.closed_account? && !person.locked_access?
+          .label.label-success
+            Active
       .col-sm-5
         .pull-right
           %span.label.label-default
@@ -75,13 +86,8 @@
           %dd= person.profile.bio
 
       .col-sm-4
-        = link_to t("admins.user_search.view_profile"),
-          person_path(person),
-          class: "btn btn-default btn-block"
-        - if person.owner.present?
-          = link_to t("admins.user_search.add_invites"),
-            add_invites_path(person.user_id),
-            class: "btn btn-info btn-block"
+        = render partial: "admins/user_entry/view_profile", locals: {person: person}
+        = render partial: "admins/user_entry/add_invites", locals: {person: person}
         = render partial: "admins/user_entry/lock_action", locals: {person: person}
         = render partial: "admins/user_entry/close_action", locals: {person: person}
         = render partial: "admins/user_entry/admin_action", locals: {person: person}
