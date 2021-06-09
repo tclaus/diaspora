@@ -14,6 +14,9 @@ module Workers
       local_persons, remote_persons = Person.where(diaspora_handle: diaspora_handle).partition(&:local?)
       retract_local_comments(local_persons)
       retract_remote_comments(remote_persons)
+
+      delete_account(local_persons)
+      delete_account(remote_persons)
     end
 
     private
@@ -23,7 +26,6 @@ module Workers
         Comment.where(author_id: spammer.id).each do |comment|
           spammer.owner.retract(comment)
         end
-        spammer.owner.close_account!
       end
     end
 
@@ -32,7 +34,7 @@ module Workers
         post_author = comment.parent.author
         if post_author.local? && (retract_for.include?(post_author.owner.username) || retract_for.empty?)
           post_author.owner.retract(comment)
-        elsif always_delete
+        else
           comment.destroy
         end
       end

@@ -43,12 +43,6 @@
             - if person.owner.invited_by.present?
               %dt= t(".invite_token")
               %dd= invite_code_url(person.owner.invited_by.invitation_code)
-          %dt= t(".account_closed")
-          %dd
-            - if person.closed_account?
-              %span.label.label-warning= t(".yes")
-            - else
-              %span.label.label-success= t(".no")
           %dt= t(".nsfw")
           %dd
             - if person.profile.nsfw
