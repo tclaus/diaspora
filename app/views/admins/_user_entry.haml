@@ -12,14 +12,13 @@
         %br
         - if person.closed_account?
           .label.label-danger
-            Closed
-        - else 
-          -if person.locked_access?
-            .label.label-warning
-              Locked
+            = t(".closed_account")
+        - elsif person.locked_access?
+          .label.label-warning
+            = t(".locked_account")
         - if !person.closed_account? && !person.locked_access?
           .label.label-success
-            Active
+            = t(".active_account")
       .col-sm-5
         .pull-right
           %span.label.label-default
