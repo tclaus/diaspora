@@ -1,0 +1,49 @@
+.modal.fade{ id:       "importAccountModal",
+             tabindex: "-1",
+             role:     "dialog",
+             aria:     { labelledby: "importAccountModalLabel", hidden: "true" }}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true" }}
+          &times;
+        %h3.modal-title{ id:"importAccountModalLabel"}
+          Import another account
+        .modal-body
+          %p
+            You are about to import and merge another account into fla@diaspora-fr.org.
+            Here is what's going to happen:
+          %ol
+            %li
+              Your profile (name, bio, birthday, gender...) will be updated with the content from the imported account
+            %li
+              Your settings (theme, visibility...) will be updated with those from the imported account
+            %li
+              All your aspects and contacts will be added to this account. This will be transparent for them, they will be linked to that account as they were linked with the account you are importing
+            %li
+              All posts and comments you made with the imported account will be imported in that account and seen as posted by this accounts by the other users
+            %li
+              %strong
+                The imported account and all its linked data will be deleted from the previous pod.
+
+          %p
+            If the pod of the account you are importing is offline, your contacts and posts will still be imported, but your contacts will receive a notification as if you started sharing with them.
+
+          .row
+            .col-md-6
+              %label Select the data archive:
+              %input{type: "file"}
+            .col-md-6
+              %label Select the photos archive:
+              %input{type: "file"}
+
+          %h4
+            %span{style:"color: green"}🗹
+            Your archive files are correct, import is possible!
+          %h4
+            The account fla@diasp.org will be imported
+            %strong
+              and deleted. This cannot be undone!
+          %p
+            .btn.btn-danger
+              Import and merge fla@diasp.org into fla@diaspora-fr.
