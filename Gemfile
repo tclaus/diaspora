@@ -251,9 +251,7 @@ group :development do
   gem "rubocop",        "0.93.1", require: false
   gem "rubocop-rails",  "2.9.1", require: false
 
-  # Debugging
-  gem "pry"
-  gem "pry-byebug"
+
 
   # test coverage
   gem "simplecov", "0.21.2", require: false
@@ -305,4 +303,8 @@ group :development, :test do
 
   # For `assigns` in controller specs
   gem "rails-controller-testing", "1.0.4"
+
+    # Debugging
+  gem "pry"
+  gem "pry-byebug"
 end

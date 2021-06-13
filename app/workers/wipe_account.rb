@@ -43,7 +43,6 @@ module Workers
     def delete_account(persons)
       persons.each do |spammer|
         AccountDeletion.create!(person: spammer) unless AccountDeletion.exists?(person: spammer)
-        spammer.update_column(:serialized_public_key, "BLOCKED") # rubocop:disable Rails/SkipsModelValidations
       end
     end
   end

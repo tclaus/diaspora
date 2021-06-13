@@ -364,7 +364,7 @@ describe "diaspora federation callbacks" do
     it "receives a entity" do
       received = Fabricate(:status_message_entity, author: remote_person.diaspora_handle)
       persisted = FactoryBot.create(:status_message)
-
+      byebug
       expect(Diaspora::Federation::Receive).to receive(:perform).with(received).and_return(persisted)
       expect(Workers::ReceiveLocal).to receive(:perform_async).with(persisted.class.to_s, persisted.id, [])
 
