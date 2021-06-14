@@ -360,7 +360,6 @@ class Person < ApplicationRecord
 
   # discovery (webfinger)
   def self.find_or_fetch_by_identifier(diaspora_id)
-
     # exiting person?
     person = by_account_identifier(diaspora_id)
     if person.present? && person.profile.present?

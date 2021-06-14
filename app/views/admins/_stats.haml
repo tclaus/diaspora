@@ -47,4 +47,4 @@
       %ul
       - @popular_tags.each do |name, count|
         %li
-          =link_to("#{count}  #{name}", "/tags/#{name}")
+          = link_to("#{count}  #{name}", "/tags/#{name}")
