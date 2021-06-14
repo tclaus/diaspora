@@ -226,17 +226,15 @@ module Diaspora
 
       def self.should_perform(entity)
         author = entity.try(:diaspora_handle)
-        if author.present?
-          return false if Person.diaspora_handle_from_blocked_pod(author.diaspora_id)
-        end
+        return false if author.present? && Person.diaspora_handle_from_blocked_pod(author.diaspora_id)
 
         root_author = entity.try(:root_diaspora_id)
-        if root_author.present?
-          return false if Person.diaspora_handle_from_blocked_pod(root_author)
-        end
+        return false if root_author.present? && Person.diaspora_handle_from_blocked_pod(root_author)
 
         return false if closed_account(author)
+
         return false if closed_account(root_author)
+
         true
       end
 
