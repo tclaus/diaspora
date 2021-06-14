@@ -15,7 +15,7 @@ DiasporaFederation.configure do |config|
   config.define_callbacks do
     on :fetch_person_for_webfinger do |diaspora_id|
       person = Person.where(diaspora_handle: diaspora_id, closed_account: false).where.not(owner: nil).first
-      if person
+      unless person.nil? || person.closed?
         DiasporaFederation::Discovery::WebFinger.new(
           {
             acct_uri:      "acct:#{person.diaspora_handle}",
@@ -39,7 +39,7 @@ DiasporaFederation.configure do |config|
 
     on :fetch_person_for_hcard do |guid|
       person = Person.where(guid: guid, closed_account: false).where.not(owner: nil).take
-      if person
+      unless person.nil? || person.closed?
         DiasporaFederation::Discovery::HCard.new(
           guid:             person.guid,
           nickname:         person.username,
