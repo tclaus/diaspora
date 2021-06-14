@@ -98,7 +98,7 @@ class Pod < ApplicationRecord
 
   rescue URI::InvalidComponentError
     logger.error "Invalid pod host: #{host}"
-  
+
   rescue StandardError => e
     logger.error "While updating pod: #{host}, #{e.inspect}"
   end

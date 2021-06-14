@@ -307,7 +307,7 @@ group :development, :test do
   # For `assigns` in controller specs
   gem "rails-controller-testing", "1.0.4"
 
-    # Debugging
+  # Debugging
   gem "pry"
   gem "pry-byebug"
 end
