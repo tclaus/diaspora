@@ -47,7 +47,7 @@ module Diaspora
             {
               author:           comment.diaspora_handle,
               guid:             comment.guid,
-              parent_guid:      comment.post.guid,
+              parent_guid:      comment.post&.guid,
               text:             comment.text,
               created_at:       comment.created_at,
               edited_at:        comment.signature&.additional_data&.[]("edited_at"),
