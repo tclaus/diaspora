@@ -42,20 +42,22 @@ module Diaspora
       end
 
       def self.comment(comment)
-        DiasporaFederation::Entities::Comment.new(
-          {
-            author:           comment.diaspora_handle,
-            guid:             comment.guid,
-            parent_guid:      comment.post.guid,
-            text:             comment.text,
-            created_at:       comment.created_at,
-            edited_at:        comment.signature&.additional_data&.[]("edited_at"),
-            author_signature: comment.signature.try(:author_signature),
-            parent:           related_entity(comment.post)
-          },
-          comment.signature.try(:order),
-          comment.signature.try(:additional_data) || {}
-        )
+        unless comment.post.nil?
+          DiasporaFederation::Entities::Comment.new(
+            {
+              author:           comment.diaspora_handle,
+              guid:             comment.guid,
+              parent_guid:      comment.post.guid,
+              text:             comment.text,
+              created_at:       comment.created_at,
+              edited_at:        comment.signature&.additional_data&.[]("edited_at"),
+              author_signature: comment.signature.try(:author_signature),
+              parent:           related_entity(comment.post)
+            },
+            comment.signature.try(:order),
+            comment.signature.try(:additional_data) || {}
+          )
+        end
       end
 
       def self.contact(contact)
