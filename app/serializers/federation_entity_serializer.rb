@@ -9,7 +9,7 @@ class FederationEntitySerializer < ActiveModel::Serializer
   private
 
   def modify_serializable_object(hash)
-    hash.merge(entity.to_json)
+    hash.merge(entity.to_json) unless entity.nil?
   end
 
   def entity
