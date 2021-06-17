@@ -21,7 +21,6 @@ module Services
       blogurl = URI.parse(primaryblog["url"])
       tumblr_ids[blogurl.host.to_s] = request_to_external_blog(blogurl, body)
 
-      logger.debug "event=post_to_service type=tumblr sender_id=#{user_id} post=#{post.guid}"
       post.tumblr_ids = tumblr_ids.to_json
       post.save
     end

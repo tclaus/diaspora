@@ -63,6 +63,13 @@ class Post < ApplicationRecord
       .where(public: true)
   }
 
+  scope :all_local_public, -> {
+    where(" exists (
+      select 1 from people where posts.author_id = people.id
+      and people.pod_id is null)
+      and posts.public = true")
+  }
+
   scope :commented_by, ->(person)  {
     select('DISTINCT posts.*')
       .left_outer_joins(:comments, author: [:pod])
