@@ -82,7 +82,7 @@ DiasporaFederation.configure do |config|
     end
 
     on :fetch_public_key do |diaspora_id|
-      Person.find_or_fetch_by_identifier(diaspora_id).public_key
+      Person.find_or_fetch_by_identifier(diaspora_id)&.public_key
     end
 
     on :fetch_related_entity do |entity_type, guid|
@@ -127,7 +127,7 @@ DiasporaFederation.configure do |config|
     end
 
     on :fetch_person_url_to do |diaspora_id, path|
-      Person.find_or_fetch_by_identifier(diaspora_id).url_to(path)
+      Person.find_or_fetch_by_identifier(diaspora_id)&.url_to(path)
     end
 
     on :update_pod do |url, status|

@@ -19,7 +19,7 @@ class ArchiveImporter
         break entity_class::PARENT_TYPE if entity_class.const_defined?(:PARENT_TYPE)
       }
       entity = Diaspora::Federation::Mappings.model_class_for(type).find_by(guid: data.fetch(:parent_guid))
-      data[:parent] = Diaspora::Federation::Entities.related_entity(entity)
+      data[:parent] = Diaspora::Federation::Entities.related_entity(entity) unless entity.nil?
     end
   end
 end
