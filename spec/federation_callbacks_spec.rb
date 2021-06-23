@@ -234,7 +234,7 @@ describe "diaspora federation callbacks" do
     it "return nil if the person can't be fetched" do
       diaspora_id = Fabricate.sequence(:diaspora_id)
       expect(Person).to receive(:find_or_fetch_by_identifier).with(diaspora_id)
-        .and_return(nil)
+                                                             .and_return(nil)
 
       DiasporaFederation.callbacks.trigger(:fetch_public_key, diaspora_id)
     end
