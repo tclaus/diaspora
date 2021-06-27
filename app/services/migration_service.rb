@@ -22,14 +22,7 @@ class MigrationService
     find_or_create_user
     import_archive
     run_migration
-  ensure
     remove_intermediate_file
-  end
-
-  def self_import?
-    source_diaspora_id = archive_validator.archive_author_diaspora_id
-    target_diaspora_id = "#{new_user_name}#{User.diaspora_id_host}"
-    source_diaspora_id.eql?(target_diaspora_id)
   end
 
   # when old person can't be resolved we still import data but we don't create&perform AccountMigration instance
