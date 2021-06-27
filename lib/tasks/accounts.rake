@@ -8,13 +8,28 @@ namespace :accounts do
     args = %i[archive_path photos_path new_user_name import_settings import_profile]
            .map {|name| [name, args[name]] }.to_h
     process_arguments(args)
-    start_time = Time.now.getlocal
-    if args[:new_user_name].present? && (args[:archive_path].present? || args[:photos_path].present?)
-      ImportService.new.import_by_files(args[:archive_path], args[:photos_path], args[:new_user_name],
-                                        args.slice(:import_settings, :import_profile))
-      puts "\n Migration completed in #{Time.now.getlocal - start_time} seconds. (Photos might still be processed in)"
-    else
-      puts "Must set a user name and a archive file path or photos file path"
+
+    begin
+      service = MigrationService.new(args[:archive_path], args[:new_user_name])
+      service.validate
+      puts "Warnings:\n#{service.warnings.join("\n")}\n-----" if service.warnings.any?
+      if service.only_import?
+        puts "Warning: Archive owner is not fetchable. Proceeding with data import, but account migration record "\
+          "won't  be created"
+      end
+      print "Do you really want to execute the archive import? Note: this is irreversible! [y/N]: "
+      next unless $stdin.gets.strip.casecmp?("y")
+
+      start_time = Time.now.getlocal
+      service.perform!
+      puts service.only_import? ? "Data import complete!" : "Data import and migration complete!"
+      puts "Migration took #{Time.now.getlocal - start_time} seconds"
+    rescue MigrationService::ArchiveValidationFailed => exception
+      puts "Errors in the archive found:\n#{exception.message}\n-----"
+    rescue MigrationService::MigrationAlreadyExists
+      puts "Migration record already exists for the user, can't continue"
+    ensure
+      service.remove_intermediate_file
     end
     puts "\n Migration finished took #{Time.now.getlocal - start_time} seconds. (Photos might still be processed)"
   end
