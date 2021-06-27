@@ -188,7 +188,7 @@ describe MigrationService do
   let(:new_username) { "newuser" }
   let(:new_user_handle) { "#{new_username}@#{AppConfig.bare_pod_uri}" }
 
-  let(:archive_file) { Tempfile.new(%w[archive .json]) }
+  let(:archive_file) { Tempfile.new(["archive", ".json"]) }
 
   def setup_validation_time_expectations
     expect_person_fetch(contact2_diaspora_id, nil)
