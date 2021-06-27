@@ -28,6 +28,14 @@ class MigrationService
     old_person.nil?
   end
 
+  def remove_intermediate_file
+    # If an unzip operation created an unzipped file, remove it after migration
+    return if @intermediate_file.nil?
+    return unless File.exist?(@intermediate_file)
+
+    File.delete(@intermediate_file)
+  end
+
   private
 
   def find_or_create_user
@@ -106,14 +114,6 @@ class MigrationService
       @intermediate_file = target_file
       return File.new(target_file, "r")
     end
-  end
-
-  def remove_intermediate_file
-    # If an unzip operation created an unzipped file, remove it after migration
-    return if @intermediate_file.nil?
-    return unless File.exist?(@intermediate_file)
-
-    File.delete(@intermediate_file)
   end
 
   class ArchiveValidationFailed < RuntimeError
