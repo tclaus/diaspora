@@ -15,6 +15,6 @@ class ExportedUser < SecureUploader
 
   def filename
     extension = File.extname(@filename) if @filename
-    "#{model.username}_data_#{secure_token}.#{extension}"
+    "#{model.username}_data_#{secure_token}#{extension}"
   end
 end

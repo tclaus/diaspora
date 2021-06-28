@@ -174,7 +174,7 @@ class UsersController < ApplicationController
       change_post_default(user_data)
     elsif user_data[:color_theme]
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
-    elsif params[:export] || params[:exported_photos_file]
+    elsif user_data[:export] || user_data[:exported_photos_file]
       upload_export_files(user_data)
     else
       change_settings(user_data)
@@ -240,25 +240,19 @@ class UsersController < ApplicationController
   end
 
   def upload_export_files(user_data)
-    @user.export = params[:export] if params[:export]
-    @user.exported_photos_file  = params[:exported_photos_file] if params[:exported_photos_file]
-    @user.save
+    logger.info "Start importing profile"
+    @user.export = user_data[:export] if user_data[:export]
+    @user.exported_photos_file = user_data[:exported_photos_file] if user_data[:exported_photos_file]
+    if @user.save
+      flash.now[:notice] = "A profile migration is scheduled"
+    else
+      flash.now[:error] = "An error occured scheduling a migration: #{@user.errors.full_messages}"
+    end
     start_migration_account
   end
 
   def start_migration_account
-    begin
-      # TODO: Start a task
-      service = MigrationService.new(export, username)
-      service.validate
-      service.perform!
-    rescue MigrationService::ArchiveValidationFailed => exception
-      puts "Errors in the archive found:\n#{exception.message}\n-----"
-    rescue MigrationService::MigrationAlreadyExists
-      puts "Migration record already exists for the user, can't continue"
-    ensure
-      service.remove_intermediate_file
-    end
+    Workers::ImportProfile.perform_async(@user.username)
   end
 
   def change_settings(user_data, successful="users.update.settings_updated", error="users.update.settings_not_updated")
