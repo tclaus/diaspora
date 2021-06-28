@@ -314,6 +314,9 @@ class User < ApplicationRecord
   ######### Data export ##################
   mount_uploader :export, ExportedUser
 
+  ######### Photos export ##################
+  mount_uploader :exported_photos_file, ExportedPhotos
+
   def queue_export
     update exporting: true, export: nil, exported_at: nil
     Workers::ExportUser.perform_async(id)
@@ -336,9 +339,6 @@ class User < ApplicationRecord
   def compressed_export
     ActiveSupport::Gzip.compress Diaspora::Exporter.new(self).execute
   end
-
-  ######### Photos export ##################
-  mount_uploader :exported_photos_file, ExportedPhotos
 
   def queue_export_photos
     update exporting_photos: true, exported_photos_file: nil, exported_photos_at: nil

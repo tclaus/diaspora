@@ -154,6 +154,8 @@ class UsersController < ApplicationController
       :post_default_public,
       :otp_required_for_login,
       :otp_secret,
+      :exported_photos_file,
+      :export,
       email_preferences: UserPreference::VALID_EMAIL_TYPES.map(&:to_sym)
     )
   end
@@ -172,6 +174,8 @@ class UsersController < ApplicationController
       change_post_default(user_data)
     elsif user_data[:color_theme]
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
+    elsif params[:export] || params[:exported_photos_file]
+      upload_export_files(user_data)
     else
       change_settings(user_data)
     end
@@ -232,6 +236,28 @@ class UsersController < ApplicationController
         @user.reload
         flash.now[:error] = t("users.update.unconfirmed_email_not_changed")
       end
+    end
+  end
+
+  def upload_export_files(user_data)
+    @user.export = params[:export] if params[:export]
+    @user.exported_photos_file  = params[:exported_photos_file] if params[:exported_photos_file]
+    @user.save
+    start_migration_account
+  end
+
+  def start_migration_account
+    begin
+      # TODO: Start a task
+      service = MigrationService.new(export, username)
+      service.validate
+      service.perform!
+    rescue MigrationService::ArchiveValidationFailed => exception
+      puts "Errors in the archive found:\n#{exception.message}\n-----"
+    rescue MigrationService::MigrationAlreadyExists
+      puts "Migration record already exists for the user, can't continue"
+    ensure
+      service.remove_intermediate_file
     end
   end
 

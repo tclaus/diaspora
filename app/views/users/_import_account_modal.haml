@@ -11,7 +11,9 @@
           Import another account
         .modal-body
           %p
-            You are about to import and merge another account into fla@diaspora-fr.org.
+            You are about to import and merge another account into 
+            = current_user.diaspora_handle
+            /.
             Here is what's going to happen:
           %ol
             %li
@@ -28,22 +30,21 @@
 
           %p
             If the pod of the account you are importing is offline, your contacts and posts will still be imported, but your contacts will receive a notification as if you started sharing with them.
-
-          .row
-            .col-md-6
-              %label Select the data archive:
-              %input{type: "file"}
-            .col-md-6
-              %label Select the photos archive:
-              %input{type: "file"}
-
-          %h4
-            %span{style:"color: green"}🗹
-            Your archive files are correct, import is possible!
-          %h4
-            The account fla@diasp.org will be imported
-            %strong
-              and deleted. This cannot be undone!
-          %p
-            .btn.btn-danger
-              Import and merge fla@diasp.org into fla@diaspora-fr.
+          = form_for current_user, url: edit_user_path, html: {method: :put, multipart: true, class: "form-horizontal"} do |f|
+            .row
+              .col-md-6
+                %label Select the data archive:
+                = f.file_field :export
+              .col-md-6
+                %label Select the photos archive:
+                = f.file_field :exported_photos_file
+            %h4
+              The original account will be imported
+              %strong
+                and deleted. This cannot be undone!
+            %p
+              .clearfix
+                .btn.btn-primary{data: {dismiss: "modal"}}
+                  Cancel
+                = f.submit 'Import and merge', class: "btn btn-danger.pull-right", id: "change_email_preferences"
+                  
