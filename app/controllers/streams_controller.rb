@@ -89,7 +89,7 @@ class StreamsController < ApplicationController
   # Returns popular public tags by tags used in a timespan, only one count per pos creator
   # Prohibites flooding tags from mass uploading bots
   def popular_tags
-    time_span = Time.zone.now - 1.day
+    time_span = Time.zone.today - 1.day
     ActsAsTaggableOn::Tagging.find_by_sql "select count(*) as count, t.name from
           (select tags.name, posts.author_id from taggings
             left join tags on taggings.tag_id = tags.id
@@ -98,6 +98,6 @@ class StreamsController < ApplicationController
             and posts.public = true
             group by tags.name, author_id order by tags.name asc) as t group by t.name
             order by count desc
-            limit 15"
+            limit 10"
   end
 end
