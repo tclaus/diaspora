@@ -127,7 +127,10 @@ DiasporaFederation.configure do |config|
     end
 
     on :fetch_person_url_to do |diaspora_id, path|
-      Person.find_or_fetch_by_identifier(diaspora_id)&.url_to(path)
+      url = Person.find_or_fetch_by_identifier(diaspora_id)&.url_to(path)
+      raise DiasporaFederation::Federation::Fetcher::NotFetchable if url.nil?
+
+      url
     end
 
     on :update_pod do |url, status|
