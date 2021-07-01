@@ -21,9 +21,9 @@ class ArchiveImporter
     attr_reader :old_author_id
 
     def persisted_object
-      @persisted_object ||= (instance if real_author == old_author_id)
-    rescue StandardError => e
-      logger.warn "#{self}: #{e}"
+      return @persisted_object if defined?(@persisted_object)
+
+      @persisted_object = (instance if real_author == old_author_id)
     end
 
     def real_author
