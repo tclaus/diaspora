@@ -98,6 +98,6 @@ class StreamsController < ApplicationController
             and posts.public = true
             group by tags.name, author_id order by tags.name asc) as t group by t.name
             order by count desc
-            limit 15"
+            limit 10"
   end
 end
