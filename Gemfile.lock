@@ -171,7 +171,7 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.4)
-    deepl-rb (2.2.4)
+    deepl-rb (2.3.0)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)

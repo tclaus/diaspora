@@ -79,6 +79,13 @@ module MobileHelper
 
 # rubocop:enable Rails/ContentTag
 
+  def mobile_translate_icon(post)
+    link_to "",
+            "#",
+            data:  {url: post_translation_path(post.id)},
+            class: "entypo-share translate-action active"
+  end
+
   def mobile_comment_icon(post)
     link_to content_tag(:span, post.comments.size, class: "count comment-count"),
             new_post_comment_path(post),

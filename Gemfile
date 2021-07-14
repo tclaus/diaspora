@@ -183,8 +183,8 @@ gem "deepl-rb", "~> 2.3"
 # Detect language of post
 gem "cld3", "~> 3.4", ">= 3.4.2"
 
-# Detect language of post
-gem "cld3", "~> 3.4", ">= 3.4.2"
+# Post translations
+gem "deepl-rb", "~> 2.3"
 
 # Prevent occasions where minitest is not bundled in
 # packaged versions of ruby. See following issues/prs:
