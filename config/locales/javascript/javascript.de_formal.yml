@@ -267,6 +267,8 @@ de_formal:
       no_posts_yet: "Es gibt noch keine Beiträge, die hier angezeigt werden könnten."
       original_post_deleted: "Originalbeitrag wurde vom Autor gelöscht"
       permalink: "Permalink"
+      translate: "Übersetzen"
+      backToOriginal: "Original anzeigen (<%= lang %>)"
       public: "Öffentlich"
       reshare: "Weitersagen"
       reshares:

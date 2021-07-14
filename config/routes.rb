@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :likes, only: %i(create destroy index)
     resources :comments, only: %i(new create destroy index)
     resources :reshares, only: :index
+    get :translation, only: :show
   end
 
   get 'p/:id' => 'posts#show', :as => 'short_post'
@@ -52,6 +53,7 @@ Rails.application.routes.draw do
   get "activity" => "streams#activity", :as => "activity_stream"
   get "stream" => "streams#multi", :as => "stream"
   get "public" => "streams#public", :as => "public_stream"
+  get "local_public" => "streams#local_public", :as => "local_public_stream"
   get "followed_tags" => "streams#followed_tags", :as => "followed_tags_stream"
   get "mentions" => "streams#mentioned", :as => "mentioned_stream"
   get "liked" => "streams#liked", :as => "liked_stream"
@@ -185,7 +187,11 @@ Rails.application.routes.draw do
       post 'by_handle' => :retrieve_remote, :as => 'person_by_handle'
     end
   end
-  get '/u/:username' => 'people#show', :as => 'user_profile', :constraints => { :username => /[^\/]+/ }
+
+  # Note: The contraint for this route's username parameter cannot be removed.
+  # This constraint turns off the format parameter, so that an username
+  # doctor.example would not try to render the user `doctor` in `example` format.
+  get "/u/:username" => "people#show", :as => "user_profile", :constraints => {username: %r{[^/]+}}
 
   # External
 
@@ -208,7 +214,7 @@ Rails.application.routes.draw do
   get 'help/:topic' => 'help#faq'
 
   #Protocol Url
-  get "protocol" => redirect("https://wiki.diasporafoundation.org/Federation_Protocol_Overview")
+  get "protocol" => redirect("https://diaspora.github.io/diaspora_federation/")
 
   # NodeInfo
   get ".well-known/nodeinfo", to: "node_info#jrd"
@@ -219,9 +225,6 @@ Rails.application.routes.draw do
   if AppConfig.settings.terms.enable? || Rails.env.test?
     get 'terms' => 'terms#index'
   end
-
-  # Relay
-  get ".well-known/x-social-relay" => "social_relay#well_known"
 
   # Startpage
   root :to => 'home#show'

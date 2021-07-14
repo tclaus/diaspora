@@ -1249,6 +1249,9 @@ en:
     public:
       title: "Public activity"
 
+    local_public:
+      title: "Local posts"
+
     multi:
       title: "Stream"
 
@@ -1432,5 +1435,6 @@ en:
     disabled: "Not available"
     open: "Open"
     closed: "Closed"
+    translation: "Translator"
 
 

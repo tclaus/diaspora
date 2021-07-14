@@ -1,6 +1,7 @@
 (function(){
   Diaspora.Mobile.PostActions = {
     initialize: function() {
+      $(".translate-action", ".stream").bind("tap click", this.onTranslate);
       $(".like-action", ".stream").bind("tap click", this.onLike);
       $(".reshare-action", ".stream").bind("tap click", this.onReshare);
     },
@@ -67,6 +68,43 @@
         error: function(response) {
           Diaspora.Mobile.Alert.handleAjaxError(response);
         },
+        complete: function() {
+          Diaspora.Mobile.PostActions.hideLoader(link);
+        }
+      });
+    },
+
+    onTranslate: function(evt) {
+      evt.preventDefault();
+      var link = $(evt.target).closest(".translate-action"),
+          href = link.attr("data-url");
+      var resetTextMarker = "";
+      if (link.children().length > 0) {
+        // then reset to original language
+        resetTextMarker = "&reset=true";
+      }
+
+      $.ajax({
+        url: href + "?format=mobile" + resetTextMarker,
+        dataType: "json",
+        type: "GET",
+        beforeSend: function() {
+          Diaspora.Mobile.PostActions.showLoader(link);
+        },
+
+        success: function(response) {
+          Diaspora.Mobile.PostActions.toggleActive(link);
+          var el = link.closest(".stream-element").find(".mobile-content").first();
+          el.children("p, blockquote").remove();
+          el.prepend(response.translatedText);
+
+          if (resetTextMarker === "") {
+            link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
+          } else {
+            link.children().remove();
+          }
+        },
+
         complete: function() {
           Diaspora.Mobile.PostActions.hideLoader(link);
         }

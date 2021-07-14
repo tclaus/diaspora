@@ -22,7 +22,7 @@
         <span class="details gray post-timestamp">
           -
           <a href="/posts/{{id}}">
-            <time class="timeago" data-original-title="{{{localTime created_at}}}" datetime="{{created_at}}" />
+            <time class="timeago" data-original-title="{{{localTime created_at}}}" datetime="{{created_at}}"></time>
           </a>
 
           <a href="/posts/{{guid}}" class="permalink" title="{{t "stream.permalink"}}">
@@ -33,6 +33,13 @@
     {{/unless}}
 
     <div class="post-content"> </div>
+    {{#if translationEnabled}}
+      {{#if translatedText}}
+        <a class ="post-translate" href="#">{{t "stream.backToOriginal" lang=detectedSourceLanguage}}</a>
+      {{else}}
+        <a class="post-translate" href="#">{{t "stream.translate"}}</a>
+      {{/if}}
+    {{/if}}
     <div class="status-message-location nsfw-hidden"> </div>
 
     {{#unless preview}}

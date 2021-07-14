@@ -74,6 +74,7 @@ defaults:
   settings:
     pod_name: 'diaspora*'
     enable_registrations: true
+    enable_local_posts_stream: 'disabled'
     autofollow_on_join: true
     autofollow_on_join_user: 'hq@pod.diaspora.software'
     welcome_message:
@@ -153,6 +154,8 @@ defaults:
       key:
       secret:
       authorized: true
+  deepl:
+    enable: false
   mail:
     enable: false
     sender_address: 'no-reply@example.org'
@@ -173,15 +176,6 @@ defaults:
   admins:
     account:
     podmin_email:
-  relay:
-    outbound:
-      send: false
-      url: 'https://relay.iliketoast.net/receive/public'
-    inbound:
-      subscribe: false
-      scope: tags
-      include_user_tags: false
-      pod_tags:
 
 development:
   environment:

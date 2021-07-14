@@ -23,6 +23,7 @@ Although the chat was never enabled per default and was marked as experimental, 
 * Do not show getting started after account import [#8036](https://github.com/diaspora/diaspora/pull/8036)
 * Remove the JSXC/Prosody integration [#8069](https://github.com/diaspora/diaspora/pull/8069)
 * Replace factory\_girl with factory\_bot [#8218](https://github.com/diaspora/diaspora/pull/8218)
+* Drop relay support [#8243](https://github.com/diaspora/diaspora/pull/8243)
 
 ## Bug fixes
 * Fix multiple photos upload progress bar [#7655](https://github.com/diaspora/diaspora/pull/7655)
@@ -31,16 +32,23 @@ Although the chat was never enabled per default and was marked as experimental, 
 ## Features
 * Add client-side cropping of profile image uploads [#7581](https://github.com/diaspora/diaspora/pull/7581)
 * Add client-site rescaling of post images if they exceed the maximum possible size [#7734](https://github.com/diaspora/diaspora/pull/7734)
-* Add backend for archive import [#7660](https://github.com/diaspora/diaspora/pull/7660)
+* Add backend for archive import [#7660](https://github.com/diaspora/diaspora/pull/7660) [#8254](https://github.com/diaspora/diaspora/pull/8254) [#8264](https://github.com/diaspora/diaspora/pull/8264)
 * For pods running PostgreSQL, make sure that no upper-case/mixed-case tags exist, and create a `lower(name)` index on tags to speed up ActsAsTaggableOn [#8206](https://github.com/diaspora/diaspora/pull/8206)
+* Allow podmins/moderators to see all local public posts to improve moderation [#8232](https://github.com/diaspora/diaspora/pull/8232)
 
 # 0.7.16.0
 
 ## Refactor
+* Cache local posts/comments count for statistics [#8241](https://github.com/diaspora/diaspora/pull/8241)
+* Fix html-syntax in some handlebars templates [#8251](https://github.com/diaspora/diaspora/pull/8251)
+* Remove `chat_enabled` flag from archive export [#8265](https://github.com/diaspora/diaspora/pull/8265)
 
 ## Bug fixes
 
 ## Features
+* Add tags to tumblr posts [#8244](https://github.com/diaspora/diaspora/pull/8244)
+* Add blocks to the archive export [#8263](https://github.com/diaspora/diaspora/pull/8263)
+* Allow points and dashes in the username [#8266](https://github.com/diaspora/diaspora/pull/8266)
 
 # 0.7.15.0
 
