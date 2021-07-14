@@ -154,6 +154,8 @@ defaults:
       key:
       secret:
       authorized: true
+  deepl:
+    enable: false
   mail:
     enable: false
     sender_address: 'no-reply@example.org'
