@@ -4,8 +4,8 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
   urlRoot : "/posts",
 
   initialize : function() {
-    this.interactions = new app.models.PostInteractions(_.extend({post: this}, this.get("interactions")));
-    this.translation = new app.models.Translation(this.get("translation"), {post: this});    
+    this.interactions = new app.models.Post.Interactions(_.extend({post: this}, this.get("interactions")));
+    this.translation = new app.models.Translation(this.get("translation"), {post: this});
     this.delegateToInteractions();
   },
 

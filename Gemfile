@@ -73,7 +73,7 @@ group :mysql, optional: true do
   gem "mysql2", "0.5.3"
 end
 group :postgresql, optional: true do
-  gem "pg", "1.2.3"
+  gem "pg",     "1.2.3"
 end
 
 gem "activerecord-import", "1.1.0"
@@ -204,8 +204,8 @@ gem "logging-rails", "0.6.0", require: "logging/rails"
 
 gem "rubyzip", "2.3.0", require: "zip"
 
-# Detect language of post
-gem "cld3", "~> 3.4", ">= 3.4.2"
+# Post translations
+gem "deepl-rb", "~> 2.2", ">= 2.2.4"
 
 # Prevent occasions where minitest is not bundled in
 # packaged versions of ruby. See following issues/prs:
