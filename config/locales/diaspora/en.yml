@@ -155,6 +155,7 @@ en:
       closed_account: "Closed"
       locked_account: "Locked"
       active_account: "Active"
+      first_seen: "First seen"
       last_seen: "Last seen"
       current_sign_in_ip: "IP address at current sign in"
       account_closed: "Account closed"

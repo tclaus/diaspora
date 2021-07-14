@@ -35,6 +35,8 @@
           - if person.owner.present?
             %dt= t(".email")
             %dd= person.owner.email
+            %dt= t(".first_seen")
+            %dd= person.owner.created_at || t(".unknown")
             %dt= t(".last_seen")
             %dd= person.owner.last_seen || t(".unknown")
             %dt= t(".current_sign_in_ip")
