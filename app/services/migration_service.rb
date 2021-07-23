@@ -31,7 +31,7 @@ class MigrationService
   def self_import?
     source_diaspora_id = archive_validator.archive_author_diaspora_id
     target_diaspora_id = "#{new_user_name}#{User.diaspora_id_host}"
-    source_diaspora_id == target_diaspora_id
+    source_diaspora_id.eql?(target_diaspora_id)
   end
 
   # when old person can't be resolved we still import data but we don't create&perform AccountMigration instance
@@ -60,6 +60,10 @@ class MigrationService
   def run_migration
     account_migration.save
     account_migration.perform!
+  end
+
+  def archive_file_exists?
+    File.exist?(archive_path)
   end
 
   def account_migration
