@@ -58,7 +58,7 @@
               = t("users.import_modal.original_account_will_be_deleted")
             %p
               .clearfix
-                .btn.btn-default{data: {dismiss: "modal"}}
+                .btn.btn-default{data: {dismiss: "modal"}, id: "cancel-import"}
                   = t("users.import_modal.cancel")
                 = f.submit t("users.import_modal.start_import"),
                            class:    "btn btn-primary.pull-right",

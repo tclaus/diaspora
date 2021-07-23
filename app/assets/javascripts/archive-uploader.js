@@ -1,24 +1,37 @@
+const profileFileChosen = $("#profile-file-chosen");
+const photosFileChosen = $("#photos-file-chosen");
+
 const checkProfileUploadButton = function() {
   let photoFiles = $("#profile-file-btn")[0].files;
   let profileFiles = $("#photos-file-btn")[0].files;
-  if ((photoFiles.size + profileFiles.size) === 0) {
-    $("#upload_profile_files").attr("disabled", "disabled");
-  } else {
-    $("#upload_profile_files").removeAttr("disabled");
+
+  $("#upload_profile_files")[0].disabled = (photoFiles.length + profileFiles.length === 0);
+};
+
+const getFilename = function(files) {
+  if (files && files.length > 0) {
+    return files[0].name;
   }
+  return "";
 };
 const profileFileButton = document.getElementById("profile-file-btn");
 const profileFileChosen = document.getElementById("profile-file-chosen");
 
-const photosFileButton = document.getElementById("photos-file-btn");
-const photosFileChosen = document.getElementById("photos-file-chosen");
-
-profileFileButton.addEventListener("change", function() {
-  profileFileChosen.textContent = this.files[0].name;
+$("#profile-file-btn").on("change", function() {
+  profileFileChosen.text(getFilename(this.files));
   checkProfileUploadButton();
 });
 
-photosFileButton.addEventListener("change", function() {
-  photosFileChosen.textContent = this.files[0].name;
+$("#photos-file-btn").on("change", function() {
+  photosFileChosen.text(getFilename(this.files));
   checkProfileUploadButton();
 });
+
+$("#cancel-import").on("click", function() {
+  $("#profile-file-btn").val("");
+  profileFileChosen.text("");
+
+  $("#photos-file-btn").val("");
+  photosFileChosen.text("");
+});
+
