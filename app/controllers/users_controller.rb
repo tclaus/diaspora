@@ -156,7 +156,6 @@ class UsersController < ApplicationController
       :otp_secret,
       :exported_photos_file,
       :export,
-      {stream_languages: []},
       email_preferences: UserPreference::VALID_EMAIL_TYPES.map(&:to_sym)
     )
   end
@@ -177,8 +176,6 @@ class UsersController < ApplicationController
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
     elsif user_data[:export] || user_data[:exported_photos_file]
       upload_export_files(user_data)
-    elsif user_data[:stream_languages]
-      change_stream_languages(user_data[:stream_languages])
     else
       change_settings(user_data)
     end
@@ -253,13 +250,6 @@ class UsersController < ApplicationController
                           " #{@user.errors.full_messages}"
     end
     start_migration_account
-  end
-
-  def change_stream_languages(stream_languages)
-    language_ids = stream_languages.delete_if {|id| id == "" }
-    languages = language_ids.map {|id| {user_id: @user.id, language_id: id} }
-    StreamLanguage.where(user_id: @user.id).destroy_all
-    @user.stream_languages.create(languages)
   end
 
   def start_migration_account
