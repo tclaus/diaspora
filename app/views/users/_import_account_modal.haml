@@ -28,6 +28,9 @@
           %p
             = t("users.import_modal.old_pod_offline")
 
+          %p
+            If the pod of the account you are importing is offline, your contacts and posts will still be imported,
+            but your contacts will receive a notification as if you started sharing with them.
           = form_for current_user,
                      url: edit_user_path,
                      html: {method: :put, multipart: true, class: "form-horizontal"} do |f|
