@@ -8,17 +8,21 @@
         %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
           &times;
         %h3.modal-title{id: "importAccountModalLabel"}
-          = t("users.import_modal.title")
+          Import another account
         .modal-body
           %p
-            = simple_format(t("users.import_modal.subtext", {accountname: current_user.diaspora_handle}))
+            You are about to import and merge another account into
+            = current_user.diaspora_handle
+            /.
+            Here is what's going to happen:
           %ol
             %li
-              = t("users.import_modal.list1")
+              Your profile (name, bio, birthday, gender...) will be updated with the content from the imported account
             %li
-              = t("users.import_modal.list2")
+              Your settings (theme, visibility...) will be updated with those from the imported account
             %li
-              = t("users.import_modal.list3")
+              All your aspects and contacts will be added to this account. This will be transparent for them, they
+              will be linked to that account as they were linked with the account you are importing
             %li
               = t("users.import_modal.list4")
           %strong
@@ -65,4 +69,3 @@
                 id: "upload_profile_files",
                 disabled: true
 
-= javascript_include_tag "archive-uploader"
