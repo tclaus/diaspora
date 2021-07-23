@@ -8,25 +8,27 @@
         %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
           &times;
         %h3.modal-title{id: "importAccountModalLabel"}
-          = t("users.import_modal.title")
+          Import another account
         .modal-body
           %p
-            = simple_format(t("users.import_modal.subtext", {accountname: current_user.diaspora_handle}))
+            You are about to import and merge another account into
+            = current_user.diaspora_handle
+            /.
+            Here is what's going to happen:
           %ol
             %li
-              = t("users.import_modal.list1")
+              Your profile (name, bio, birthday, gender...) will be updated with the content from the imported account
             %li
-              = t("users.import_modal.list2")
+              Your settings (theme, visibility...) will be updated with those from the imported account
             %li
-              = t("users.import_modal.list3")
+              All your aspects and contacts will be added to this account. This will be transparent for them, they
+              will be linked to that account as they were linked with the account you are importing
             %li
-              = t("users.import_modal.list4")
-          %strong
-            = t("users.import_modal.closing_text")
-          %p
-            = t("users.import_modal.closing_recommendation")
-          %p
-            = t("users.import_modal.old_pod_offline")
+              All posts and comments you made with the imported account will be imported in that account and seen
+              as posted by this accounts by the other users
+            %li
+              %strong
+                The imported account and all its linked data will be deleted from the previous pod.
 
           %p
             If the pod of the account you are importing is offline, your contacts and posts will still be imported,
@@ -35,34 +37,19 @@
                      url: edit_user_path,
                      html: {method: :put, multipart: true, class: "form-horizontal"} do |f|
             .row
-              .col-md-12
-                .upload-btn-wrapper
-                  .btn.btn-primary
-                    = t("users.import_modal.select_profile_archive")
-                  = f.file_field :export, accept: "application/json, application/zip, application/gzip",
-                    id: "profile-file-btn"
-                  %span#profile-file-chosen
-                    = t("users.import_modal.no_profile_file_set")
-            .row
-              .col-md-12
-                .upload-btn-wrapper
-                  .btn.btn-primary
-                    = t("users.import_modal.select_photo_archive")
-                  = f.file_field :exported_photos_file, accept: "application/zip",
-                    id: "photos-file-btn"
-                  %span#photos-file-chosen
-                    = t("users.import_modal.no_photos_file_set")
+              .col-md-6
+                %label Select the data archive:
+                = f.file_field :export, accept: "application/json, application/zip, application/gzip"
+              .col-md-6
+                %label Select the photo archive:
+                = f.file_field :exported_photos_file, accept: "application/zip"
             %h4
-              = t("users.import_modal.import_starts")
+              The original account will be imported
               %strong
-              = t("users.import_modal.original_account_will_be_deleted")
+                and the original account deleted.
             %p
               .clearfix
                 .btn.btn-default{data: {dismiss: "modal"}}
-                  = t("users.import_modal.cancel")
-                = f.submit t("users.import_modal.start_import"),
-                class: "btn btn-primary.pull-right",
-                id: "upload_profile_files",
-                disabled: true
+                  Cancel
+                = f.submit "Import and merge", class: "btn btn-primary.pull-right", id: "change_email_preferences"
 
-= javascript_include_tag "archive-uploader"
