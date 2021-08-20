@@ -39,7 +39,7 @@ Feature: posting from the mobile main page
 
     When I visit the stream with aspect "PostingTo"
     Then I should see "I am selecting my friends"
-    
+
     When I visit the stream with aspect "Unicorns"
     Then I should see "I am selecting my friends"
 
