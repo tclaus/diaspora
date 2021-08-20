@@ -245,6 +245,16 @@ describe LikeService do
       LikeService.new(alice).unlike_post(post.id)
       expect(post.likes.length).to eq(0)
     end
+
+    it "removes the like for a comment" do
+      comment = CommentService.new(alice).create(post.id, "I like my own post")
+      LikeService.new(alice).create_for_comment(comment.id)
+      expect(comment.likes.length).to eq(1)
+
+      LikeService.new(alice).unlike_comment(comment.id)
+      comment = CommentService.new(alice).find!(comment.id)
+      expect(comment.likes.length).to eq(0)
+    end
   end
 
   describe "#unlike_comment" do
