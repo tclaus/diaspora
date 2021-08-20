@@ -124,6 +124,7 @@ DiasporaFederation.configure do |config|
 
     on :fetch_public_entity do |entity_type, guid|
       entity = Diaspora::Federation::Mappings.model_class_for(entity_type).all_public.find_by(guid: guid)
+      # TODO: Check for person.closed_account? when merging with #8228 'Block Pod'
       case entity
       when Poll
         Diaspora::Federation::Entities.status_message(entity.status_message)
