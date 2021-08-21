@@ -27,6 +27,11 @@ class Report < ApplicationRecord
       .select("reports.*, people.guid as originator_guid")
   }
 
+  scope :join_originator, -> {
+    joins("LEFT JOIN people ON originator_diaspora_handle = people.diaspora_handle ")
+      .select("reports.*, people.guid as originator_guid")
+  }
+
   def reported_author
     item&.author
   end
@@ -83,6 +88,7 @@ class Report < ApplicationRecord
   def action_no_action?
     action&.downcase == STATUS_NO_ACTION.downcase
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)
