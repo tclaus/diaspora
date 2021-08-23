@@ -47,6 +47,4 @@
       %ul
       - @popular_tags.each do |name, count|
         %li
-          != t("admins.stats.tag_name",
-            name_tag: content_tag(:strong, name),
-            count_tag: content_tag(:strong, count))
+          =link_to("#{count}  #{name}", "/tags/#{name}")
