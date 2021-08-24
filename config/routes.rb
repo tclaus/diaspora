@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :likes, only: %i(create destroy index)
     resources :comments, only: %i(new create destroy index)
     resources :reshares, only: :index
+    get :translation, only: :show
   end
 
   get 'p/:id' => 'posts#show', :as => 'short_post'

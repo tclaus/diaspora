@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   before_action :gon_set_current_user
   before_action :gon_set_appconfig
   before_action :gon_set_preloads
+  before_action :gon_set_translation_enabled
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   inflection_method grammatical_gender: :gender
@@ -181,6 +182,10 @@ class ApplicationController < ActionController::Base
   def gon_set_preloads
     return unless gon.preloads.nil?
     gon.preloads = {}
+  end
+
+  def gon_set_translation_enabled
+    gon.translation_enabled = TranslationService.enabled?
   end
 
   protected
