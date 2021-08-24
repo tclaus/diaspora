@@ -1364,6 +1364,7 @@ de:
   will_paginate:
     previous_label: "&laquo; voriges"
 
+
     next_label: nächstes &raquo;
   simple_captcha:
     placeholder: Gib die dargestellten Zeichen ein

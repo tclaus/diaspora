@@ -77,7 +77,7 @@ module MobileHelper
     end
   end
 
-  # rubocop:enable Rails/ContentTag
+# rubocop:enable Rails/ContentTag
 
   def mobile_comment_icon(post)
     link_to content_tag(:span, post.comments.size, class: "count comment-count"),

@@ -26,6 +26,8 @@ class TranslationService
     supported_languages.any? {|supported_language| supported_language.code.downcase.eql?(local_language) }
   end
 
+  # rubocop:enable Metrics/MethodLength
+
   private
 
   def translate_text(text)

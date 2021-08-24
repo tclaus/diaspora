@@ -249,6 +249,8 @@ de:
       limited: Begrenzt
       like: Gefällt mir
       unlike: Gefällt mir nicht mehr
+      translate: "Übersetzen"
+      backToOriginal: "Original anzeigen (<%= lang %>)"
       reshare: Weitersagen
       comment: Kommentieren
       original_post_deleted: Originalbeitrag wurde vom Autor entfernt.
