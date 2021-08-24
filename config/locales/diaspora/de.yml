@@ -1363,6 +1363,7 @@ de:
       error_token: Token war falsch oder ungültig
   will_paginate:
     previous_label: "&laquo; voriges"
+
     next_label: nächstes &raquo;
   simple_captcha:
     placeholder: Gib die dargestellten Zeichen ein
@@ -1386,3 +1387,4 @@ de:
     disabled: Nicht verfügbar
     open: Offen
     closed: Geschlossen
+    translation: Übersetzer
