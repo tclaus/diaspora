@@ -27,6 +27,7 @@ module Workers
            Diaspora::Federation::AuthorIgnored,
            Diaspora::Federation::InvalidAuthor,
            Diaspora::Federation::RecipientClosed,
+           Diaspora::Federation::PodBlocked,
            # TODO: deprecated
            DiasporaFederation::Salmon::MissingMagicEnvelope,
            DiasporaFederation::Salmon::MissingAuthor,
