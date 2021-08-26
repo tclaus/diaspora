@@ -26,7 +26,8 @@ module Workers
            DiasporaFederation::Salmon::InvalidEncoding,
            Diaspora::Federation::AuthorIgnored,
            Diaspora::Federation::InvalidAuthor,
-           Diaspora::Federation::RecipientClosed => e
+           Diaspora::Federation::RecipientClosed,
+           Diaspora::Federation::PodBlocked => e
       logger.warn "don't retry for error: #{e.class}"
     end
   end
