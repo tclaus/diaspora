@@ -4,18 +4,22 @@ class Report < ApplicationRecord
   validates :user_id, presence: true
   validates :item_id, presence: true
   validates :item_type, presence: true, inclusion: {
-    in: %w(Post Comment), message: "Type should match `Post` or `Comment`!"}
+    in: %w[Post Comment], message: "Type should match `Post` or `Comment`!"
+  }
   validates :text, presence: true
 
-  validate :entry_does_not_exist, :on => :create
-  validate :post_or_comment_does_exist, :on => :create
+  validate :entry_does_not_exist, on: :create
+  validate :post_or_comment_does_exist, on: :create
 
   belongs_to :user
   belongs_to :post, optional: true
   belongs_to :comment, optional: true
   belongs_to :item, polymorphic: true
 
-  after_commit :send_report_notification, :on => :create
+  STATUS_DELETED = "deleted"
+  STATUS_NO_ACTION = "no action"
+
+  after_commit :send_report_notification, on: :create
 
   scope :join_originator, -> {
     joins("LEFT JOIN people ON originator_diaspora_handle = people.diaspora_handle ")
@@ -23,18 +27,18 @@ class Report < ApplicationRecord
   }
 
   def reported_author
-    item.author if item
+    item&.author
   end
 
   def entry_does_not_exist
     if Report.where(item_id: item_id, item_type: item_type).exists?(user_id: user_id)
-      errors[:base] << 'You cannot report the same post twice.'
+      errors[:base] << "You cannot report the same post twice."
     end
   end
 
   def post_or_comment_does_exist
     if Post.find_by_id(item_id).nil? && Comment.find_by_id(item_id).nil?
-      errors[:base] << 'Post or comment was already deleted or doesn\'t exists.'
+      errors[:base] << "Post or comment was already deleted or doesn't exists."
     end
   end
 
@@ -62,14 +66,22 @@ class Report < ApplicationRecord
 
   def mark_as_reviewed_and_deleted
     Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: "Deleted")
+          .update_all(reviewed: true, action: STATUS_DELETED)
   end
 
   def mark_as_reviewed
     Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: "No Action")
+          .update_all(reviewed: true, action: STATUS_NO_ACTION)
   end
   # rubocop:enable Rails/SkipsModelValidations
+
+  def action_deleted?
+    action&.downcase == STATUS_DELETED.downcase
+  end
+
+  def action_no_action?
+    action&.downcase == STATUS_NO_ACTION.downcase
+  end
 
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)

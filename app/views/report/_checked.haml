@@ -9,7 +9,7 @@
     %th
       = t("report.type")
     %th
-      = t("report.originator")
+      = t("report.author")
     %th
       = t("report.decision")
     %th
@@ -28,7 +28,8 @@
         - unless report.originator_diaspora_handle.nil?
           = link_to(report.originator_diaspora_handle, "/people/#{report.originator_guid}")
       %td
-        = report.action
+        = t("report.item_deleted") if report.action_deleted?
+        = t("report.item_no_action") if report.action_no_action?
       %td
         - unless report.item.nil?
           = link_to_content(report)
