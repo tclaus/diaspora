@@ -9,6 +9,10 @@ module Diaspora
     # Raised, if the author of the existing object doesn't match the received author
     class InvalidAuthor < RuntimeError
     end
+
+    # Raised if pod is blocked by admin
+    class PodBlocked < RuntimeError
+    end
   end
 end
 
