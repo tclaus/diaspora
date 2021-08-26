@@ -90,6 +90,14 @@ class Report < ApplicationRecord
   end
   # rubocop:enable Rails/SkipsModelValidations
 
+  def action_deleted?
+    action&.downcase == STATUS_DELETED.downcase
+  end
+
+  def action_no_action?
+    action&.downcase == STATUS_NO_ACTION.downcase
+  end
+
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)
   end
