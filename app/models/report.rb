@@ -26,11 +26,6 @@ class Report < ApplicationRecord
       .select("reports.*, people.guid as originator_guid")
   }
 
-  scope :join_originator, -> {
-    joins("LEFT JOIN people ON originator_diaspora_handle = people.diaspora_handle ")
-      .select("reports.*, people.guid as originator_guid")
-  }
-
   def reported_author
     item&.author
   end
@@ -71,14 +66,22 @@ class Report < ApplicationRecord
 
   def mark_as_reviewed_and_deleted
     Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: "Deleted")
+          .update_all(reviewed: true, action: STATUS_DELETED)
   end
 
   def mark_as_reviewed
     Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: "No Action")
+          .update_all(reviewed: true, action: STATUS_NO_ACTION)
   end
   # rubocop:enable Rails/SkipsModelValidations
+
+  def action_deleted?
+    action&.downcase == STATUS_DELETED.downcase
+  end
+
+  def action_no_action?
+    action&.downcase == STATUS_NO_ACTION.downcase
+  end
 
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)

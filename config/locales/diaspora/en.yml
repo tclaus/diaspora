@@ -1066,7 +1066,7 @@ en:
     no_pending_reports: "No pending reports"
     reported_tab: "Reported"
     reviewed_tab: "Reviewed"
-    originator: "Originator"
+    author: "Author"
     tooltip_incomming: "New incomming reports"
     tooltip_reviewed: "Already reviewed reports"
     tooltip_statistics: "Statistics about reporter and reporting items"
@@ -1077,6 +1077,8 @@ en:
     type: "Type"
     decision: "Decision"
     action: "Action"
+    item_deleted: "Deleted"
+    item_no_action: "No Action"
     count: "Count"
     reason_label: "Reason:"
     review_link: "Mark as reviewed"
@@ -1092,8 +1094,7 @@ en:
       one: "There is one unreviewed report."
       other: "There are %{count} unreviewed reports."
     by_reporter: "By Reporter"
-    by_originator: "By Originator"
-    originator: "Originator"
+    by_author: "By Author"
   profiles:
     edit:
       basic: "My basic profile"

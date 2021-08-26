@@ -12,7 +12,7 @@ class ReportController < ApplicationController
     @unreviewed_reports = Report.join_originator.where(reviewed: false).order(created_at: :desc)
     @reviewed_reports = Report.join_originator.where(reviewed: true).order(created_at: :desc)
     @statistics_by_reporter = statistics_by_reporter
-    @statistics_by_originator = statistics_by_originator
+    @statistics_by_author = statistics_by_author
   end
 
   def update
@@ -55,7 +55,7 @@ class ReportController < ApplicationController
     ActiveRecord::Base.connection.exec_query sql
   end
 
-  def statistics_by_originator
+  def statistics_by_author
     sql = "select count(*), originator_diaspora_handle, guid from reports
            left join people on originator_diaspora_handle = people.diaspora_handle
            where originator_diaspora_handle is not null
