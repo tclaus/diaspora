@@ -18,9 +18,8 @@ class ReportController < ApplicationController
   def update
     if report = Report.where(id: params[:id]).first
       report.mark_as_reviewed
-      report.update(action: "No Action")
     end
-    redirect_to :action => :index
+    redirect_to action: :index
   end
 
   def destroy
@@ -36,7 +35,7 @@ class ReportController < ApplicationController
     report = current_user.reports.new(report_params)
     report.originator_diaspora_handle = report.reported_author.diaspora_handle
     if report.save
-      render json: true, status: 200
+      render json: true, status: :ok
     else
       head :conflict
     end
