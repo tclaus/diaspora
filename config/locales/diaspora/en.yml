@@ -97,6 +97,7 @@ en:
       user_search: "User search"
       weekly_user_stats: "Weekly user stats"
       pod_stats: "Pod stats"
+      tags_board: "Taggings"
       report: "Reports"
       sidekiq_monitor: "Sidekiq monitor"
       pod_network: "Pod network"
@@ -1247,6 +1248,11 @@ en:
     manage:
       title: "Manage followed tags"
       no_tags: "You aren't following any tags."
+    
+  popular_tags:
+    title: "Popular tags for this day"
+    no_tags: "No posts are tagged on this day"
+    tag_count: "%{count} individual poster"
 
   streams:
     community_spotlight_stream: "Community spotlight"
