@@ -49,4 +49,3 @@ Then(/^I should see the reviewed report with decision Deleted$/) do
     find("tr", text: "Deleted")
   end
 end
-
