@@ -5,12 +5,12 @@
       .panel-heading
         .reporter.pull-right
           != t("report.reported_label", person: link_to(username, user_profile_path(username)))
-        .reason
+        .author
           %span.reason-label
             != "#{t('report.author')}:"
           %span
             = report.author.name
-        .reason
+        .created-at
           %span.reason-label
             != "#{t('report.created_at')}:"
           %span
