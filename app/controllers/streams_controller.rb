@@ -72,6 +72,7 @@ class StreamsController < ApplicationController
       @stream ||= stream_klass.new(current_user, :max_time => max_time)
     end
 
+    @popular_tags = tags_service.popular_tags_aligned
     respond_with do |format|
       format.html { render 'streams/main_stream' }
       format.mobile { render 'streams/main_stream' }
@@ -83,5 +84,9 @@ class StreamsController < ApplicationController
     if params[:a_ids].present?
       session[:a_ids] = params[:a_ids]
     end
+  end
+
+  def tags_service
+    @tags_service ||= TagsService.new
   end
 end
