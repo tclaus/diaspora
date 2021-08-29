@@ -27,7 +27,7 @@ class ArchiveImporter
     end
 
     def real_author
-      instance.author.diaspora_handle
+      instance&.author&.diaspora_handle
     end
   end
 end
