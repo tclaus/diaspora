@@ -11,7 +11,7 @@ class AddUserFieldsToReports < ActiveRecord::Migration[5.2]
         report.save(validate: false, touch: false)
       end
       if report.item.nil?
-        report.action = "Deleted"
+        report.action = Report::STATUS_DELETED
         report.save(validate: false, touch: false)
       end
     end
