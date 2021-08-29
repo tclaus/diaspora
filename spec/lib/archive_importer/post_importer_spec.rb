@@ -120,15 +120,15 @@ describe ArchiveImporter::PostImporter do
              "created_at" : "2015-10-19T13:58:16Z",
              "guid" : "#{guid}",
              "author" : "#{new_user.diaspora_handle}",
-             "root_author": "root_author@remote-pod.com",
-             "root_guid":   "#{UUID.generate(:compact)}"
+             "root_author" : "author@example.com",
+             "root_guid" : "#{UUID.generate(:compact)}"
           },
-          "entity_type": "reshare"
+          "entity_type" : "reshare"
         }
       JSON
 
-      context "with fetch problems" do
-        it "handles unfetchable root post" do
+      context "with unknown root author" do
+        it "handles missing person" do
           allow(DiasporaFederation::Federation::Fetcher).to receive(:fetch_public)
             .and_raise(DiasporaFederation::Federation::Fetcher::NotFetchable)
 

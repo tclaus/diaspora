@@ -22,8 +22,7 @@ class ArchiveImporter
       self.persisted_object = nil
     end
 
-    attr_reader :json
-    attr_reader :user
+    attr_reader :json, :user
     attr_accessor :persisted_object
 
     def entity
