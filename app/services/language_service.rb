@@ -11,13 +11,9 @@ class LanguageService
 
   def detect_post_language(post)
     original_post = root_post(post)
-    return if original_post.nil?
+    return if original_post.nil? || original_post.text.nil?
 
-    return if original_post.text.nil?
-
-    result = nil
-    result = language_for_text(original_post.text.to_s) if original_post.text.present?
-    result = language_by_heuristic(post) if result.nil?
+    result = cld3.find_language(original_post.text)
     return unless result
     if result.reliable?
       post.language_id = result.language.to_s.split("_").first
@@ -27,14 +23,16 @@ class LanguageService
   def language_for_public
     return default_language if @user.nil?
 
-    user_defined_language
+    post.language_id = result.language.to_s
+    post.language_reliable = result.reliable?
   end
 
-  def language_for_text(text)
-    text_without_url = remove_urls_from_text(text)
-    CLD.find_language(text_without_url)
+  def cld3
+    @cld3 ||= CLD3::NNetLanguageIdentifier.new(0, 1000)
   end
 
+  def self.language_for_public(default_language=I18n.locale.to_s)
+    exclusive_languages = %w[en de fr es] # exclusive languages
   private
 
   def user_defined_language
@@ -48,6 +46,8 @@ class LanguageService
 
     [default_language, "en"] # all other requested languages should return english plus the requested language
   end
+
+  private
 
   def root_post(post)
     if post.type.eql?("Reshare")
