@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :diaspora do
   desc "Detects languages uses in posts"
   task detect_languages: :environment do
@@ -9,5 +11,4 @@ namespace :diaspora do
       end
     end
   end
-
 end
