@@ -3,7 +3,6 @@
 require "cld3"
 
 class LanguageService
-
   def detect_post_language(post)
     original_post = root_post(post)
     return if original_post.nil? || original_post.text.nil?
@@ -20,7 +19,7 @@ class LanguageService
   end
 
   def self.language_for_public(default_language=I18n.locale.to_s)
-    exclusive_languages = %w[en de fr es] # exclusive languages
+    exclusive_languages = %w[en de fr es ru] # exclusive languages
     return [default_language] if exclusive_languages.include?(default_language)
 
     [default_language, "en"] # all other requested languages should return english plus the requested language
