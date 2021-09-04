@@ -193,11 +193,11 @@
     %hr
 
     .row
-      .col-md-12.account-data
+      .col-md-12
         %h3= t(".export_data")
         %p If you want to migrate this account to another pod, start by exporting your data using the buttons below.
     .row
-      .col-md-6
+      .col-md-6.account-data
         %h4= t("profile")
         .form-group
           - if current_user.exporting

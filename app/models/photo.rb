@@ -111,8 +111,8 @@ class Photo < ApplicationRecord
     # During migration in bad cases this might be happen
     # If this happens, stream loading stops. Better dont show photos as stop loading stream
     if remote_photo_path.present? && remote_photo_name.present?
-      name = "#{name}_"
-      image_url = remote_photo_path + name + remote_photo_name
+      name = "#{name.to_s}_" if name
+      image_url = remote_photo_path + name.to_s + remote_photo_name
       if AppConfig.privacy.camo.proxy_remote_pod_images?
         Diaspora::Camo.image_url(image_url)
       else
