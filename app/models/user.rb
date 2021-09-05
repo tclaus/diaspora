@@ -314,7 +314,7 @@ class User < ApplicationRecord
   ######### Data export ##################
   mount_uploader :export, ExportedUser
 
-  ######### Photos export ##################
+  ######### Photo export ##################
   mount_uploader :exported_photos_file, ExportedPhotos
 
   def queue_export
