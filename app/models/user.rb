@@ -312,7 +312,7 @@ class User < ApplicationRecord
   ######### Data export ##################
   mount_uploader :export, ExportedUser
 
-  ######### Photos export ##################
+  ######### Photo export ##################
   mount_uploader :exported_photos_file, ExportedPhotos
 
   def queue_export
@@ -329,7 +329,7 @@ class User < ApplicationRecord
       update exporting: false
     end
   rescue StandardError => e
-    logger.error "Unexpected error while exporting user '#{username}': #{e.class}: #{e.message}\n" \
+    logger.error "Unexpected error while exporting data for '#{username}: #{e.class}: #{e.message}\n" \
                  "#{e.backtrace.first(15).join("\n")}"
     update exporting: false
   end

@@ -240,13 +240,14 @@ class UsersController < ApplicationController
   end
 
   def upload_export_files(user_data)
-    logger.info "Start importing profile"
+    logger.info "Start importing account"
     @user.export = user_data[:export] if user_data[:export]
     @user.exported_photos_file = user_data[:exported_photos_file] if user_data[:exported_photos_file]
     if @user.save
-      flash.now[:notice] = "A profile migration is scheduled"
+      flash.now[:notice] = "Your account migration has been scheduled"
     else
-      flash.now[:error] = "An error occured scheduling a migration: #{@user.errors.full_messages}"
+      flash.now[:error] = "Your account migration could not be scheduled for the following reason:"\
+                          " #{@user.errors.full_messages}"
     end
     start_migration_account
   end
