@@ -176,4 +176,12 @@ class Post < ApplicationRecord
       subscribers.concat(resharers).concat(participants) if public?
     end
   end
+
+  def investigate_language
+    language_service.detect_post_language(self)
+  end
+
+  def language_service
+    @@language_service ||= LanguageService.new
+  end
 end

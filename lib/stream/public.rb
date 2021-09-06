@@ -16,6 +16,13 @@ class Stream::Public < Stream::Base
   # @return [ActiveRecord::Association<Post>] AR association of posts
   def posts
     @posts ||= Post.all_public
+    return nil if @posts.nil?
+
+    if user
+      @posts.where(language_id: LanguageService.language_for_public(user.language))
+    else
+      @posts.where(language_id: LanguageService.language_for_public)
+    end
   end
 
   # Override base class method
