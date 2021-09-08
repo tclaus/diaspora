@@ -33,17 +33,17 @@ textarea {
 // scss-lint:enable QualifyingElement
 
 .upload-btn-wrapper {
-  display: inline-block;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
 
-  input[type=file] {
-    font-size: 100px;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-  }
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 
 textarea {
