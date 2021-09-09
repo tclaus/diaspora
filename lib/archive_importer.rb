@@ -36,9 +36,8 @@ class ArchiveImporter
         profile_attributes: profile_attributes
       }
     )
-    @user = User.find_or_build(data)
-    @user.getting_started = false
-    @user.save!
+    self.user = User.find_or_build(data)
+    user.save!
   end
 
   private
