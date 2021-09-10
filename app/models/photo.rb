@@ -107,7 +107,7 @@ class Photo < ApplicationRecord
 
   def url(name=nil)
     if remote_photo_path.present? && remote_photo_name.present?
-      name = "#{name}_" if name
+      name = "#{name.to_s}_" if name # rubocop:disable Lint/RedundantStringCoercion
       image_url = remote_photo_path + name.to_s + remote_photo_name
       camo_image_url(image_url)
     elsif processed?
