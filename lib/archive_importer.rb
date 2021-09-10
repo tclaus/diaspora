@@ -37,6 +37,7 @@ class ArchiveImporter
       }
     )
     self.user = User.find_or_build(data)
+    self.user.getting_started = false
     user.save!
   end
 
