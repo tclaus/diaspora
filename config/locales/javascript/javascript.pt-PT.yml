@@ -217,6 +217,7 @@ pt-PT:
         zero: "Mostrar mais <%= count %> comentários"
       original_post_deleted: "Publicação original eliminada pelo autor."
       permalink: "Ligação permanente"
+      translate: "traduzir"
       public: "Público"
       reshare: "Voltar a Partilhar"
       reshares:

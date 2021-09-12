@@ -292,6 +292,7 @@ ru:
       no_posts_yet: "Здесь пока не видно записей."
       original_post_deleted: "Исходная запись удалена автором."
       permalink: "Постоянная ссылка"
+      translate: "перевести"
       public: "Публичная"
       reshare: "Поделиться"
       reshares:
