@@ -270,6 +270,7 @@ fr:
       no_posts_yet: "Il n’y a aucun message à afficher pour le moment."
       original_post_deleted: "Le message original a été effacé par son auteur."
       permalink: "Lien permanent"
+      translate: "Traduire"
       public: "Public"
       reshare: "Repartager"
       reshares:

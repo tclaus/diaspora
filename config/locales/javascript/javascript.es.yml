@@ -267,6 +267,7 @@ es:
       no_posts_yet: "Todavía no hay post para mostrar aquí."
       original_post_deleted: "Publicación original borrada por el autor."
       permalink: "Enlace permanente"
+      translate: "Traducir"
       public: "Público"
       reshare: "Compartir"
       reshares:

@@ -18,34 +18,12 @@ class TranslationService
     }
   end
 
-  # rubocop:disable Metrics/MethodLength
-
-  def self.enabled?
+  def enabled?
     false unless AppConfig.deepl.enable
-    supported_languages = %w[bg
-                             cs
-                             da
-                             de
-                             el
-                             en
-                             es
-                             hu
-                             it
-                             lt
-                             lv
-                             pl
-                             pt
-                             ro
-                             ru
-                             sk
-                             sl
-                             sv
-                             zh]
-
-    supported_languages.include? I18n.locale.to_s.split("_").first
+    supported_languages = DeepL.languages
+    local_language = I18n.locale.to_s.split("_").first.downcase
+    supported_languages.any? { |supported_language| supported_language.code.downcase.eql?(local_language) }
   end
-
-  # rubocop:enable Metrics/MethodLength
 
   private
 
@@ -61,4 +39,5 @@ class TranslationService
   rescue DeepL::Exceptions::RequestError
     I18n.t("translation.translation.error")
   end
+
 end
