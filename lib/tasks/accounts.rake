@@ -6,7 +6,6 @@ namespace :accounts do
     puts "Account migration is requested. You can import a profile or a photos archive or booth."
     args = %i[archive_path photos_path new_user_name].map {|name| [name, args[name]] }.to_h
     process_arguments(args)
-
     start_time = Time.now.getlocal
     if args[:new_user_name].present?
       import_profile = ImportProfileService.new
@@ -14,8 +13,7 @@ namespace :accounts do
     else
       puts "Must set a user name and a archive file path or photos file path"
     end
-    puts ""
-    puts "Migration finished took #{Time.now.getlocal - start_time} seconds. (Photos might still be processed)"
+    puts "\n Migration finished took #{Time.now.getlocal - start_time} seconds. (Photos might still be processed)"
   end
 
   def process_arguments(args)
