@@ -16,6 +16,8 @@ namespace :accounts do
     else
       puts "Must set a user name and a archive file path or photos file path"
     end
+    puts ""
+    puts "Migration finished took #{Time.now.getlocal - start_time} seconds. (Photos might still be processed)"
   end
 
   def process_arguments(args)
