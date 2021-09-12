@@ -330,8 +330,8 @@ describe MigrationService do
     end
 
     it "uncompresses zip archive" do
-      zip_ccompressed_file = create_zip_archive
-      service = MigrationService.new(zip_ccompressed_file, new_username)
+      zip_compressed_file = create_zip_archive
+      service = MigrationService.new(zip_compressed_file, new_username)
       expect(service.only_import?).to be_truthy
     end
 
