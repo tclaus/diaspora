@@ -8,7 +8,6 @@ namespace :accounts do
     args = %i[archive_path photos_path new_user_name import_settings import_profile]
            .map {|name| [name, args[name]] }.to_h
     process_arguments(args)
-
     start_time = Time.now.getlocal
     if args[:new_user_name].present?
       import_profile = ImportProfileService.new
