@@ -249,6 +249,7 @@ es:
       enable_post_notifications: Activa los avisos para esta publicación
       disable_post_notifications: Desactiva los avisos para esta publicación
       permalink: Enlace permanente
+      translate: "Traducir"
       via: via <%= provider %>
       no_posts_yet: Todavía no hay post para mostrar aquí.
       likes:

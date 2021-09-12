@@ -277,6 +277,7 @@ ru:
       enable_post_notifications: Включить уведомления на эту запись
       disable_post_notifications: Отключить уведомления на эту запись
       permalink: Постоянная ссылка
+      translate: "перевести"
       via: через <%= provider %>
       no_posts_yet: Здесь пока не видно записей.
       likes:

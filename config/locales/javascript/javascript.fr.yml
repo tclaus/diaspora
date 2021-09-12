@@ -253,6 +253,7 @@ fr:
       enable_post_notifications: Activer les notifications pour ce message
       disable_post_notifications: Désactiver les notifications pour ce message
       permalink: Lien permanent
+      translate: "Traduire"
       via: via <%= provider %>
       no_posts_yet: Il n’y a aucun message à afficher pour le moment.
       likes:

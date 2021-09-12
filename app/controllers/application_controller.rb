@@ -159,12 +159,16 @@ class ApplicationController < ActionController::Base
   end
 
   def gon_set_translation_enabled
-    gon.translation_enabled = TranslationService.enabled?
+    gon.translation_enabled = translation_service.enabled?
   end
 
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
+  end
+
+  def translation_service
+    @translation_service ||= TranslationService.new
   end
 end

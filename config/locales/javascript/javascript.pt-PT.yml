@@ -208,6 +208,7 @@ pt-PT:
       enable_post_notifications: Ativar notificações para esta publicação
       disable_post_notifications: Desativar notificações para esta publicação
       permalink: Ligação permanente
+      translate: "traduzir"
       via: via <%= provider %>
       likes:
         zero: "<%= count %> gosto"
