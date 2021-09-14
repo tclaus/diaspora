@@ -43,7 +43,7 @@ class LanguageService
                     .order(count_all: :desc)
                     .count
                     .first
-    return if reference&.first.nil?
+    return if reference&.first&.nil?
 
     post_language = PostLanguage.new
     post_language.language = reference.first
