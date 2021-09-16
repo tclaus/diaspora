@@ -3,6 +3,11 @@
 require "cld3"
 
 class LanguageService
+
+  def initialize(user=nil)
+    @user = user
+  end
+
   def detect_post_language(post)
     original_post = root_post(post)
     return if original_post.nil?
@@ -15,18 +20,28 @@ class LanguageService
     post.language_reliable = result.reliable?
   end
 
-  def cld3
-    @cld3 ||= CLD3::NNetLanguageIdentifier.new(0, 1000)
+  def language_for_public
+    return default_language if @user.nil?
+
+    user_defined_language
   end
 
-  def self.language_for_public(default_language=I18n.locale.to_s)
+  private
+
+  def user_defined_language
+    user_languages = @user.stream_languages.pluck(:language_id)
+    return user_languages if user_languages.present?
+
+    default_language
+  end
+
+  def default_language
+    default_language = I18n.locale.to_s
     exclusive_languages = %w[en de fr es ru] # exclusive languages
     return [default_language] if exclusive_languages.include?(default_language)
 
     [default_language, "en"] # all other requested languages should return english plus the requested language
   end
-
-  private
 
   def root_post(post)
     if post.type.eql?("Reshare")
@@ -36,26 +51,7 @@ class LanguageService
     post
   end
 
-  # If a post can not be get a used language directly, it look to the other posts from same user.
-  def language_by_heuristic(post)
-    reference = Post.where(author_id: post.author_id, language_reliable: true)
-                    .group(:language_id)
-                    .order(count_all: :desc)
-                    .count
-                    .first
-    return if reference&.first&.nil?
-
-    post_language = PostLanguage.new
-    post_language.language = reference.first
-    post_language.reliable = true
-    post_language
-  end
-
-  class PostLanguage
-    attr_accessor :language, :reliable
-
-    def reliable?
-      reliable
-    end
+  def cld3
+    @cld3 ||= CLD3::NNetLanguageIdentifier.new(0, 1000)
   end
 end

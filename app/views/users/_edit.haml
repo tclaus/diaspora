@@ -68,6 +68,29 @@
 
     .row
       .col-md-12
+        %h3= t(".change_stream_language")
+        = form_for "user", url: edit_user_path, html: {method: :put} do |f|
+          .form-inline.clearfix
+            .dropdown
+              %button{type: "button", class: "form-control form-group",
+              "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false"}
+                Select Languages
+                %span.caret
+              %ul.dropdown-menu{"aria-labelledby": "dLabel"}
+                = f.collection_check_boxes(:stream_languages, selected_stream_languages(@user), :last, :first) do |b|
+                  %li.selected
+                    .checkbox
+                      = b.label {b.check_box({checked: true}) + b.text}
+                = f.collection_check_boxes(:stream_languages, available_stream_languages(@user), :last, :first) do |b|
+                  %li
+                    .checkbox
+                      = b.label {b.check_box({checked: false}) + b.text}
+            = f.submit t(".change_stream_language"), class: "btn btn-primary pull-right"
+
+    %hr
+
+    .row
+      .col-md-12
         %h3= t(".change_color_theme")
         = form_for "user", url: edit_user_path, html: {method: :put} do |f|
           .form-inline.clearfix
