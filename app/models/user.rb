@@ -94,6 +94,8 @@ class User < ApplicationRecord
 
   has_many :share_visibilities
 
+  has_many :stream_languages
+
   before_save :guard_unconfirmed_email
 
   after_save :remove_invalid_unconfirmed_emails

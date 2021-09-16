@@ -1323,6 +1323,7 @@ en:
       current_password_expl: "the one you sign in with..."
       character_minimum_expl: "must be at least six characters"
       change_language: "Change language"
+      change_stream_language: "Change stream language"
       change_color_theme: "Change color theme"
       close_account_text: "Close account"
       stream_preferences: "Stream preferences"
