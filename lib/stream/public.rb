@@ -18,15 +18,15 @@ class Stream::Public < Stream::Base
     @posts ||= Post.all_public
     return nil if @posts.nil?
 
-    if user
-      @posts.where(language_id: LanguageService.language_for_public(user.language))
-    else
-      @posts.where(language_id: LanguageService.language_for_public)
-    end
+    @posts.where(language_id: language_service.language_for_public)
   end
 
   # Override base class method
   def aspects
     ["public"]
+  end
+
+  def language_service
+    @language_service ||= LanguageService.new(@user)
   end
 end

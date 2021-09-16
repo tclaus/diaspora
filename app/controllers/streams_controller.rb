@@ -87,6 +87,6 @@ class StreamsController < ApplicationController
   end
 
   def tags_service
-    @tags_service ||= TagsService.new
+    @tags_service ||= TagsService.new(current_user)
   end
 end

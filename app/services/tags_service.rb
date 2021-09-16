@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class TagsService
+
+  def initialize(user=nil)
+    @user = user
+  end
+
   def popular_tags_aligned
     tags_collection = []
     popular_tags_simplified.each do |synonym|
@@ -23,10 +28,11 @@ class TagsService
   end
 
   # Returns array of popular public tags and its count used in a timespan, only one count per post creator
-  # Prohibits flooding tags from mass uploading bots
+  # Prohibits flooding tags from mass uploading same bots
+  # Tage are counted from posts of a distinct language
   def popular_tags
     time_span = Time.zone.today - 1.day
-    languages = LanguageService.language_for_public
+    languages = language_service.language_for_public
     ActsAsTaggableOn::Tagging.find_by_sql "select count(*) as count, t.name from
           (select tags.name, posts.author_id from taggings
             left join tags on taggings.tag_id = tags.id
@@ -63,5 +69,9 @@ class TagsService
   def add_tag(aligned_tag_list, tag)
     aligned_tag_list[tag[:name]] = {stem_word: tag[:name],
                                     count:     tag[:count]}
+  end
+
+  def language_service
+    @language_service ||= LanguageService.new(@user)
   end
 end
