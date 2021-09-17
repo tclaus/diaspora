@@ -3,7 +3,6 @@
 require "cld3"
 
 class LanguageService
-
   def initialize(user=nil)
     @user = user
   end

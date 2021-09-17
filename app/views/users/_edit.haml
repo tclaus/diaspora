@@ -80,11 +80,11 @@
                 = f.collection_check_boxes(:stream_languages, selected_stream_languages(@user), :last, :first) do |b|
                   %li.selected
                     .checkbox
-                      = b.label {b.check_box({checked: true}) + b.text}
+                      = b.label { b.check_box({ checked: true }) + b.text }
                 = f.collection_check_boxes(:stream_languages, available_stream_languages(@user), :last, :first) do |b|
                   %li
                     .checkbox
-                      = b.label {b.check_box({checked: false}) + b.text}
+                      = b.label { b.check_box({checked: false }) + b.text }
             = f.submit t(".change_stream_language"), class: "btn btn-primary pull-right"
 
     %hr
