@@ -14,21 +14,17 @@ module LanguageHelper
   def selected_stream_languages(user)
     options = []
     AVAILABLE_LANGUAGES.each do |locale, language|
-      if user.stream_languages.pluck(:language_id).include?(locale)
-        options << [language, locale]
-      end
+      options << [language, locale] if user.stream_languages.pluck(:language_id).include?(locale)
     end
-    options.sort_by { |o| o[0] }
+    options.sort_by {|o| o[0] }
   end
 
   def available_stream_languages(user)
     options = []
     AVAILABLE_LANGUAGES.each do |locale, language|
-      unless user.stream_languages.pluck(:language_id).include?(locale)
-        options << [language, locale]
-      end
+      options << [language, locale] unless user.stream_languages.pluck(:language_id).include?(locale)
     end
-    options.sort_by { |o| o[0] }
+    options.sort_by {|o| o[0] }
   end
 
   def get_javascript_strings_for(language, section)
