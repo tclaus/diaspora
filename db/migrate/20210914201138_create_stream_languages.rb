@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateStreamLanguages < ActiveRecord::Migration[5.2]
   def change
     create_table :stream_languages do |t|

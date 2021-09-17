@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TagsService
-
   def initialize(user=nil)
     @user = user
   end
