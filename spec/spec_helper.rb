@@ -108,6 +108,19 @@ RSpec.configure do |config|
       :get,
       "https://example.com/.well-known/webfinger?resource=acct:bob@example.com"
     )
+    stub_request(
+      :get,
+      "https://example.com/.well-known/host-meta"
+    )
+    stub_request(:get, "https://api.deepl.com/v2/languages?auth_key=722b3fb8-fea5-6a9b-3e07-39bb102b972f")
+      .with(
+        headers: {
+          'Accept'=>'*/*',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent'=>'Ruby'
+        }
+      )
+      .to_return(status: 200, body: '[{"language":"de", "name": "German", "supports_formality": true}]', headers: {})
     $process_queue = false
   end
 
