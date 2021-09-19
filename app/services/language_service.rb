@@ -50,6 +50,29 @@ class LanguageService
     post
   end
 
+  # If a post can not be get a used language directly, it look to the other posts from same user.
+  def language_by_heuristic(post)
+    reference = Post.where(author_id: post.author_id, language_reliable: true)
+                    .group(:language_id)
+                    .order(count_all: :desc)
+                    .count
+                    .first
+    return if reference.nil? || reference.first.nil?
+
+    post_language = PostLanguage.new
+    post_language.language = reference.first
+    post_language.reliable = true
+    post_language
+  end
+
+  class PostLanguage
+    attr_accessor :language, :reliable
+
+    def reliable?
+      reliable
+    end
+  end
+
   def cld3
     @cld3 ||= CLD3::NNetLanguageIdentifier.new(0, 1000)
   end

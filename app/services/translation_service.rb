@@ -20,9 +20,8 @@ class TranslationService
 
   def enabled?
     false unless AppConfig.deepl.enable
-    supported_languages = DeepL.languages
     local_language = I18n.locale.to_s.split("_").first.downcase
-    supported_languages.any? { |supported_language| supported_language.code.downcase.eql?(local_language) }
+    supported_languages.any? {|supported_language| supported_language.code.downcase.eql?(local_language) }
   end
 
   private
@@ -38,6 +37,10 @@ class TranslationService
     I18n.t("translation.authkey_not_provided")
   rescue DeepL::Exceptions::RequestError
     I18n.t("translation.translation.error")
+  end
+
+  def supported_languages
+    @supported_languages ||= DeepL.languages
   end
 
 end
