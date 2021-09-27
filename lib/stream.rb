@@ -12,4 +12,5 @@ module Stream
   require "stream/public"
   require "stream/local_public"
   require "stream/tag"
+  require "stream/searched_posts"
 end

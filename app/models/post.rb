@@ -17,6 +17,10 @@ class Post < ApplicationRecord
   include Diaspora::Shareable
   include Diaspora::MentionsContainer
 
+  include Elasticsearch::Model
+  after_save    { Workers::PostIndexer.perform_async(:index,  id) }
+  after_destroy { Workers::PostIndexer.perform_async(:delete, id) }
+
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
 
@@ -142,6 +146,22 @@ class Post < ApplicationRecord
     scope
   end
 
+  def self.for_a_queried_stream(order, user=nil, ignore_blocks=false)
+    scope = includes_for_a_stream
+            .order("#{table_name}.#{order} DESC")
+            .limit(10)
+
+    if user.present?
+      if ignore_blocks
+        scope = scope.excluding_hidden_shareables(user)
+      else
+        scope = scope.excluding_hidden_content(user)
+      end
+    end
+
+    scope
+  end
+
   def reshare_for(user)
     return unless user
     reshares.find_by(author_id: user.person.id)
@@ -183,5 +203,11 @@ class Post < ApplicationRecord
 
   def language_service
     @@language_service ||= LanguageService.new
+  end
+
+  def as_indexed_json(options={})
+    as_json(
+      include: {author: {methods: %i[full_name diaspora_handle], only: %i[full_name diaspora_handle]}}
+    )
   end
 end
