@@ -169,6 +169,11 @@ gem "will_paginate",           "4.0.0"
 gem "elasticsearch-model", "~> 7.2"
 gem "elasticsearch-rails", "~> 7.2"
 
+# Elastic Search
+
+gem "elasticsearch-model", "~> 7.2"
+gem "elasticsearch-rails", "~> 7.2"
+
 # Logging
 
 gem "logging-rails", "0.6.0", require: "logging/rails"
