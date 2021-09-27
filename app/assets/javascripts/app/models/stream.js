@@ -26,6 +26,10 @@ app.models.Stream = Backbone.Collection.extend({
   },
 
   url : function(){
+    let URLParams = new URLSearchParams(document.location.search);
+    if (URLParams.has("q")) {
+      return this.paginatedPath();
+    }
     return _.any(this.items.models) ? this.timeFilteredPath() : this.basePath();
   },
 
@@ -56,11 +60,22 @@ app.models.Stream = Backbone.Collection.extend({
   },
 
   basePath : function(){
-    return this.streamPath || document.location.pathname;
+    return this.streamPath || document.location.pathname + document.location.search;
   },
 
   timeFilteredPath : function(){
-   return this.basePath() + "?max_time=" + this.maxTime();
+    let divider = document.location.search === "" ? "?" : "&"
+    return this.basePath() + divider + "max_time=" + this.maxTime();
+  },
+
+  paginatedPath: function(){
+    if (this.page === undefined) {
+      this.page = 1;
+    } else {
+      this.page++;
+    }
+    let divider = document.location.search === "" ? "?" : "&";
+    return this.basePath() + divider + "page=" + this.page;
   },
 
   maxTime: function(){

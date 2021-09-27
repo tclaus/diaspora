@@ -50,6 +50,10 @@ class StatusMessage < Post
     owned_or_visible_by_user(user).any_tag_stream(tag_ids)
   end
 
+  def self.user_query_stream(user, query, page)
+    owned_or_visible_by_user(user).query_stream(query, page)
+  end
+
   def self.user_tag_stream(user, tag_ids)
     owned_or_visible_by_user(user).all_tag_stream(tag_ids)
   end
@@ -60,6 +64,11 @@ class StatusMessage < Post
 
   def self.public_any_tag_stream(tag_ids)
     all_public.select("DISTINCT #{table_name}.*").any_tag_stream(tag_ids)
+  end
+
+  def self.query_stream(query, page)
+    response = Post.search query, from: (page - 1) * 10
+    where(posts: {id: response.results.map(&:id)})
   end
 
   def self.any_tag_stream(tag_ids)

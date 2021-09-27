@@ -88,9 +88,7 @@ Rails.application.routes.draw do
     end
   end
 
-
   resources :tags, :only => [:index]
-
   resources "tag_followings", only: %i(create destroy index) do
     collection do
       get :manage

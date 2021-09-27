@@ -121,6 +121,9 @@ RSpec.configure do |config|
         }
       )
       .to_return(status: 200, body: '[{"language":"de", "name": "German", "supports_formality": true}]', headers: {})
+    stub_request(:any, "localhost:9200")
+      .to_return(status: 200, body: "", headers: {})
+
     $process_queue = false
   end
 

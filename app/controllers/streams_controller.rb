@@ -43,8 +43,11 @@ class StreamsController < ApplicationController
       inviter = current_user.invited_by.try(:person)
       gon.preloads[:mentioned_person] = {name: inviter.name, handle: inviter.diaspora_handle} if inviter
     end
-
-    stream_responder(Stream::Multi)
+    if params[:q].nil?
+      stream_responder(Stream::Multi)
+    else
+      stream_responder(Stream::SearchedPosts)
+    end
   end
 
   def commented
@@ -64,12 +67,28 @@ class StreamsController < ApplicationController
     stream_responder(Stream::FollowedTag)
   end
 
+  def stream_query
+    stream_responder(Stream::SearchedPosts)
+  end
+
+  def query
+    [] unless params[:q]
+
+    params[:q]
+  end
+
+  def page
+    0 unless params[:page]
+
+    params[:page]
+  end
+
   private
 
   def stream_responder(stream_klass=nil)
 
     if stream_klass.present?
-      @stream ||= stream_klass.new(current_user, :max_time => max_time)
+      @stream ||= stream_klass.new(current_user, query: query, max_time: max_time, page: page)
     end
 
     @popular_tags = tags_service.popular_tags_aligned
