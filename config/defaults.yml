@@ -156,6 +156,9 @@ defaults:
       authorized: true
   deepl:
     enable: false
+  elasticsearch:
+    enable_host: false
+    enable_cloud: false
   mail:
     enable: false
     sender_address: 'no-reply@example.org'

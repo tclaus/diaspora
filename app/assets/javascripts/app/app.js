@@ -97,7 +97,7 @@ var app = {
 
     // there's probably a better way to do this...
     $(document).on("click", "a[rel=backbone]", function(evt){
-      if (!(app.stream && /^\/(?:stream|activity|aspects|public|mentions|likes)/.test(app.stream.basePath()))) {
+      if (!(app.stream && /^\/(?:stream|activity|aspects|public|mentions|likes|stream_query)/.test(app.stream.basePath()))) {
         // We aren't on a regular stream page
         return;
       }
