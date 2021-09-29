@@ -5,7 +5,7 @@ module Workers
     sidekiq_options queue: :elasticsearch, retry: false
 
     def perform(operation, record_id)
-      return if ES_CLIENT.nil?
+      return if ES_CLIENT.nil? || Rails.env.test?
 
       logger.debug [operation, "ID: #{record_id}"]
       case operation.to_s
