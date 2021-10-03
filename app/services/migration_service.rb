@@ -22,6 +22,7 @@ class MigrationService
     find_or_create_user
     import_archive
     run_migration
+  ensure
     remove_intermediate_file
   end
 
@@ -34,14 +35,6 @@ class MigrationService
   # when old person can't be resolved we still import data but we don't create&perform AccountMigration instance
   def only_import?
     old_person.nil?
-  end
-
-  def remove_intermediate_file
-    # If an unzip operation created an unzipped file, remove it after migration
-    return if @intermediate_file.nil?
-    return unless File.exist?(@intermediate_file)
-
-    File.delete(@intermediate_file)
   end
 
   private
@@ -127,6 +120,14 @@ class MigrationService
       @intermediate_file = target_file
       return File.new(target_file, "r")
     end
+  end
+
+  def remove_intermediate_file
+    # If an unzip operation created an unzipped file, remove it after migration
+    return if @intermediate_file.nil?
+    return unless File.exist?(@intermediate_file)
+
+    File.delete(@intermediate_file)
   end
 
   class ArchiveValidationFailed < RuntimeError

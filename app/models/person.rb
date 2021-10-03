@@ -377,9 +377,6 @@ class Person < ApplicationRecord
     DiasporaFederation::Discovery::Discovery.new(diaspora_id).fetch_and_save
 
     by_account_identifier(diaspora_id)
-  rescue DiasporaFederation::Discovery::InvalidDocument
-    logger.info "#{diaspora_id} returns not as a valid document"
-    nil
   end
 
   def self.by_account_identifier(diaspora_id)
