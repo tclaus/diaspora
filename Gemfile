@@ -180,6 +180,9 @@ gem "rubyzip", "2.3.2", require: "zip"
 # Post translations
 gem "deepl-rb", "~> 2.3"
 
+# Detect language of post
+gem "cld3", "~> 3.4", ">= 3.4.2"
+
 # Prevent occasions where minitest is not bundled in
 # packaged versions of ruby. See following issues/prs:
 # https://github.com/gitlabhq/gitlabhq/issues/3826
