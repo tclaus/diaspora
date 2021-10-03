@@ -47,6 +47,11 @@ def default_job_config
     recurring_pod_check:     {
       "cron":  "#{random_minute.call} #{random_hour.call} * * *",
       "class": "Workers::RecurringPodCheck"
+    },
+
+    cleanup_never_used_accounts: {
+      "cron":   "#{random_minute.call} * * * *",
+      "class":  "Workers::RemoveUnusedAccounts"
     }
   }
 end

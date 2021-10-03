@@ -18,6 +18,8 @@ en:
   delete: "Delete"
   username: "Username"
   email: "Email"
+  post_count: "Posts"
+  comment_count: "Comments"
   are_you_sure: "Are you sure?"
   are_you_sure_delete_account: "Are you sure you want to close your account? This can’t be undone!"
   are_you_sure_ignore_user: "You are going to ignore that user. Are you sure?"

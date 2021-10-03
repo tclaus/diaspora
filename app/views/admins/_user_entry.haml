@@ -32,6 +32,11 @@
         %dl.dl-horizontal
           %dt= t("username")
           %dd= person.username
+          %dt= t("post_count")
+          %dd= person.post_count
+          %dt= t("comment_count")
+          %dd= person.comment_count
+
           - if person.owner.present?
             %dt= t(".email")
             %dd= person.owner.email
