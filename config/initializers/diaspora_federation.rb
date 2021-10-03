@@ -82,7 +82,7 @@ DiasporaFederation.configure do |config|
 
     on :fetch_public_key do |diaspora_id|
       person = Person.find_or_fetch_by_identifier(diaspora_id)
-      person.public_key unless person.nil? || person.pod&.blocked
+      person.public_key unless person.nil? || person.pod&.blocked || person.closed_account?
     end
 
     on :fetch_related_entity do |entity_type, guid|
@@ -113,15 +113,15 @@ DiasporaFederation.configure do |config|
       when DiasporaFederation::Entities::Retraction
         Diaspora::Federation::Receive.retraction(entity, recipient_id)
       else
-        # TODO: Check for person.closed_account? when merging with #8228 'Block Pod'
-        persisted = Diaspora::Federation::Receive.perform(entity)
-        Workers::ReceiveLocal.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
+        if Diaspora::Federation::Entities.should_perform(entity)
+          persisted = Diaspora::Federation::Receive.perform(entity)
+          Workers::ReceiveLocal.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
+        end
       end
     end
 
     on :fetch_public_entity do |entity_type, guid|
       entity = Diaspora::Federation::Mappings.model_class_for(entity_type).all_public.find_by(guid: guid)
-      # TODO: Check for person.closed_account? when merging with #8228 'Block Pod'
       case entity
       when Poll
         Diaspora::Federation::Entities.status_message(entity.status_message)

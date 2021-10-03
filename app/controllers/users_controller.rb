@@ -125,6 +125,7 @@ class UsersController < ApplicationController
       :post_default_public,
       :exported_photos_file,
       :export,
+      {stream_languages: []},
       email_preferences: UserPreference::VALID_EMAIL_TYPES.map(&:to_sym)
     )
   end
@@ -152,6 +153,8 @@ class UsersController < ApplicationController
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
     elsif user_data[:export] || user_data[:exported_photos_file]
       upload_export_files(user_data)
+    elsif user_data[:stream_languages]
+      change_stream_languages(user_data[:stream_languages])
     else
       change_settings(user_data)
     end

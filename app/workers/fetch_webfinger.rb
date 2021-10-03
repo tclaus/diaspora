@@ -18,7 +18,6 @@ module Workers
 
       # also, schedule to fetch a few public posts from that person if its pod is not blocked
       Diaspora::Fetcher::Public.queue_for(person)
-
     rescue DiasporaFederation::Discovery::DiscoveryError
       # Ignored
     end
