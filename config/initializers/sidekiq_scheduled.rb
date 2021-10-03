@@ -50,7 +50,7 @@ def default_job_config
     },
 
     cleanup_never_used_accounts: {
-      "cron":   "#{random_minute.call} * * * *",
+      "cron":   "#{random_minute.call} 12 * * *",
       "class":  "Workers::RemoveUnusedAccounts"
     }
   }
