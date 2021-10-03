@@ -149,7 +149,9 @@ DATA
       persons = persons.where(users[:email].matches("%#{email}%")) if email.present?
       persons = persons.where(people[:guid].matches("%#{guid}%")) if guid.present?
       persons = persons.where(profiles[:birthday].gt(Time.zone.today - 13.years)) if under13 == "1"
-      persons = persons.select("people.*, users.id as user_id, profiles.full_name as full_name")
+      persons = persons.select("people.*, users.id as user_id, profiles.full_name as full_name,
+                               (select count(*) from posts where posts.author_id = people.id) as post_count,
+                               (select count(*) from comments where author_id = people.id) as comment_count")
       persons = persons.distinct
       persons.limit(50)
     end
