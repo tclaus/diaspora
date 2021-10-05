@@ -20,6 +20,8 @@ class TranslationService
 
   def enabled?
     false unless AppConfig.deepl.enable
+    false if Rails.env.test?
+
     local_language = I18n.locale.to_s.split("_").first.downcase
     supported_languages.any? {|supported_language| supported_language.code.downcase.eql?(local_language) }
   end
