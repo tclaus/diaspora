@@ -21,10 +21,35 @@ module LanguageHelper
 
   def available_stream_languages(user)
     options = []
+    allowed_languages = language_ids
     AVAILABLE_LANGUAGES.each do |locale, language|
-      options << [language, locale] unless user.stream_languages.pluck(:language_id).include?(locale)
+      if allowed_languages.include?(locale) && user.stream_languages.pluck(:language_id).exclude?(locale)
+        options << [language, locale]
+      end
     end
     options.sort_by {|o| o[0] }
+  end
+
+  def language_ids
+    # language_distribution_in_posts
+    ids = []
+    language_distribution_in_posts.each do |pair|
+      ids << pair["language_id"]
+    end
+    ids
+  end
+
+  def language_distribution_in_posts
+    Rails.cache.fetch("post_language_distribution", expires_in: 1.day) do
+      fetch_language_distribution_in_posts
+    end
+  end
+
+  def fetch_language_distribution_in_posts
+    sql = "select count(*), language_id from posts
+           where public = true and language_reliable = true
+           group by language_id order by count(*) desc"
+    ActiveRecord::Base.connection.exec_query sql
   end
 
   def get_javascript_strings_for(language, section)
