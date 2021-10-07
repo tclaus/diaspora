@@ -4,6 +4,7 @@ class SearchController < ApplicationController
   before_action :authenticate_user!
 
   def search
+    add_to_search_history
     if search_query.starts_with?("#")
       if search_query.length > 1
         respond_to do |format|
@@ -23,6 +24,14 @@ class SearchController < ApplicationController
   end
 
   private
+
+  def add_to_search_history
+
+    search_term = search_query.strip
+    return unless request.format == :html && search_term.present?
+
+    SearchHistory.create(search_term: search_term)
+  end
 
   def search_query
     @search_query ||= (params[:q] || params[:term] || '').strip
