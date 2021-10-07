@@ -95,6 +95,7 @@ class User < ApplicationRecord
   has_many :share_visibilities
 
   has_many :stream_languages, dependent: :destroy
+  has_many :search_histories, dependent: :destroy
 
   before_save :guard_unconfirmed_email
 
