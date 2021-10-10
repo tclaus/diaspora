@@ -36,7 +36,6 @@ class OpenGraphCache < ApplicationRecord
     uri = URI.parse(url.start_with?("http") ? url : "http://#{url}")
     uri.normalize!
     object = OpenGraphReader.fetch!(uri)
-
     return unless object
 
     self.title = object.og.title.truncate(255)
@@ -44,15 +43,35 @@ class OpenGraphCache < ApplicationRecord
     self.image = object.og.image.url
     self.url = object.og.url
     self.description = object.og.description
+    self.locale = extract_language_id(object.og.locale)
+    detect_language_by_description if locale.nil?
     if object.og.video.try(:secure_url) && secure_video_url?(object.og.video.secure_url)
       self.video_url = object.og.video.secure_url
     end
-
     self.save
   rescue OpenGraphReader::NoOpenGraphDataError, OpenGraphReader::InvalidObjectError
   end
 
   def secure_video_url?(url)
     SECURE_OPENGRAPH_VIDEO_URLS.any? {|u| u =~ url }
+  end
+
+  def detect_language_by_description
+    result = language_service.language_for_text(description) if description.present?
+    self.locale = result.language.to_s.split("_").first if result.present? && result.reliable?
+  end
+
+  def extract_language_id(locale)
+    return locale.content.split("_").first unless locale.nil?
+
+    locale
+  end
+
+  def investigate_language
+    language_service.detect_post_language(self)
+  end
+
+  def language_service
+    @language_service ||= LanguageService.new
   end
 end
