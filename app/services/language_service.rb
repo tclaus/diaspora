@@ -3,7 +3,7 @@
 require "cld3"
 
 class LanguageService
-  def initialize(user=nil)
+  def initialize(user = nil)
     @user = user
   end
 
@@ -11,11 +11,11 @@ class LanguageService
     original_post = root_post(post)
     return if original_post.nil?
 
-    result = cld3.find_language(original_post.text.to_s) if original_post.text.present?
+    result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
     return unless result
 
-    post.language_id = result.language.to_s
+    post.language_id = result.language.to_s.split("_").first
     post.language_reliable = result.reliable?
   end
 
@@ -23,6 +23,11 @@ class LanguageService
     return default_language if @user.nil?
 
     user_defined_language
+  end
+
+  def language_for_text(text)
+    text_without_url = remove_urls_from_text(text)
+    cld3.find_language(text_without_url)
   end
 
   private
@@ -65,6 +70,11 @@ class LanguageService
     post_language
   end
 
+  def remove_urls_from_text(text)
+    pattern = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+    text.gsub(pattern, " ")
+  end
+
   class PostLanguage
     attr_accessor :language, :reliable
 
@@ -74,6 +84,6 @@ class LanguageService
   end
 
   def cld3
-    @cld3 ||= CLD3::NNetLanguageIdentifier.new(0, 1000)
+    @cld3 ||= CLD3::NNetLanguageIdentifier.new(10, 780)
   end
 end

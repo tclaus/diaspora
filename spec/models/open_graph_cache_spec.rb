@@ -16,7 +16,8 @@ describe OpenGraphCache, type: :model do
               title:       "Some article",
               type:        "article",
               url:         "https://example.com/acticle/123-seo-foo",
-              video:       double(secure_url: "https://example.com/videos/123.html")
+              video:       double(secure_url: "https://example.com/videos/123.html"),
+              locale:      double(content: "en")
             )
           )
         )
@@ -42,7 +43,8 @@ describe OpenGraphCache, type: :model do
               title:       "Some article",
               type:        "article",
               url:         "https://example.com/acticle/123-seo-foo",
-              video:       double(secure_url: "https://bandcamp.com/EmbeddedPlayer/v=2/track=12/size=small")
+              video:       double(secure_url: "https://bandcamp.com/EmbeddedPlayer/v=2/track=12/size=small"),
+              locale:      double(content: "en")
             )
           )
         )

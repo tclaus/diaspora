@@ -7,6 +7,7 @@ describe Workers::GatherOpenGraphData do
     @ogsite_image = 'http://www.we-support-open-graph.com/img/something.png'
     @ogsite_url = 'http://www.we-support-open-graph.com'
     @ogsite_description = 'Homepage'
+    @ogsite_locale = "de_DE"
 
     @ogsite_body =
       "<html><head><title>#{@ogsite_title}</title>
@@ -15,6 +16,7 @@ describe Workers::GatherOpenGraphData do
       <meta property=\"og:image\" content=\"#{@ogsite_image}\" />
       <meta property=\"og:url\" content=\"#{@ogsite_url}\" />
       <meta property=\"og:description\" content=\"#{@ogsite_description}\" />
+      <meta property=\"og:locale\" content=\"#{@ogsite_locale}\" />
       </head><body></body></html>"
 
     @oglong_title = "D" * 256
@@ -26,6 +28,7 @@ describe Workers::GatherOpenGraphData do
       <meta property=\"og:image\" content=\"#{@ogsite_image}\" />
       <meta property=\"og:url\" content=\"#{@oglong_url}\" />
       <meta property=\"og:description\" content=\"#{@ogsite_description}\" />
+      <meta property=\"og:locale\" content=\"#{@ogsite_locale}\" />
       </head><body></body></html>"
 
     @no_open_graph_url = 'http://www.we-do-not-support-open-graph.com/index.html'
@@ -66,6 +69,7 @@ describe Workers::GatherOpenGraphData do
       expect(ogc.image).to eq(@ogsite_image)
       expect(ogc.url).to eq(@ogsite_url)
       expect(ogc.description).to eq(@ogsite_description)
+      expect(ogc.locale).to eq("de")
 
       Workers::GatherOpenGraphData.new.perform(@status_message.id, @ogsite_url)
       expect(OpenGraphCache.where(url: @ogsite_url).count).to eq(1)
