@@ -13,7 +13,10 @@ class LanguageService
     original_post = root_post(post)
     return if original_post.nil?
 
-    result = cld3.find_language(original_post.text.to_s) if original_post.text.present?
+    return if original_post.text.nil?
+
+    result = nil
+    result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
     return unless result
     if result.reliable?
@@ -24,7 +27,7 @@ class LanguageService
   def language_for_public
     return default_language if @user.nil?
 
-    post.language_id = result.language.to_s
+    post.language_id = result.language.to_s.split("_").first
     post.language_reliable = result.reliable?
   end
 
