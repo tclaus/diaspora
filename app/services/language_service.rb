@@ -3,7 +3,9 @@
 require "cld3"
 
 class LanguageService
-  def initialize(user = nil)
+  CLD = CLD3::NNetLanguageIdentifier.new(50, 780)
+
+  def initialize(user=nil)
     @user = user
   end
 
@@ -11,6 +13,9 @@ class LanguageService
     original_post = root_post(post)
     return if original_post.nil?
 
+    return if original_post.text.nil?
+
+    result = nil
     result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
     return unless result
@@ -27,7 +32,7 @@ class LanguageService
 
   def language_for_text(text)
     text_without_url = remove_urls_from_text(text)
-    cld3.find_language(text_without_url)
+    CLD.find_language(text_without_url)
   end
 
   private
@@ -81,9 +86,5 @@ class LanguageService
     def reliable?
       reliable
     end
-  end
-
-  def cld3
-    @cld3 ||= CLD3::NNetLanguageIdentifier.new(10, 780)
   end
 end
