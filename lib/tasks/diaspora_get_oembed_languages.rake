@@ -5,7 +5,10 @@ namespace :diaspora do
   task gather_oembed_languages: :environment do
     OpenGraphCache.where(locale: nil).find_in_batches do |openGraphCaches|
       openGraphCaches.each do |og|
+        puts "Fetches language for: #{og.url}"
         og.fetch_and_save_opengraph_data!
+        rescue =>e
+          puts "Error: #{e}"
       end
     end
   end
