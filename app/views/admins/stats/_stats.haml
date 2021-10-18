@@ -1,0 +1,56 @@
+= render partial: "admins/stats/stats_bar"
+
+.row
+  .col-md-12
+    %h3
+      Statistics
+      %small
+        New or incoming messages
+    %table.table.table-striped
+      %thead
+        %tr
+          %th{scope: "col"}
+            Time
+          %th{scope: "col"}
+            Posts (local / Total incoming)
+          %th{scope: "col"}
+            Comments (local / Total incoming)
+          %th{scope: "col"}
+            New Users
+      %tbody
+        %tr
+          %th{scope: "row"}
+            Day
+          %th
+            = number_with_delimiter(stats[:day][:local_posts]) + " / " + number_with_delimiter(stats[:day][:total_posts])
+          %th
+            = number_with_delimiter(stats[:day][:local_comments]) + " / " + number_with_delimiter(stats[:day][:total_comments])
+          %th
+            = number_with_delimiter(stats[:day][:users])
+        %tr
+          %th{scope: "row"}
+            Week
+          %th
+            = number_with_delimiter(stats[:week][:local_posts]) + " / " + number_with_delimiter(stats[:week][:total_posts])
+          %th
+            = number_with_delimiter(stats[:week][:local_comments]) + " / " + number_with_delimiter(stats[:week][:total_comments])
+          %th
+            = number_with_delimiter(stats[:week][:users])
+        %tr
+          %th{scope: "row"}
+            Month
+          %th
+            = number_with_delimiter(stats[:month][:local_posts]) + " / " + number_with_delimiter(stats[:month][:total_posts])
+          %th
+            = number_with_delimiter(stats[:month][:local_comments]) + " / " + number_with_delimiter(stats[:month][:total_comments])
+          %th
+            = number_with_delimiter(stats[:month][:users])
+        %tr
+          %th{scope: "row"}
+            Year
+          %th
+            = number_to_human(stats[:year][:local_posts]) + " / " + number_to_human(stats[:year][:total_posts])
+          %th
+            = number_to_human(stats[:year][:local_posts]) + " / " + number_to_human(stats[:year][:total_comments])
+          %th
+            = number_to_human(stats[:year][:users])

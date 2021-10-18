@@ -1,0 +1,18 @@
+= render partial: "admins/stats/stats_bar"
+
+%h2
+  Posts distributions
+.row
+  .col-md-4
+    %h3
+      By language distribution (30 days)
+    = render partial: "admins/stats/language_distribution_list", locals: {list: posts[:by_language][:month]}
+.row
+  .col-md-6
+    %h3
+      Most liked (30 days)
+    = render partial: "admins/stats/posts_list", locals: {list: posts[:most_liked][:month]}
+  .col-md-6
+    %h3
+      Most commented (30 days)
+    = render partial: "admins/stats/posts_list", locals: {list: posts[:most_commented][:month]}

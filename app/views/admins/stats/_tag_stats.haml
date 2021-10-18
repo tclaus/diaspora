@@ -1,0 +1,17 @@
+= render partial: "admins/stats/stats_bar"
+
+%h2
+  Tags distributions
+.row
+  .col-md-4
+    %h3
+      Popular Tag of this day
+    = render partial: "admins/stats/popular_tags", locals: {tags: popular_tags[:day]}
+  .col-md-4
+    %h3
+      Popular Tags of this week (7 days)
+    = render partial: "admins/stats/popular_tags", locals: {tags: popular_tags[:week]}
+  .col-md-4
+    %h3
+      Popular Tags of the month (30 days)
+    = render partial: "admins/stats/popular_tags", locals: {tags: popular_tags[:month]}

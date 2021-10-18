@@ -143,6 +143,8 @@ Rails.application.routes.draw do
     get :admin_inviter
     get :weekly_user_stats
     get :stats, as: "pod_stats"
+    get :post_stats, as: "post_stats"
+    get :tag_stats, as: "tag_stats"
     get :dashboard, as: "admin_dashboard"
     get "add_invites/:invite_code_id" => "admins#add_invites", :as => "add_invites"
   end
