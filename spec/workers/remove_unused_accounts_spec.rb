@@ -3,7 +3,6 @@
 describe Workers::RemoveUnusedAccounts do
   describe "#perform" do
     it "removes old unused accounts while let others untouched" do
-
       alice.post(:status_message, text: "AWESOME", to: alice.aspects.first.id)
       bob.created_at = Time.current - 45.days
       bob.last_seen = Time.current - 45.days
