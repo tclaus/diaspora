@@ -12,7 +12,7 @@ module Workers
     def perform(post_id, url, retry_count=1)
       post = Post.find(post_id)
       post.open_graph_cache = OpenGraphCache.find_or_create_by(url: url)
-      update_language_from_og(post)
+      update_language_from_og(post) if post.language_id.nil?
       post.save
     rescue ActiveRecord::RecordNotFound
       # User created a post and deleted it right afterwards before we
@@ -25,10 +25,9 @@ module Workers
     private
 
     def update_language_from_og(post)
-      return unless post.open_graph_cache&.locale.present? && post.language_reliable == false
+      return if post.open_graph_cache&.locale.nil?
 
       post.language_id = post.open_graph_cache.locale
-      post.language_reliable = true
     end
   end
 end
