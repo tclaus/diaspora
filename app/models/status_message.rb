@@ -16,7 +16,7 @@ class StatusMessage < Post
   extract_tags_from :text
 
   validates_length_of :text, :maximum => 65535, :message => proc {|p, v| I18n.t('status_messages.too_long', :count => 65535, :current_length => v[:value].length)}
-  before_save :investigate_language
+  before_save :update_text_language
 
   # don't allow creation of empty status messages
   validate :presence_of_content, on: :create

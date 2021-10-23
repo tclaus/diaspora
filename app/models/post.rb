@@ -197,6 +197,10 @@ class Post < ApplicationRecord
     end
   end
 
+  def update_text_language
+    investigate_language if text_changed?
+  end
+
   def investigate_language
     language_service.detect_post_language(self)
   end
