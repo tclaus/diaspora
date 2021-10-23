@@ -18,7 +18,11 @@ class Stream::Public < Stream::Base
     @posts ||= Post.all_public
     return nil if @posts.nil?
 
-    @posts.where(language_id: language_service.language_for_public)
+    languages = language_service.language_for_public
+    return @posts if languages.empty?
+
+    @posts.where("(posts.language_id in (#{languages.to_s.delete('[').delete(']').gsub('"', "'")})
+                   or posts.language_id is null)")
   end
 
   # Override base class method

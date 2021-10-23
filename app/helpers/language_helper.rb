@@ -47,7 +47,7 @@ module LanguageHelper
 
   def fetch_language_distribution_in_posts
     sql = "select count(*), language_id from posts
-           where public = true and language_reliable = true
+           where public = true and language_id is not null
            group by language_id order by count(*) desc"
     ActiveRecord::Base.connection.exec_query sql
   end

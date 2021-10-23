@@ -19,9 +19,9 @@ class LanguageService
     result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
     return unless result
-
-    post.language_id = result.language.to_s.split("_").first
-    post.language_reliable = result.reliable?
+    if result.reliable?
+      post.language_id = result.language.to_s.split("_").first
+    end
   end
 
   def language_for_public
@@ -38,10 +38,7 @@ class LanguageService
   private
 
   def user_defined_language
-    user_languages = @user.stream_languages.pluck(:language_id)
-    return user_languages if user_languages.present?
-
-    default_language
+    @user.stream_languages.pluck(:language_id)
   end
 
   def default_language
@@ -62,7 +59,7 @@ class LanguageService
 
   # If a post can not be get a used language directly, it look to the other posts from same user.
   def language_by_heuristic(post)
-    reference = Post.where(author_id: post.author_id, language_reliable: true)
+    reference = Post.where("author_id = posts.author_id and language_id is not null")
                     .group(:language_id)
                     .order(count_all: :desc)
                     .count
