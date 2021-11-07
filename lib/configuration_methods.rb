@@ -50,11 +50,11 @@ module Configuration
         self["services.#{service}.authorized"] == true
     end
 
-    def local_posts_stream?(person)
+    def local_posts_stream?(user)
       return true if settings.enable_local_posts_stream == "admins" &&
-                     Role.is_admin?(person)
+                      user.admin?
       return true if settings.enable_local_posts_stream == "moderators" &&
-                     (Role.moderator?(person) || Role.is_admin?(person))
+                      user.moderator?
 
       settings.enable_local_posts_stream == "everyone"
     end
