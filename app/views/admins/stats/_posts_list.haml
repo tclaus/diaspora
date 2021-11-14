@@ -1,0 +1,19 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th{scope: "col"}
+        Text
+      %th{scope: "col"}
+        Language
+      %th{scope: "col"}
+        Count
+  %tbody
+    - list.rows.each do |guid, count, interacted_at, language_id, text|
+      %tr
+        %th{scope: "row"}
+          = link_to(truncate(message(text).plain_text_without_markdown, length: 50),
+          "/posts/#{guid}", target: :_blank)
+        %th
+          = language_id
+        %th
+          = count

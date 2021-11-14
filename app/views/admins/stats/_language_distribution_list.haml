@@ -1,0 +1,14 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th{scope: "col"}
+        Language
+      %th{scope: "col"}
+        Count
+  %tbody
+    - list.rows.each do |count, language|
+      %tr
+        %th{scope: "row"}
+          = "#{language}"
+        %th
+          = "#{count}"

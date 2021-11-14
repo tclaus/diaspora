@@ -36,4 +36,8 @@ module StatisticsHelper
       "serv-disabled"
     end
   end
+
+  def message(text)
+    Diaspora::MessageRenderer.new(text)
+  end
 end
