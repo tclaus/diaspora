@@ -26,7 +26,7 @@ class StreamsController < ApplicationController
   end
 
   def local_public
-    if AppConfig.local_posts_stream?(current_user.person)
+    if AppConfig.local_posts_stream?(current_user)
       stream_responder(Stream::LocalPublic)
     else
       head :not_found
