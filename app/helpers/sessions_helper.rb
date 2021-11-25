@@ -17,6 +17,12 @@ module SessionsHelper
   end
 
 
+  def authorization_context?
+    uri = Addressable::URI.parse(session["user_return_to"])
+    client_id = session["client_id"]
+    uri && uri.path.match("openid_connect").present? || client_id.present?
+  end
+
   def display_registration_link?
     AppConfig.settings.enable_registrations? && controller_name != "registrations"
   end
