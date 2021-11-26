@@ -66,10 +66,7 @@
                        aria:        {labelledby: "passwordConfirmationLabel"}
 
     - if AppConfig.settings.captcha.enable?
-      = show_simple_captcha object: "user",
-                            code_type: "numeric",
-                            class: "simple-captcha-image",
-                            input_html: {class: "form-control captcha-input"}
+      = f.invisible_captcha :subtitle
 
     = invite_hidden_tag(invite)
 

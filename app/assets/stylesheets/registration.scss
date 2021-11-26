@@ -31,22 +31,6 @@
     max-width: 500px;
   }
 
-  .captcha-img {
-    left: 10px;
-    position: absolute;
-    top: 169px;
-    width: 120px;
-  }
-
-  .form-control.captcha-input {
-    border-bottom: 1px solid $input-border;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    box-sizing: border-box;
-    line-height: $line-height-base;
-    padding-left: 130px;
-  }
-
   .terms > a {
     color: inherit;
     text-decoration: underline;
