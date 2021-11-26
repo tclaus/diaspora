@@ -76,4 +76,13 @@
       display: none;
     }
   }
+
+  form {
+    max-width: 500px;
+  }
+
+  .terms > a {
+    color: inherit;
+    text-decoration: underline;
+  }
 }

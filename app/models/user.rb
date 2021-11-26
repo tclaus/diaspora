@@ -11,8 +11,6 @@ class User < ApplicationRecord
   include Querying
   include SocialActions
 
-  apply_simple_captcha :message => I18n.t('simple_captcha.message.failed'), :add_to_base => true
-
   scope :logged_in_since, ->(time) { where('last_seen > ?', time) }
   scope :monthly_actives, ->(time = Time.now) { logged_in_since(time - 1.month) }
   scope :daily_actives, ->(time = Time.now) { logged_in_since(time - 1.day) }
@@ -583,11 +581,7 @@ class User < ApplicationRecord
   end
 
   def sign_up
-    if AppConfig.settings.captcha.enable?
-      save_with_captcha
-    else
-      save
-    end
+    save
   end
 
   def flag_for_removal(remove_after)

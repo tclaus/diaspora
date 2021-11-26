@@ -112,6 +112,7 @@ If you're currently running your production pod with `./script/server` in a tmux
 * Re-introduce likes on comments [#8203](https://github.com/diaspora/diaspora/pull/8203) [#8439](https://github.com/diaspora/diaspora/pull/8439) [#8442](https://github.com/diaspora/diaspora/pull/8442)
 * New redesigned registration page [#8285](https://github.com/diaspora/diaspora/pull/8285)
 * Allow comments to be fetched [#8441](https://github.com/diaspora/diaspora/pull/8441)
+* Remove the visible captcha and replaced it as invisible captcha
 
 # 0.7.18.2
 
