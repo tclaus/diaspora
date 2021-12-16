@@ -255,18 +255,15 @@ class UsersController < ApplicationController
       flash.now[:error] = "Your account migration could not be scheduled for the following reason:"\
                           " #{@user.errors.full_messages}"
     end
-    start_migration_account
+    Workers::ImportUser.perform_async(@user.id)
   end
+
 
   def change_stream_languages(stream_languages)
     language_ids = stream_languages.delete_if {|id| id == "" }
     languages = language_ids.map {|id| {user_id: @user.id, language_id: id} }
     StreamLanguage.where(user_id: @user.id).destroy_all
     @user.stream_languages.create(languages)
-  end
-
-  def start_migration_account
-    Workers::ImportProfile.perform_async(@user.username)
   end
 
   def change_settings(user_data, successful="users.update.settings_updated", error="users.update.settings_not_updated")
