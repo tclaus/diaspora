@@ -1075,23 +1075,9 @@ describe User, type: :model do
                 email:                 "ohai@example.com",
                 password:              "password",
                 password_confirmation: "password",
-                captcha:               "12345",
-
                 person:                {profile: {first_name: "O",
                                                   last_name:  "Hai"}}}
       @user = User.build(params)
-    end
-
-    it "saves with captcha off" do
-      AppConfig.settings.captcha.enable = false
-      expect(@user).to receive(:save).and_return(true)
-      @user.sign_up
-    end
-
-    it "saves with captcha on" do
-      AppConfig.settings.captcha.enable = true
-      expect(@user).to receive(:save_with_captcha).and_return(true)
-      @user.sign_up
     end
   end
 
