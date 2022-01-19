@@ -7,7 +7,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i(new create public)
 
-  invisible_captcha only: %i(create update), honeypot: :subtitle
+  invisible_captcha only: %i(create), honeypot: :subtitle
 
   respond_to :html
 
