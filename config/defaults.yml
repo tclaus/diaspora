@@ -152,6 +152,7 @@ defaults:
       authorized: true
   deepl:
     enable: false
+    auth_key:
   elasticsearch:
     enable_host: false
     enable_cloud: false

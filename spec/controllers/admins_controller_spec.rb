@@ -141,29 +141,7 @@ describe AdminsController, type: :controller do
       get :stats
       expect(response).to be_successful
       expect(response).to render_template(:stats)
-      expect(response.body).to include(
-        I18n.translate(
-          "admins.stats.display_results", segment: "<strong>#{I18n.translate('admins.stats.daily')}</strong>"
-        )
-      )
     end
 
-    it "succeeds and renders stats for different ranges" do
-      %w[week 2weeks month].each do |range|
-        get :stats, params: {range: range}
-        expect(response).to be_successful
-        expect(response).to render_template(:stats)
-        expect(response.body).not_to include(
-          I18n.translate(
-            "admins.stats.display_results", segment: "<strong>#{I18n.translate('admins.stats.daily')}</strong>"
-          )
-        )
-        expect(response.body).to include(
-          I18n.translate(
-            "admins.stats.display_results", segment: "<strong>#{I18n.translate("admins.stats.#{range}")}</strong>"
-          )
-        )
-      end
-    end
   end
 end
