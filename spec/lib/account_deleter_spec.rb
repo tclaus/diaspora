@@ -191,7 +191,7 @@ describe AccountDeleter do
   it "has all user association keys accounted for" do
     special_ar_user_associations = %i[person profile contacts auto_follow_back_aspect]
     ignored_ar_user_associations = %i[followed_tags invited_by invited_users contact_people aspect_memberships
-                                      ignored_people share_visibilities conversation_visibilities conversations reports]
+                                      ignored_people share_visibilities conversation_visibilities conversations reports search_histories]
     all_keys = @account_deletion.normal_ar_user_associates_to_delete +
       special_ar_user_associations + ignored_ar_user_associations
     expect(all_keys.sort_by(&:to_s)).to eq(User.reflections.keys.sort_by(&:to_s).map(&:to_sym))

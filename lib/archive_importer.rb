@@ -10,7 +10,7 @@ class ArchiveImporter
     @archive_hash = archive_hash
   end
 
-  def import
+  def import(opts={})
     import_tag_followings
     import_aspects
     import_contacts
