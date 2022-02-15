@@ -27,7 +27,8 @@ public/500.html
 # cannot provide a schema.rb that works for both MySQL and PostgreSQL, so we
 # have no choice. Our migrations are maintained, so it should always be
 # possible to get back to a "clean" database schema anyway.
-db/schema.rb
+# The schema needs to be checked in for societas instance
+# db/schema.rb
 
 # Sprites
 app/assets/images/branding-*.png

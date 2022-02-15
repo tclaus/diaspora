@@ -49,7 +49,7 @@ module Diaspora
       def self.comment(entity, opts)
         receive_relayable(Comment, entity, opts) do
           Comment.new(
-            author:      author_of(entity),
+            auhor:      author_of(entity),
             guid:        entity.guid,
             created_at:  entity.created_at,
             text:        entity.text,

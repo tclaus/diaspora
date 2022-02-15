@@ -158,10 +158,6 @@ To avoid potential security issues, diaspora\* now makes sure that ImageMagick i
 
 # 0.7.16.0
 
-## Security
-
-* Update rails to fix [CVE-2022-23633](https://github.com/advisories/GHSA-wh98-p28r-vrc9) [#8336](https://github.com/diaspora/diaspora/pull/8336)
-
 ## Refactor
 * Cache local posts/comments count for statistics [#8241](https://github.com/diaspora/diaspora/pull/8241)
 * Fix html-syntax in some handlebars templates [#8251](https://github.com/diaspora/diaspora/pull/8251)
@@ -171,7 +167,7 @@ To avoid potential security issues, diaspora\* now makes sure that ImageMagick i
 
 ## Bug fixes
 * Ensure the log folder exists [#8287](https://github.com/diaspora/diaspora/pull/8287)
-* Limit name length in header [#8313](https://github.com/diaspora/diaspora/pull/8313)
+* Limit name length in header [#8313] (https://github.com/diaspora/diaspora/pull/8313)
 * Fix fallback avatar in hovercards [#8316](https://github.com/diaspora/diaspora/pull/8316)
 * Use old person private key for export if relayable author migrated away [#8310](https://github.com/diaspora/diaspora/pull/8310)
 

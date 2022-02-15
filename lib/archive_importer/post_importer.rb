@@ -17,7 +17,6 @@ class ArchiveImporter
 
       entity_data["photos"].each do |photo|
         photo["entity_data"]["author"] = user.diaspora_handle
-        photo["entity_data"]["remote_photo_path"] = "#{AppConfig.pod_uri}uploads\/images\/"
       end
     end
 
@@ -25,12 +24,11 @@ class ArchiveImporter
       json.fetch("subscribed_users_ids", []).each do |diaspora_id|
         begin
           person = Person.find_or_fetch_by_identifier(diaspora_id)
-          next if person.nil? # TODO: Side effect of 'disable_pods', but import needs rework anyway
-
           person = person.account_migration.newest_person unless person.account_migration.nil?
           next if person.closed_account?
           # TODO: unless person.nil? import subscription: subscription import is not supported yet
         rescue DiasporaFederation::Discovery::DiscoveryError
+          # Ignored
         end
       end
     end
