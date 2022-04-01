@@ -22,7 +22,7 @@ namespace "comments" do
     comment_signatures_with_data.find_each do |possible_comment_to_migrate|
       extract_thread_parent_guid(possible_comment_to_migrate)
 
-      migrated_comments + +
+      migrated_comments+=1
       write_progress(migrated_comments)
     end
   end
