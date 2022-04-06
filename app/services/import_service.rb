@@ -11,6 +11,7 @@ class ImportService
     if path_to_profile.present?
       logger.info "Import for profile #{username} at path #{path_to_profile} requested"
       import_user_profile(path_to_profile, username, opts.merge(photo_migration: path_to_photos.present?))
+      Workers::Mail::ImportDataCompleted
     end
 
     user = User.find_by(username: username)
@@ -19,6 +20,7 @@ class ImportService
     if path_to_photos.present?
       logger.info("Importing photos from import file for '#{username}' from #{path_to_photos}")
       import_user_photos(user, path_to_photos)
+      Workers::Mail::ImportPhotosCompleted
     end
     remove_file_references(user)
   end

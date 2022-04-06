@@ -895,6 +895,9 @@ en:
         Hoping to see you again,
 
         The diaspora* email robot!
+    import_completed:
+      photos: "Your photos file import has been completed"
+      data: "Your data import has been completed"
   api:
     openid_connect:
       authorizations:
