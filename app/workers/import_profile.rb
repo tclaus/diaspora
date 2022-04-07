@@ -18,7 +18,7 @@ module Workers
     private
 
     def import_profile
-      @import_profile ||= ImportProfileService.new
+      @import_profile ||= ImportService.new
     end
   end
 end
