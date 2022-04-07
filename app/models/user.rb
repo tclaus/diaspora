@@ -95,6 +95,7 @@ class User < ApplicationRecord
   has_many :search_histories, dependent: :destroy
 
   before_save :guard_unconfirmed_email
+  before_save :set_defaults
 
   after_save :remove_invalid_unconfirmed_emails
 
@@ -523,6 +524,10 @@ class User < ApplicationRecord
     return unless will_save_change_to_unconfirmed_email?
 
     self.confirm_email_token = unconfirmed_email ? SecureRandom.hex(15) : nil
+  end
+
+  def set_defaults
+    self.auto_follow_back = false if auto_follow_back.nil?
   end
 
   # Whenever email is set, clear all unconfirmed emails which match
