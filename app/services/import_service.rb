@@ -8,17 +8,19 @@ class ImportService
   end
 
   def import_by_files(path_to_profile, path_to_photos, username, opts={})
-    if path_to_profile.present?
+    if path_to_profile.present? &&  File.exist?(path_to_profile)
       logger.info "Import for profile #{username} at path #{path_to_profile} requested"
       import_user_profile(path_to_profile, username, opts.merge(photo_migration: path_to_photos.present?))
+      Workers::Mail::ImportDataCompleted
     end
 
     user = User.find_by(username: username)
     raise ArgumentError, "Username #{username} should exist before uploading photos." if user.nil?
 
-    if path_to_photos.present?
+    if path_to_photos.present? &&  File.exist?(path_to_photos)
       logger.info("Importing photos from import file for '#{username}' from #{path_to_photos}")
       import_user_photos(user, path_to_photos)
+      Workers::Mail::ImportPhotosCompleted
     end
     remove_file_references(user)
   end
@@ -36,8 +38,10 @@ class ImportService
     logger.info "Successfully imported profile: #{username}"
   rescue MigrationService::ArchiveValidationFailed => e
     logger.error "Errors in the archive found: #{e.message}"
+    # TODO: Mail an user hier
   rescue MigrationService::MigrationAlreadyExists
     logger.error "Migration record already exists for the user, can't continue"
+    # TODO: Mail an user zum Import hier
   rescue MigrationService::SelfMigrationNotAllowed
     logger.error "You can't migrate onto your own account"
   end

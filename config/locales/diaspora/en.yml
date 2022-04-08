@@ -843,7 +843,7 @@ en:
         Hello %{name}
 
         We’ve encountered an issue while processing your personal data for download.
-        Please try again!
+        If this issue persists, please contact your podmin for help.
 
         Sorry,
 
@@ -864,7 +864,7 @@ en:
         Hello %{name}
 
         We’ve encountered an issue while processing your photos for download.
-        Please try again!
+        If this issue persists, please contact your podmin for help.
 
         Sorry,
 
@@ -907,6 +907,9 @@ en:
         Hoping to see you again,
 
         The diaspora* email robot!
+    import_completed:
+      photos: "Your photos file import has been completed"
+      data: "Your data import has been completed"
   api:
     openid_connect:
       authorizations:

@@ -21,7 +21,7 @@ Although the chat was never enabled per default and was marked as experimental, 
 * Remove backporting of mention syntax [#7788](https://github.com/diaspora/diaspora/pull/7788)
 * Enable Content-Security-Policy header by default [#7781](https://github.com/diaspora/diaspora/pull/7781)
 * Do not show getting started after account import [#8036](https://github.com/diaspora/diaspora/pull/8036)
-* Remove the JSXC/Prosody integration [#8069](https://github.com/diaspora/diaspora/pull/8069)
+* Remove the JSXC/Prosody integration [#8069](https://github.com/diaspora/diaspora/pull/8069) [#8341](https://github.com/diaspora/diaspora/pull/8341)
 * Replace factory\_girl with factory\_bot [#8218](https://github.com/diaspora/diaspora/pull/8218)
 * Drop relay support [#8243](https://github.com/diaspora/diaspora/pull/8243)
 
@@ -36,6 +36,15 @@ Although the chat was never enabled per default and was marked as experimental, 
 * For pods running PostgreSQL, make sure that no upper-case/mixed-case tags exist, and create a `lower(name)` index on tags to speed up ActsAsTaggableOn [#8206](https://github.com/diaspora/diaspora/pull/8206)
 * Allow podmins/moderators to see all local public posts to improve moderation [#8232](https://github.com/diaspora/diaspora/pull/8232) [#8320](https://github.com/diaspora/diaspora/pull/8320)
 * Add support for directly paste images to upload them [#8237](https://github.com/diaspora/diaspora/pull/8237)
+
+# 0.7.17.0
+
+## Refactor
+
+## Bug fixes
+* Don't suggest to retry exports on failure [#8343](https://github.com/diaspora/diaspora/pull/8343)
+
+## Features
 
 # 0.7.16.0
 
