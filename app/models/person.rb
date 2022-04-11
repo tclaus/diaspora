@@ -365,7 +365,7 @@ class Person < ApplicationRecord
     # pod blocked?
     if diaspora_handle_from_blocked_pod?(diaspora_id)
       logger.info "Rejecting #{diaspora_id}, from blocked pod"
-      raise DiasporaFederation::Federation::PodBlocked,
+      raise Diaspora::Federation::Federation::PodBlocked,
             "Failed discovery for #{diaspora_id}: blocked pod"
     end
 
