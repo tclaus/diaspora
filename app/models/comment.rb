@@ -31,7 +31,7 @@ class Comment < ApplicationRecord
   validates :text, :presence => true, :length => {:maximum => 65535}
 
   has_many :reports, as: :item
-
+  has_many :comments, foreign_key: :thread_parent_guid, primary_key: :guid
   has_one :signature, class_name: "CommentSignature", dependent: :delete
 
   scope :including_author, -> { includes(:author => :profile) }
@@ -45,6 +45,10 @@ class Comment < ApplicationRecord
 
   before_save do
     self.text.strip! unless self.text.nil?
+  end
+
+  after_save do
+    save_parent_comment_guid
   end
 
   after_commit on: :create do
@@ -78,6 +82,16 @@ class Comment < ApplicationRecord
 
     def relayable_options
       {post: @target, text: @text}
+    end
+  end
+
+  private
+  def save_parent_comment_guid
+    if thread_parent_guid.present?
+      self.signature = build_signature if self.signature.nil?
+      self.signature.additional_data[:parent_thread_guid] = thread_parent_guid
+      self.signature.save
+      logger.info "Write a new comment thread parent guid: #{thread_parent_guid}"
     end
   end
 end
