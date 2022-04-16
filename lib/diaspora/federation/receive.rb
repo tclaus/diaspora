@@ -53,7 +53,7 @@ module Diaspora
                   guid: entity.guid,
                   created_at: entity.created_at,
                   text: entity.text,
-                  thread_parent_guid: entity.additional_data[:thread_parent_guid],
+                  thread_parent_guid: entity.additional_data["thread_parent_guid"],
                   commentable: Post.find_by(guid: entity.parent_guid)
           )
         end
