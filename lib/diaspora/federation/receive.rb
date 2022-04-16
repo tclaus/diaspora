@@ -5,7 +5,7 @@ module Diaspora
     module Receive
       extend Diaspora::Logging
 
-      def self.perform(entity, opts={})
+      def self.perform(entity, opts = {})
         public_send(Mappings.receiver_for(entity), entity, opts)
       end
 
@@ -32,9 +32,9 @@ module Diaspora
         return if AccountMigration.exists?(old_person: old_person, new_person: profile.person)
 
         AccountMigration.create!(
-          old_person:        old_person,
-          new_person:        profile.person,
-          remote_photo_path: entity.remote_photo_path
+                old_person: old_person,
+                new_person: profile.person,
+                remote_photo_path: entity.remote_photo_path
         ).tap do |migration|
           migration.signature = entity.signature if old_person.local?
           migration.save!
@@ -49,11 +49,12 @@ module Diaspora
       def self.comment(entity, opts)
         receive_relayable(Comment, entity, opts) do
           Comment.new(
-            author:      author_of(entity),
-            guid:        entity.guid,
-            created_at:  entity.created_at,
-            text:        entity.text,
-            commentable: Post.find_by(guid: entity.parent_guid)
+                  author: author_of(entity),
+                  guid: entity.guid,
+                  created_at: entity.created_at,
+                  text: entity.text,
+                  thread_parent_guid: entity.additional_data[:thread_parent_guid],
+                  commentable: Post.find_by(guid: entity.parent_guid)
           )
         end
       end
@@ -72,12 +73,12 @@ module Diaspora
         author = author_of(entity)
         ignore_existing_guid(Conversation, entity.guid, author) do
           Conversation.create!(
-            author:              author,
-            guid:                entity.guid,
-            subject:             entity.subject,
-            created_at:          entity.created_at,
-            participant_handles: entity.participants,
-            messages:            entity.messages.map {|message| build_message(message) }
+                  author: author,
+                  guid: entity.guid,
+                  subject: entity.subject,
+                  created_at: entity.created_at,
+                  participant_handles: entity.participants,
+                  messages: entity.messages.map {|message| build_message(message)}
           )
         end
       end
@@ -85,10 +86,10 @@ module Diaspora
       def self.like(entity, opts)
         receive_relayable(Like, entity, opts) do
           Like.new(
-            author:   author_of(entity),
-            guid:     entity.guid,
-            positive: entity.positive,
-            target:   Mappings.model_class_for(entity.parent_type).find_by(guid: entity.parent_guid)
+                  author: author_of(entity),
+                  guid: entity.guid,
+                  positive: entity.positive,
+                  target: Mappings.model_class_for(entity.parent_type).find_by(guid: entity.parent_guid)
           )
         end
       end
@@ -103,9 +104,9 @@ module Diaspora
         author = author_of(entity)
         ignore_existing_guid(Participation, entity.guid, author) do
           Participation.create!(
-            author: author,
-            guid:   entity.guid,
-            target: Mappings.model_class_for(entity.parent_type).find_by(guid: entity.parent_guid)
+                  author: author,
+                  guid: entity.guid,
+                  target: Mappings.model_class_for(entity.parent_type).find_by(guid: entity.parent_guid)
           )
         end
       end
@@ -117,14 +118,14 @@ module Diaspora
         if persisted_photo
           persisted_photo.tap do |photo|
             photo.update_attributes(
-              text:                entity.text,
-              public:              entity.public,
-              created_at:          entity.created_at,
-              remote_photo_path:   entity.remote_photo_path,
-              remote_photo_name:   entity.remote_photo_name,
-              status_message_guid: entity.status_message_guid,
-              height:              entity.height,
-              width:               entity.width
+                    text: entity.text,
+                    public: entity.public,
+                    created_at: entity.created_at,
+                    remote_photo_path: entity.remote_photo_path,
+                    remote_photo_name: entity.remote_photo_name,
+                    status_message_guid: entity.status_message_guid,
+                    height: entity.height,
+                    width: entity.width
             )
           end
         else
@@ -135,10 +136,10 @@ module Diaspora
       def self.poll_participation(entity, opts)
         receive_relayable(PollParticipation, entity, opts) do
           PollParticipation.new(
-            author:           author_of(entity),
-            guid:             entity.guid,
-            poll:             Poll.find_by(guid: entity.parent_guid),
-            poll_answer_guid: entity.poll_answer_guid
+                  author: author_of(entity),
+                  guid: entity.guid,
+                  poll: Poll.find_by(guid: entity.parent_guid),
+                  poll_answer_guid: entity.poll_answer_guid
           )
         end
       end
@@ -146,19 +147,19 @@ module Diaspora
       def self.profile(entity, _opts)
         author_of(entity).profile.tap do |profile|
           profile.update_attributes(
-            first_name:       entity.first_name,
-            last_name:        entity.last_name,
-            image_url:        entity.image_url,
-            image_url_medium: entity.image_url_medium,
-            image_url_small:  entity.image_url_small,
-            birthday:         entity.birthday,
-            gender:           entity.gender,
-            bio:              entity.bio,
-            location:         entity.location,
-            searchable:       entity.searchable,
-            nsfw:             entity.nsfw,
-            tag_string:       entity.tag_string,
-            public_details:   entity.public
+                  first_name: entity.first_name,
+                  last_name: entity.last_name,
+                  image_url: entity.image_url,
+                  image_url_medium: entity.image_url_medium,
+                  image_url_small: entity.image_url_small,
+                  birthday: entity.birthday,
+                  gender: entity.gender,
+                  bio: entity.bio,
+                  location: entity.location,
+                  searchable: entity.searchable,
+                  nsfw: entity.nsfw,
+                  tag_string: entity.tag_string,
+                  public_details: entity.public
           )
         end
       end
@@ -167,11 +168,11 @@ module Diaspora
         author = author_of(entity)
         ignore_existing_guid(Reshare, entity.guid, author) do
           Reshare.create!(
-            author:     author,
-            guid:       entity.guid,
-            created_at: entity.created_at,
-            root_guid:  entity.root_guid
-          ).tap {|reshare| send_participation_for(reshare) }
+                  author: author,
+                  guid: entity.guid,
+                  created_at: entity.created_at,
+                  root_guid: entity.root_guid
+          ).tap {|reshare| send_participation_for(reshare)}
         end
       end
 
@@ -196,15 +197,16 @@ module Diaspora
         end
       end
 
-      def self.status_message(entity, _opts) # rubocop:disable Metrics/AbcSize
+      def self.status_message(entity, _opts)
+        # rubocop:disable Metrics/AbcSize
         try_load_existing_guid(StatusMessage, entity.guid, author_of(entity)) do
           StatusMessage.new(
-            author:                author_of(entity),
-            guid:                  entity.guid,
-            text:                  entity.text,
-            public:                entity.public,
-            created_at:            entity.created_at,
-            provider_display_name: entity.provider_display_name
+                  author: author_of(entity),
+                  guid: entity.guid,
+                  text: entity.text,
+                  public: entity.public,
+                  created_at: entity.created_at,
+                  provider_display_name: entity.provider_display_name
           ).tap do |status_message|
             status_message.location = build_location(entity.location) if entity.location
             status_message.poll = build_poll(entity.poll) if entity.poll
@@ -223,32 +225,32 @@ module Diaspora
 
       private_class_method def self.build_location(entity)
         Location.new(
-          address: entity.address,
-          lat:     entity.lat,
-          lng:     entity.lng
+                address: entity.address,
+                lat: entity.lat,
+                lng: entity.lng
         )
       end
 
       private_class_method def self.build_message(entity)
         Message.new(
-          author:            author_of(entity),
-          guid:              entity.guid,
-          text:              entity.text,
-          created_at:        entity.created_at,
-          conversation_guid: entity.conversation_guid
+                author: author_of(entity),
+                guid: entity.guid,
+                text: entity.text,
+                created_at: entity.created_at,
+                conversation_guid: entity.conversation_guid
         )
       end
 
       private_class_method def self.build_poll(entity)
         Poll.new(
-          guid:     entity.guid,
-          question: entity.question
+                guid: entity.guid,
+                question: entity.question
         ).tap do |poll|
           poll.poll_answers = entity.poll_answers.map do |answer|
             PollAnswer.new(
-              guid:   answer.guid,
-              answer: answer.answer,
-              poll:   poll
+                    guid: answer.guid,
+                    answer: answer.answer,
+                    poll: poll
             )
           end
         end
@@ -256,28 +258,28 @@ module Diaspora
 
       private_class_method def self.save_photo(entity)
         Photo.create!(
-          author:              author_of(entity),
-          guid:                entity.guid,
-          text:                entity.text,
-          public:              entity.public,
-          created_at:          entity.created_at,
-          remote_photo_path:   entity.remote_photo_path,
-          remote_photo_name:   entity.remote_photo_name,
-          status_message_guid: entity.status_message_guid,
-          height:              entity.height,
-          width:               entity.width
+                author: author_of(entity),
+                guid: entity.guid,
+                text: entity.text,
+                public: entity.public,
+                created_at: entity.created_at,
+                remote_photo_path: entity.remote_photo_path,
+                remote_photo_name: entity.remote_photo_name,
+                status_message_guid: entity.status_message_guid,
+                height: entity.height,
+                width: entity.width
         )
       end
 
       private_class_method def self.save_or_load_photos(photos)
         photos.map do |photo|
-          try_load_existing_guid(Photo, photo.guid, author_of(photo)) { save_photo(photo) }
+          try_load_existing_guid(Photo, photo.guid, author_of(photo)) {save_photo(photo)}
         end
       end
 
       private_class_method def self.receive_relayable(klass, entity, opts)
-        save_relayable(klass, entity) { yield }
-          .tap {|relayable| relay_relayable(relayable) if relayable && !opts[:skip_relaying] }
+        save_relayable(klass, entity) {yield}
+                .tap {|relayable| relay_relayable(relayable) if relayable && !opts[:skip_relaying]}
       end
 
       private_class_method def self.save_relayable(klass, entity)
@@ -302,9 +304,9 @@ module Diaspora
         }.compact.to_h
 
         klass.reflect_on_association(:signature).klass.new(
-          author_signature: entity.author_signature,
-          additional_data:  entity.additional_data.merge(special_additional_data),
-          signature_order:  SignatureOrder.find_or_create_by!(order: entity.signature_order.join(" "))
+                author_signature: entity.author_signature,
+                additional_data: entity.additional_data.merge(special_additional_data),
+                signature_order: SignatureOrder.find_or_create_by!(order: entity.signature_order.join(" "))
         )
       end
 
@@ -373,8 +375,8 @@ module Diaspora
       # or use first user who isn't closed
       private_class_method def self.user_for_participation
         User.find_by(username: AppConfig.admins.account.to_s) ||
-          Role.admins.first&.person&.owner ||
-          User.where(locked_at: nil).first
+                Role.admins.first&.person&.owner ||
+                User.where(locked_at: nil).first
       end
     end
   end
