@@ -3,8 +3,11 @@
 class ImportService
   include Diaspora::Logging
 
-  def import_by_user(user, opts={})
-    import_by_files(user.export.current_path, user.exported_photos_file.current_path, user.username, opts)
+  def import_by_user(user_name, import_parameters)
+    profile_path = import_parameters["profile_path"]
+    photos_path = import_parameters["photos_path"]
+
+    import_by_files(profile_path, photos_path, user_name)
   end
 
   def import_by_files(path_to_profile, path_to_photos, username, opts={})
@@ -22,7 +25,7 @@ class ImportService
       import_user_photos(user, path_to_photos)
       Workers::Mail::ImportPhotosCompleted
     end
-    remove_file_references(user)
+    remove_import_files(path_to_profile, path_to_photos)
   end
 
   private
@@ -106,9 +109,13 @@ class ImportService
     folder
   end
 
-  def remove_file_references(user)
-    user.remove_exported_photos_file
-    user.remove_export
-    user.save
+  # Removes import files after processing
+  # @param [*String] files
+  def remove_import_files(*files)
+    files.each do |file|
+      if file && File.exist?(file)
+        File.delete(file) rescue nil
+      end
+    end
   end
 end
