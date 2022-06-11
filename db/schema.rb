@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_27_215443) do
+ActiveRecord::Schema.define(version: 2022_03_31_174032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,9 +99,11 @@ ActiveRecord::Schema.define(version: 2022_02_27_215443) do
     t.datetime "updated_at", null: false
     t.integer "likes_count", default: 0, null: false
     t.string "commentable_type", limit: 60, default: "Post", null: false
+    t.string "thread_parent_guid"
     t.index ["author_id"], name: "index_comments_on_person_id"
     t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
     t.index ["guid"], name: "index_comments_on_guid", unique: true
+    t.index ["thread_parent_guid"], name: "index_thread_parent_guid"
   end
 
   create_table "contacts", id: :serial, force: :cascade do |t|
