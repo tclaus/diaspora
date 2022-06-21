@@ -6,6 +6,22 @@ module SessionsHelper
     uri&.query_values&.fetch("login_hint", "")
   end
 
+  def authorization_context?
+    uri = Addressable::URI.parse(session["user_return_to"])
+    client_id = session["client_id"]
+    uri && uri.path.match("openid_connect").present? || client_id.present?
+  end
+
+  def open_id_context?
+    uri = Addressable::URI.parse(session["user_return_to"])
+    client_id = session["client_id"]
+    if uri && uri.path.match("openid_connect").present? || client_id.present?
+      true
+    else
+      false
+    end
+  end
+
   def display_registration_link?
     AppConfig.settings.enable_registrations? && controller_name != "registrations"
   end
