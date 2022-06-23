@@ -44,6 +44,11 @@ class UnprocessedImage < CarrierWave::Uploader::Base
     end
   end
 
+  # @param [ImageProcessing::Builder] image
+  def convert_to_jpeg(img)
+    img.format("jpeg")
+  end
+
   version :thumb_small
   version :thumb_medium
   version :thumb_large
