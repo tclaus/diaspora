@@ -19,7 +19,7 @@ describe Photo, :type => :model do
     @fixture_filename  = 'button.png'
 
     @fixture_name      = File.join(File.dirname(__FILE__), '..', 'fixtures', @fixture_filename)
-    @heic_file_name = File.join(File.dirname(__FILE__), '..', 'fixtures', @heic_filename)
+    @heic_file_name = File.join(File.dirname(__FILE__), "..", "fixtures", @heic_filename)
     @fail_fixture_name = File.join(File.dirname(__FILE__), '..', 'fixtures', 'msg.xml')
 
     @photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
