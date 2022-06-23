@@ -38,8 +38,8 @@ Diaspora.ProfilePhotoUploader = class {
     this.fineUploader = new qq.FineUploaderBasic({
       element: this.fileInput,
       validation: {
-        acceptFiles: "image/png, image/jpeg",
-        allowedExtensions: ["jpg", "jpeg", "png"]
+        acceptFiles: "image/png, image/jpeg image/heic",
+        allowedExtensions: ["jpg", "jpeg", "png", "heic"]
       },
       request: {
         endpoint: Routes.photos(),
