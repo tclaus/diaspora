@@ -26,12 +26,12 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension
-    heif_format? ? ".jpeg": File.extname(@filename)
+    heif_format? ? ".jpeg" : File.extname(@filename)
   end
 
   def heif_format?
     extname = File.extname(@filename)
-    extname == ".heif" || extname == ".heic"
+    %w[.heif .heic].include?(extname)
   end
 
   process :basic_process
