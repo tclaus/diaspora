@@ -18,22 +18,41 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg png gif]
+    %w[jpg jpeg png gif heic]
   end
 
   def filename
-    model.random_string + File.extname(@filename) if @filename
+    model.random_string + extension if @filename
+  end
+
+  def extension
+    heif_format? ? ".jpeg": File.extname(@filename)
+  end
+
+  def heif_format?
+    extname = File.extname(@filename)
+    extname == ".heif" || extname == ".heic"
   end
 
   process :basic_process
 
   def basic_process
     manipulate! do |img|
-      img.auto_orient
-      img.strip if strip_exif
+      img.combine_options do |i|
+        i.auto_orient
+        i.strip if strip_exif
+      end
+
       img = yield(img) if block_given?
+
+      convert_to_jpeg(img) if heif_format?
       img
     end
+  end
+
+  # @param [ImageProcessing::Builder] image
+  def convert_to_jpeg(img)
+    img.format("jpeg")
   end
 
   version :thumb_small
