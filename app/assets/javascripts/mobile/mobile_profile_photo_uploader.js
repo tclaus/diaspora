@@ -12,7 +12,7 @@ Diaspora.ProfilePhotoUploader.prototype = {
       element: document.getElementById("file-upload"),
       validation: {
         acceptFiles: "image/png, image/jpeg, image/gif, image/heic, image/webp",
-        allowedExtensions: ["jpg", "jpeg", "png", "heic", "webp"],
+        allowedExtensions: ["png", "jpg", "jpeg", "gif", "heic", "webp"],
         sizeLimit: 4194304
       },
       request: {
