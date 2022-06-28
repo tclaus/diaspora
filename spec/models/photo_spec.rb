@@ -23,7 +23,7 @@ describe Photo, :type => :model do
     @heic_file_name = File.join(File.dirname(__FILE__), "..", "fixtures", @heic_filename)
     @fail_fixture_name = File.join(File.dirname(__FILE__), '..', 'fixtures', 'msg.xml')
 
-    @photo  = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
+    @photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @heic_photo = @user.build_post(:photo, user_file: File.open(@heic_file_name), to: @aspect.id)
     @photo2 = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @saved_photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
@@ -188,12 +188,12 @@ describe Photo, :type => :model do
     end
   end
 
-  describe "heic files" do
-    it "convert to jpeg" do
+  describe "converting files" do
+    it "convert to webp" do
       with_carrierwave_processing do
         @heic_photo.unprocessed_image.store! File.open(@heic_file_name)
       end
-      expect(@heic_photo.remote_photo_name).to include(".jpeg")
+      expect(@heic_photo.remote_photo_name).to include(".webp")
     end
   end
 
