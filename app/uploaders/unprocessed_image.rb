@@ -18,7 +18,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg png gif heic]
+    %w[jpg jpeg png gif heic webp]
   end
 
   def filename
@@ -26,12 +26,12 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension
-    heif_format? ? ".jpeg" : File.extname(@filename)
+    needs_converting? ? ".webp" : File.extname(@filename)
   end
 
-  def heif_format?
+  def needs_converting?
     extname = File.extname(@filename)
-    %w[.heif .heic].include?(extname)
+    !extname.eql?(".webp")
   end
 
   process :basic_process
@@ -45,14 +45,14 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
       img = yield(img) if block_given?
 
-      convert_to_jpeg(img) if heif_format?
+      convert_to_jpeg(img) if needs_converting?
       img
     end
   end
 
-  # @param [ImageProcessing::Builder] image
+  # @param [ImageProcessing::Builder] img
   def convert_to_jpeg(img)
-    img.format("jpeg")
+    img.format("webp")
   end
 
   version :thumb_small
