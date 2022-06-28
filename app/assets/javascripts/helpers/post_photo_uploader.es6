@@ -59,8 +59,8 @@ Diaspora.PostPhotoUploader = class {
         promptForName: true
       },
       validation: {
-        acceptFiles: "image/png, image/jpeg, image/gif, image/heic",
-        allowedExtensions: ["jpg", "jpeg", "png", "gif", "heic"],
+        acceptFiles: "image/png, image/jpeg, image/gif, image/heic, image/webp",
+        allowedExtensions: ["jpg", "jpeg", "png", "gif", "heic", "webp"],
         sizeLimit: (window.Promise && qq.supportedFeatures.scaling ? null : this.sizeLimit)
       },
       messages: {
