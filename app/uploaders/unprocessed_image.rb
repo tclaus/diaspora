@@ -45,13 +45,13 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
       img = yield(img) if block_given?
 
-      convert_to_jpeg(img) if needs_converting?
+      convert_to_storage_format(img) if needs_converting?
       img
     end
   end
 
   # @param [ImageProcessing::Builder] img
-  def convert_to_jpeg(img)
+  def convert_to_storage_format(img)
     img.format("webp")
   end
 
