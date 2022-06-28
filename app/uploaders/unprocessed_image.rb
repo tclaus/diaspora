@@ -12,7 +12,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg png gif webp]
+    %w[jpg jpeg png gif heic webp]
   end
 
   def filename
@@ -25,7 +25,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
   def needs_converting?
     extname = File.extname(@filename)
-    %w[.webp .gif].exclude?(extname) && !model.keep_original_format
+    !extname.eql?(".webp")
   end
 
   process :basic_process
@@ -44,9 +44,9 @@ class UnprocessedImage < CarrierWave::Uploader::Base
     end
   end
 
-  # @param [ImageProcessing::Builder] image
+  # @param [ImageProcessing::Builder] img
   def convert_to_jpeg(img)
-    img.format("jpeg")
+    img.format("webp")
   end
 
   version :thumb_small

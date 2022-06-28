@@ -17,12 +17,14 @@ describe Photo, :type => :model do
     @aspect = @user.aspects.first
 
     @fixture_filename  = 'button.png'
+    @heic_filename = "autumn_1440x960.heic"
 
     @fixture_name      = File.join(File.dirname(__FILE__), '..', 'fixtures', @fixture_filename)
     @heic_file_name = File.join(File.dirname(__FILE__), "..", "fixtures", @heic_filename)
     @fail_fixture_name = File.join(File.dirname(__FILE__), '..', 'fixtures', 'msg.xml')
 
     @photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
+    @heic_photo = @user.build_post(:photo, user_file: File.open(@heic_file_name), to: @aspect.id)
     @photo2 = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @saved_photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @saved_photo.save
