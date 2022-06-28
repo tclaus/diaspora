@@ -45,7 +45,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   # @param [ImageProcessing::Builder] img
-  def convert_to_jpeg(img)
+  def convert_to_storage_format(img)
     img.format("webp")
   end
 
