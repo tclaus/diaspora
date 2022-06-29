@@ -44,11 +44,6 @@ class UnprocessedImage < CarrierWave::Uploader::Base
     end
   end
 
-  # @param [ImageProcessing::Builder] img
-  def convert_to_storage_format(img)
-    img.format("webp")
-  end
-
   version :thumb_small
   version :thumb_medium
   version :thumb_large
