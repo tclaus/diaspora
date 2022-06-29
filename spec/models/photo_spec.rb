@@ -94,7 +94,7 @@ describe Photo, :type => :model do
       @photo.update_remote_path
 
       expect(@photo.remote_photo_path).to include("http")
-      expect(@photo.remote_photo_name).to include(".png")
+      expect(@photo.remote_photo_name).to include(".webp")
     end
   end
 
