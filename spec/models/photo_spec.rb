@@ -17,14 +17,11 @@ describe Photo, :type => :model do
     @aspect = @user.aspects.first
 
     @fixture_filename  = 'button.png'
-    @heic_filename = "autumn_1440x960.heic"
 
     @fixture_name      = File.join(File.dirname(__FILE__), '..', 'fixtures', @fixture_filename)
-    @heic_file_name = File.join(File.dirname(__FILE__), "..", "fixtures", @heic_filename)
     @fail_fixture_name = File.join(File.dirname(__FILE__), '..', 'fixtures', 'msg.xml')
 
     @photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
-    @heic_photo = @user.build_post(:photo, user_file: File.open(@heic_file_name), to: @aspect.id)
     @photo2 = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @saved_photo = @user.build_post(:photo, user_file: File.open(@fixture_name), to: @aspect.id)
     @saved_photo.save
@@ -191,9 +188,9 @@ describe Photo, :type => :model do
   describe "converting files" do
     it "convert to webp" do
       with_carrierwave_processing do
-        @heic_photo.unprocessed_image.store! File.open(@heic_file_name)
+        @photo.unprocessed_image.store! File.open(@fixture_name)
       end
-      expect(@heic_photo.remote_photo_name).to include(".webp")
+      expect(@photo.remote_photo_name).to include(".webp")
     end
   end
 

@@ -9,6 +9,11 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
   attr_accessor :strip_exif
 
+  def initialize(*)
+    @convert_format =  true
+    super
+  end
+
   def strip_exif
     @strip_exif || false
   end
@@ -18,7 +23,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg png gif heic webp]
+    %w[jpg jpeg png gif webp]
   end
 
   def filename
@@ -31,7 +36,7 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
   def needs_converting?
     extname = File.extname(@filename)
-    %w[.webp .gif].exclude?(extname)
+    %w[.webp .gif].exclude?(extname) && !model.keep_original_format
   end
 
   process :basic_process
@@ -48,11 +53,6 @@ class UnprocessedImage < CarrierWave::Uploader::Base
       img.format("webp") if needs_converting?
       img
     end
-  end
-
-  # @param [ImageProcessing::Builder] img
-  def convert_to_storage_format(img)
-    img.format("webp")
   end
 
   version :thumb_small
