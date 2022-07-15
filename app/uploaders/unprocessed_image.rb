@@ -9,11 +9,6 @@ class UnprocessedImage < CarrierWave::Uploader::Base
 
   attr_accessor :strip_exif
 
-  def initialize(*)
-    @convert_format =  true
-    super
-  end
-
   def strip_exif
     @strip_exif || false
   end
