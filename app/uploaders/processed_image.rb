@@ -12,7 +12,7 @@ class ProcessedImage < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg png gif webp]
+    %w[jpg jpeg png gif webp heic]
   end
 
   def filename
