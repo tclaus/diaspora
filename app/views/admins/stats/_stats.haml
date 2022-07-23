@@ -54,3 +54,12 @@
             = number_to_human(stats[:year][:local_posts]) + " / " + number_to_human(stats[:year][:total_comments])
           %th
             = number_to_human(stats[:year][:users])
+        %tr
+          %th{scope: "row"}
+            Total
+          %th
+            = number_to_human(stats[:total][:local_posts]) + " / " + number_to_human(stats[:total][:total_posts])
+          %th
+            = number_to_human(stats[:total][:local_posts]) + " / " + number_to_human(stats[:total][:total_comments])
+          %th
+            = number_to_human(stats[:total][:users])

@@ -14,34 +14,12 @@ class AdminStatisticsService
 
   def total_stat_numbers
     stats = {}
-    stats[:day] = {}
-    stats[:week] = {}
-    stats[:month] = {}
-    stats[:year] = {}
 
-    stats[:day][:local_posts] = posts_local_since(DAY)
-    stats[:day][:total_posts] = posts_since(DAY)
-    stats[:week][:local_posts] = posts_local_since(WEEKDAYS)
-    stats[:week][:total_posts] = posts_since(WEEKDAYS)
-    stats[:month][:local_posts] = posts_local_since(MONTHDAYS)
-    stats[:month][:total_posts] = posts_since(MONTHDAYS)
-    stats[:year][:local_posts] = posts_local_since(YEAR)
-    stats[:year][:total_posts] = posts_since(YEAR)
-
-    stats[:day][:local_comments] = comments_local_since(DAY)
-    stats[:day][:total_comments] = comments_since(DAY)
-    stats[:week][:local_comments] = comments_local_since(WEEKDAYS)
-    stats[:week][:total_comments] = comments_since(WEEKDAYS)
-    stats[:month][:local_comments] = comments_local_since(MONTHDAYS)
-    stats[:month][:total_comments] = comments_since(MONTHDAYS)
-    stats[:year][:local_comments] = comments_local_since(YEAR)
-    stats[:year][:total_comments] = comments_since(YEAR)
-
-    stats[:week][:users] = users_since(WEEKDAYS)
-    stats[:day][:users] = users_since(DAY)
-    stats[:month][:users] = users_since(MONTHDAYS)
-    stats[:year][:users] = users_since(YEAR)
-
+    generate_daily_stats(stats)
+    generate_weekly_stats(stats)
+    generate_monthly_stats(stats)
+    generate_yearly_stats(stats)
+    generate_total_stats(stats)
     stats
   end
 
@@ -125,6 +103,51 @@ class AdminStatisticsService
 
   private
 
+  def generate_total_stats(stats)
+    stats[:total] = {}
+    stats[:total][:local_posts] = posts_local_total
+    stats[:total][:total_posts] = posts_total
+    stats[:total][:local_comments] = comments_local_total
+    stats[:total][:total_comments] = comments_total
+    stats[:total][:users] = users_total
+  end
+
+  def generate_yearly_stats(stats)
+    stats[:year] = {}
+    stats[:year][:local_posts] = posts_local_since(YEAR)
+    stats[:year][:total_posts] = posts_since(YEAR)
+    stats[:year][:local_comments] = comments_local_since(YEAR)
+    stats[:year][:total_comments] = comments_since(YEAR)
+    stats[:year][:users] = users_since(YEAR)
+  end
+
+  def generate_monthly_stats(stats)
+    stats[:month] = {}
+    stats[:month][:local_posts] = posts_local_since(MONTHDAYS)
+    stats[:month][:total_posts] = posts_since(MONTHDAYS)
+    stats[:month][:local_comments] = comments_local_since(MONTHDAYS)
+    stats[:month][:total_comments] = comments_since(MONTHDAYS)
+    stats[:month][:users] = users_since(MONTHDAYS)
+  end
+
+  def generate_weekly_stats(stats)
+    stats[:week] = {}
+    stats[:week][:local_posts] = posts_local_since(WEEKDAYS)
+    stats[:week][:total_posts] = posts_since(WEEKDAYS)
+    stats[:week][:local_comments] = comments_local_since(WEEKDAYS)
+    stats[:week][:total_comments] = comments_since(WEEKDAYS)
+    stats[:week][:users] = users_since(WEEKDAYS)
+  end
+
+  def generate_daily_stats(stats)
+    stats[:day] = {}
+    stats[:day][:local_posts] = posts_local_since(DAY)
+    stats[:day][:total_posts] = posts_since(DAY)
+    stats[:day][:local_comments] = comments_local_since(DAY)
+    stats[:day][:total_comments] = comments_since(DAY)
+    stats[:day][:users] = users_since(DAY)
+  end
+
   def popular_tags_since(last_days)
     ActsAsTaggableOn::Tagging.joins(:tag)
                              .limit(20)
@@ -142,9 +165,19 @@ class AdminStatisticsService
         .count
   end
 
+  def posts_local_total
+    Post.joins(:author)
+        .where("people.pod_id is null")
+        .count
+  end
+
   def posts_since(last_days)
     Post.where(["created_at >= ? ", Time.zone.today - last_days])
         .count
+  end
+
+  def posts_total
+    Post.count
   end
 
   def comments_local_since(last_days)
@@ -153,13 +186,28 @@ class AdminStatisticsService
            .count
   end
 
+  def comments_local_total
+    Comment.joins(:author)
+           .where("people.pod_id is null")
+           .count
+  end
+
   def comments_since(last_days)
     Comment.where(["created_at >= ? ", Time.zone.today - last_days])
            .count
   end
 
+  def comments_total
+    Comment.count
+  end
+
   def users_since(last_days)
     User.where(["created_at >= ? and locked_at is null", Time.zone.today - last_days])
+        .count
+  end
+
+  def users_total
+    User.where("locked_at is null")
         .count
   end
 
