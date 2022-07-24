@@ -41,6 +41,10 @@ class Pod < ApplicationRecord
 
   scope :blocked, -> { where(blocked: true) }
 
+  scope :possible_available, -> {
+    where(["offline_since is null or offline_since > ?", Time.current - 14.days])
+  }
+
   validate :not_own_pod
 
   class << self

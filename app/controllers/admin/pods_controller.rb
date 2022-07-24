@@ -6,7 +6,7 @@ module Admin
     respond_to :html, :json, :mobile
 
     def index
-      pods_json = PodPresenter.as_collection(Pod.all)
+      pods_json = PodPresenter.as_collection(Pod.possible_available)
 
       respond_with do |format|
         format.html do
@@ -15,7 +15,7 @@ module Admin
           gon.version_failed_count = Pod.version_failed.count
           gon.error_count = Pod.check_failed.count
           gon.blocked_count = Pod.blocked.count
-          gon.total_pod_count = Pod.count
+          gon.total_pod_count = Pod.possible_available.count
           render "admins/pods"
         end
         format.mobile { render "admins/pods" }
