@@ -32,7 +32,7 @@ module LanguageHelper
 
   def language_ids
     # language_distribution_in_posts
-    ids = []
+    ids = default_stream_languages.clone
     language_distribution_in_posts.each do |pair|
       ids << pair["language_id"]
     end
@@ -72,5 +72,11 @@ module LanguageHelper
 
   def rtl?
     @rtl ||= RTL_LANGUAGES.include?(I18n.locale.to_s)
+  end
+
+  private
+
+  def default_stream_languages
+    %w[de en ru es fr pt gl ca lb nl fi]
   end
 end
