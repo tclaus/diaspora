@@ -3,6 +3,8 @@
 ES_CLIENT =
   if AppConfig.elasticsearch.enable_host?
     Elasticsearch::Client.new(host:   AppConfig.elasticsearch.host.to_s,
+                              transport_options: { ssl: { verify: false } },
+                              ca_fingerprint: AppConfig.elasticsearch.cert_fingerprint,
                               logger: Logging.logger["elasticsearch"])
   elsif AppConfig.elasticsearch.enable_cloud?
     Elasticsearch::Client.new(cloud_id: AppConfig.elasticsearch.cloud_id.to_s,

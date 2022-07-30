@@ -4,8 +4,10 @@ module Workers
   class PostIndexer < Base
     sidekiq_options queue: :elasticsearch, retry: false
 
-    def perform(operation, record_id)
+    def perform(args)
       return if ES_CLIENT.nil? || Rails.env.test?
+      record_id = args["record_id"]
+      operation = args["operation"]
 
       logger.debug [operation, "ID: #{record_id}"]
       case operation.to_s

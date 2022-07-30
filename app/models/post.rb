@@ -18,8 +18,8 @@ class Post < ApplicationRecord
   include Diaspora::MentionsContainer
 
   include Elasticsearch::Model
-  after_save    { Workers::PostIndexer.perform_async(:index,  id) }
-  after_destroy { Workers::PostIndexer.perform_async(:delete, id) }
+  after_save    { Workers::PostIndexer.perform_async({operation: "index", record_id: id })}
+  after_destroy { Workers::PostIndexer.perform_async({operation: "delete", record_id: id }) }
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
