@@ -16,14 +16,20 @@ After [a discussion with our community on Discourse](https://discourse.diasporaf
 
 Although the chat was never enabled per default and was marked as experimental, some production pods did set up the integration and offered an XMPP service to their users. After this release, diaspora\* will no longer contain a chat applet, so users will no longer be able to use the webchat inside diaspora\*. The existing module that is used to enable users to authenticate to Prosody using their diaspora\* credentials will continue to work, but contact list synchronization might not work without further changes to the Prosody module, which is developed independently from this project.
 
+## Yarn for frontend dependencies
+
+We use yarn to install the frontend dependencies now, so you need to have that installed. See here for how to install it: https://yarnpkg.com/en/docs/install
+
 ## Refactor
 * Add bootstrapping for using ECMAScript 6 with automatic transpiling for compatibility [#7581](https://github.com/diaspora/diaspora/pull/7581)
 * Remove backporting of mention syntax [#7788](https://github.com/diaspora/diaspora/pull/7788)
 * Enable Content-Security-Policy header by default [#7781](https://github.com/diaspora/diaspora/pull/7781)
 * Do not show getting started after account import [#8036](https://github.com/diaspora/diaspora/pull/8036)
 * Remove the JSXC/Prosody integration [#8069](https://github.com/diaspora/diaspora/pull/8069) [#8341](https://github.com/diaspora/diaspora/pull/8341)
-* Replace factory\_girl with factory\_bot [#8218](https://github.com/diaspora/diaspora/pull/8218)
+* Replace `factory_girl` with `factory_bot` [#8218](https://github.com/diaspora/diaspora/pull/8218)
 * Drop relay support [#8243](https://github.com/diaspora/diaspora/pull/8243)
+* Use yarn to manage the frontend dependencies [#8364](https://github.com/diaspora/diaspora/pull/8364)
+* Upgrade to latest `diaspora_federation`, remove support for old federation protocol [#8368](https://github.com/diaspora/diaspora/pull/8368)
 
 ## Bug fixes
 * Fix multiple photos upload progress bar [#7655](https://github.com/diaspora/diaspora/pull/7655)
@@ -36,17 +42,32 @@ Although the chat was never enabled per default and was marked as experimental, 
 * For pods running PostgreSQL, make sure that no upper-case/mixed-case tags exist, and create a `lower(name)` index on tags to speed up ActsAsTaggableOn [#8206](https://github.com/diaspora/diaspora/pull/8206)
 * Allow podmins/moderators to see all local public posts to improve moderation [#8232](https://github.com/diaspora/diaspora/pull/8232) [#8320](https://github.com/diaspora/diaspora/pull/8320)
 * Add support for directly paste images to upload them [#8237](https://github.com/diaspora/diaspora/pull/8237)
+* Add support for webp images and convert new png/jpg to webp to save space and bandwidth [#8358](https://github.com/diaspora/diaspora/pull/8358)
+* Show total and active pods count in the pods list for podmins [#8383](https://github.com/diaspora/diaspora/pull/8383)
 
 # 0.7.18.0
 
 ## Refactor
 * Fix order-dependent jasmine test failures and switch to random order [#8333](https://github.com/diaspora/diaspora/pull/8333)
-* Get rid of some uses of "execute_script" in feature specs [#8331](https://github.com/diaspora/diaspora/pull/8331)
+* Get rid of some uses of "execute\_script" in feature specs [#8331](https://github.com/diaspora/diaspora/pull/8331)
 * Fix deprecation warnings for sidekiq 7.0 [#8359](https://github.com/diaspora/diaspora/pull/8359)
+* Remove entypo-rails dependency to prepare for rails 6 [#8361](https://github.com/diaspora/diaspora/pull/8361)
+* Remove compass-rails dependency which is not supported anymore [#8362](https://github.com/diaspora/diaspora/pull/8362)
+* Switch to sassc-rails which speeds up `assets:precompile` a lot [#8362](https://github.com/diaspora/diaspora/pull/8362)
+* Remove markerb dependency which doesn't exist anymore [#8365](https://github.com/diaspora/diaspora/pull/8365)
+* Upgrade to rails 6.1 [#8366](https://github.com/diaspora/diaspora/pull/8366)
+* Update the suggested Ruby version to 2.7. If you run into trouble during the update and you followed our installation guides, run `rvm install 2.7`. [#8366](https://github.com/diaspora/diaspora/pull/8366)
+* Upgrade to bundler 2 [#8366](https://github.com/diaspora/diaspora/pull/8366)
+* Stop checking `/.well-known/host-meta`, check for `/.well-known/nodeinfo` instead [#8377](https://github.com/diaspora/diaspora/pull/8377)
+* Handle NodeInfo timeouts gracefully [#8380](https://github.com/diaspora/diaspora/pull/8380)
 
 ## Bug fixes
+* Fix that no mails were sent after photo export [#8365](https://github.com/diaspora/diaspora/pull/8365)
+* Fix people with quotes in the name causing issues with mail sender [#8365](https://github.com/diaspora/diaspora/pull/8365)
 
 ## Features
+* Render posts and comments as HTML in HTML mails [#8365](https://github.com/diaspora/diaspora/pull/8365)
+* Add NodeInfo 2.1 support and also read newer versions of NodeInfo [#8379](https://github.com/diaspora/diaspora/pull/8379)
 
 # 0.7.17.0
 

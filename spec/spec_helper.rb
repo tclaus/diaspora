@@ -108,10 +108,7 @@ RSpec.configure do |config|
       :get,
       "https://example.com/.well-known/webfinger?resource=acct:bob@example.com"
     )
-    stub_request(
-      :get,
-      "https://example.com/.well-known/host-meta"
-    )
+
     stub_request(:get, "https://api.deepl.com/v2/languages?auth_key=722b3fb8-fea5-6a9b-3e07-39bb102b972f")
       .with(
         headers: {

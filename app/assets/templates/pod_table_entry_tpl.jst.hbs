@@ -1,5 +1,5 @@
 
-<td class="ssl-status"">
+<td class="ssl-status">
   {{#if ssl}}
     <i title="{{t 'admin.pods.ssl_enabled'}}" class="entypo-check">
   {{else}}
@@ -17,6 +17,7 @@
       <i title="{{status_text}}" class="glyphicon glyphicon-ban-circle"></i> {{t 'admin.pods.is_blocked'}}
     {{else}}
       <i title="{{status_text}}" class="glyphicon glyphicon-ok"></i>
+      {{software}}
     {{/if}}
   {{else}}
     {{status_text}}
