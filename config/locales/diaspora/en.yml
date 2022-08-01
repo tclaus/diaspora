@@ -578,6 +578,15 @@ en:
       choose_your_audience_info: "diaspora*’s aspects allow you to share with just those people you want to. You can be as public or as private as you like. Share a funny photo with the whole world, or a deep secret just with your closest friends. You’re in control."
       own_your_data: "Own your own data"
       own_your_data_info: "Many networks use your data to make money by analysing your interactions and using this information to advertise things to you. diaspora* doesn’t use your data for any purpose other than allowing you to connect and share with others."
+      societas_features_headline: "What is included?"
+      societas_features_body: "Societas also offers:  
+        <ul>
+        <li>A stream filtered by your languages</li>
+        <li>Posts can be translated</li>
+        <li>Full text search in posts</li>
+        <li>Comments can be liked</li>
+        <li>Tags of the day</li>
+        </ul>"
     podmin:
       headline: "Welcome, friend."
       byline: "You’re about to change the Internet. Let’s get you set up, shall we?"
