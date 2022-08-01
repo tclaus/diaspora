@@ -6,7 +6,7 @@ module Admin
     respond_to :html, :json, :mobile
 
     def index
-      pods_json = PodPresenter.as_collection(Pod.possible_available)
+      pods_json = PodPresenter.as_collection(Pod.all)
 
       respond_with do |format|
         format.html do
