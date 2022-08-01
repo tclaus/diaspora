@@ -462,7 +462,7 @@ GEM
     mysql2 (0.5.4)
     naught (1.1.0)
     nio4r (2.5.8)
-    nokogiri (1.13.7-arm64-darwin)
+    nokogiri (1.13.7)
       racc (~> 1.4)
     oauth (0.5.10)
     oauth2 (2.0.6)
@@ -800,7 +800,7 @@ GEM
     zeitwerk (2.6.0)
 
 PLATFORMS
-  arm64-darwin-21
+  ruby
 
 DEPENDENCIES
   active_model_serializers (= 0.9.8)
