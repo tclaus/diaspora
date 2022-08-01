@@ -644,6 +644,15 @@ es:
       own_your_data: "Sé el dueño de tus datos"
       own_your_data_info: "Muchas redes usan tus datos para hacer dinero analizando tus interacciones y usando esa información para mostrarte anuncios. diaspora* no usa tus datos para ningún propósito distinto que permitirte estar en contacto con otros."
       part_of_diaspora: "Parte de %{diaspora_site_link}"
+      societas_features_headline: "¿Qué incluye"
+      societas_features_body: "Societas también ofrece:
+        <ul> 
+        <li>Un flujo filtrado por sus idioma</li>
+        <li>Los mensajes pueden ser traducidos</li>
+        <li>Búsqueda de texto completo en los puestos</li>
+        <li>Los comentarios pueden gustar</li>
+        <li>Etiquetas del día</li>
+      </ul>"
     podmin:
       byline: "Estas a punto de cambiar internet. Vamos a configurarlo, ¿de acuerdo?"
       configuration_info: "Abre %{database_path} y %{diaspora_path} en tu editor de texto favorito y revisalos cuidadosamente, están comentados al detalle."

@@ -457,6 +457,15 @@ hu:
       byline: "Az online közösség, ahol tiéd az irányítás."
       choose_your_audience: "Válaszd meg közönséged"
       headline: "Üdvözöl a(z) %{pod_name}"
+      societas_features_headline: "Mit tartalmaz?"
+      societas_features_body: "A Societas is kínál: 
+      <ul>
+      <li>A nyelvek által szűrt folyam</li>
+      <li>A hozzászólások lefordíthatók</li>
+      <li>Teljes szöveges keresés a hozzászólásokban</li>
+      <li>A hozzászólások tetszenek</li>
+      <li>A nap címkéi</li>
+      </ul>"
     podmin:
       contribute_info: "Tedd még jobbá a diaspora*-t! Ha bármilyen hibát találsz, kérünk, hogy %{report_bugs}!"
       report_bugs: "jelezd nekünk"
