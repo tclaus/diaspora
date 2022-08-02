@@ -114,6 +114,11 @@ describe ApplicationHelper, :type => :helper do
       expect(helper.donations_enabled?).to be true
     end
 
+    it "returns true when a donorbox url is set" do
+      AppConfig.settings.donorbox_url = "foo"
+      expect(helper.donations_enabled?).to be true
+    end
+
     it "returns true when all the donations are enabled" do
       AppConfig.settings.paypal_donations.enable = true
       AppConfig.settings.liberapay_username = "foo"

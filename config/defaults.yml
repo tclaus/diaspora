@@ -88,7 +88,7 @@ defaults:
       paypal_unhosted_button_encrypted:
     liberapay_username:
     bitcoin_address:
-    bitcoin_wallet_id: # DEPRECATED: Remove with 0.6
+    donorbox_url:
     community_spotlight:
       enable: false
       suggest_email:

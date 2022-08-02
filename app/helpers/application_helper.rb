@@ -37,7 +37,8 @@ module ApplicationHelper
   def donations_enabled?
     AppConfig.settings.paypal_donations.enable? ||
     AppConfig.settings.liberapay_username.present? ||
-    AppConfig.bitcoin_donation_address.present?
+    AppConfig.bitcoin_donation_address.present? ||
+    AppConfig.settings.donorbox_url.present?
   end
 
   def timeago(time, options={})
