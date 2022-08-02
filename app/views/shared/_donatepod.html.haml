@@ -27,3 +27,10 @@
     Bitcoin:
     %br
     %input{type: "text", id: "bitcoin_address", value: AppConfig.bitcoin_donation_address, readonly: true}
+
+- if AppConfig.settings.donorbox_url.present?
+  %p
+    Donorbox
+    %br
+      %a{href: AppConfig.settings.donorbox_url}
+        Help keep this pod running

@@ -316,6 +316,9 @@
 ## donations towards the running of their pod.
 #bitcoin_address = "change_me"
 
+# Donorbox links
+#donorbox_url =
+
 ## Source code URL
 ## URL to the source code your pod is currently running.
 ## If not set your pod will provide a downloadable archive.
