@@ -28,6 +28,7 @@ app.pages.AdminPods = app.views.Base.extend({
   },
 
   _showMessages: function() {
+    console.log(gon);
     var msgs = document.createDocumentFragment();
     if (gon.totalCount && gon.totalCount > 0) {
       let totalPods = $("<div class='alert alert-info' role='alert' />")
