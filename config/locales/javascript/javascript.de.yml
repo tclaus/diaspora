@@ -53,7 +53,7 @@ de:
         blocked:
           one: "Ein Pod wurde blockiert"
           other: "<%= count %> Pods wurden blockiert"
-        total_pods: 
+        total: 
           one: "Es gibt genau einen Pod."
           other: "Es gibt insgesamt <%= count %> Pods."
     admins:

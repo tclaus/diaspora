@@ -28,10 +28,11 @@ app.pages.AdminPods = app.views.Base.extend({
   },
 
   _showMessages: function() {
+    console.log(gon);
     var msgs = document.createDocumentFragment();
     if (gon.totalCount && gon.totalCount > 0) {
       let totalPods = $("<div class='alert alert-info' role='alert' />")
-        .append(Diaspora.I18n.t("admin.pods.total", {count: gon.totalCount.toLocaleString}));
+        .append(Diaspora.I18n.t("admin.pods.total", {count: gon.totalCount.toLocaleString()}));
       if (gon.activeCount) {
         if (gon.activeCount === 0) {
           totalPods
@@ -42,7 +43,7 @@ app.pages.AdminPods = app.views.Base.extend({
             .append(" " + Diaspora.I18n.t("admin.pods.all_active"));
         } else {
           totalPods
-            .append(" " + Diaspora.I18n.t("admin.pods.active", {count: gon.activeCount.toLocaleString}));
+            .append(" " + Diaspora.I18n.t("admin.pods.active", {count: gon.activeCount.toLocaleString()}));
         }
       }
       msgs.appendChild(totalPods[0]);
@@ -50,17 +51,17 @@ app.pages.AdminPods = app.views.Base.extend({
 
     if( gon.uncheckedCount && gon.uncheckedCount > 0 ) {
       var unchecked = $("<div class='alert alert-info' role='alert' />")
-        .append(Diaspora.I18n.t("admin.pods.unchecked", {count: gon.uncheckedCount.toLocaleString}));
+        .append(Diaspora.I18n.t("admin.pods.unchecked", {count: gon.uncheckedCount.toLocaleString()}));
       msgs.appendChild(unchecked[0]);
     }
     if( gon.versionFailedCount && gon.versionFailedCount > 0 ) {
       var versionFailed = $("<div class='alert alert-warning' role='alert' />")
-          .append(Diaspora.I18n.t("admin.pods.version_failed", {count: gon.versionFailedCount.toLocaleString}));
+          .append(Diaspora.I18n.t("admin.pods.version_failed", {count: gon.versionFailedCount.toLocaleString()}));
       msgs.appendChild(versionFailed[0]);
     }
     if( gon.errorCount && gon.errorCount > 0 ) {
       var errors = $("<div class='alert alert-danger' role='alert' />")
-        .append(Diaspora.I18n.t("admin.pods.errors", {count: gon.errorCount.toLocaleString}));
+        .append(Diaspora.I18n.t("admin.pods.errors", {count: gon.errorCount.toLocaleString()}));
         msgs.appendChild(errors[0]);
     }
 
