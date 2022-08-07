@@ -47,6 +47,7 @@ module MobileHelper
   end
 
   # rubocop:disable Rails/ContentTag
+
   def mobile_like_comment_icon(comment)
     if current_user&.liked?(comment)
       link_to content_tag(:span, comment.likes.size, class: "count like-count"),
@@ -60,7 +61,8 @@ module MobileHelper
               class: "entypo-heart like-action inactive"
     end
   end
-# rubocop:enable Rails/ContentTag
+
+  # rubocop:enable Rails/ContentTag
 
   def mobile_comment_icon(post)
     link_to content_tag(:span, post.comments.size, class: "count comment-count"),
