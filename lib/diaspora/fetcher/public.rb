@@ -121,16 +121,44 @@ module Diaspora
           )
           entry.save
 
+          save_photos(entry, post["photos"])
+
         end
         set_fetch_status Public::Status_Processed
       end
 
+      def save_photos(status_message, photos)
+        return if photos.empty?
+
+        photos.each do |photo|
+          sizes = photo["sizes"]
+          sizes.each do |photo_size, remote_image_url|
+            if photo_size.eql?("raw")
+              next unless photo_exist(remote_image_url)
+              new_photo = Photo.new(author: @person, status_message_guid: status_message.guid)
+              new_photo.update_remote_path_by_name(remote_image_url)
+              new_photo.height = photo["dimensions"]["height"]
+              new_photo.width = photo["dimensions"]["width"]
+              new_photo.public = true
+              new_photo.save
+            end
+          end
+        end
+      end
+
       # set and save the fetch status for the current person
-      def set_fetch_status status
+      def set_fetch_status(status)
         return if @person.nil?
 
         @person.fetch_status = status
         @person.save
+      end
+
+      def photo_exist(remote_photo_url)
+        name_start = remote_photo_url.rindex "/"
+        photo_path = "#{remote_path.slice(0, name_start)}/"
+        photo_name = remote_path.slice(name_start + 1, remote_photo_url.length)
+        Photo.exists?(remote_photo_path: photo_path, remote_photo_name: photo_name)
       end
 
       # perform various validations to make sure the post can be saved without
@@ -139,12 +167,12 @@ module Diaspora
       # @see check_author
       # @see check_public
       # @see check_type
-      def validate post
+      def validate(post)
         check_existing(post) && check_author(post) && check_public(post) && check_type(post)
       end
 
       # hopefully there is no post with the same guid somewhere already...
-      def check_existing post
+      def check_existing(post)
         new_post = (Post.find_by_guid(post['guid']).blank?)
 
         logger.warn "a post with that guid (#{post['guid']}) already exists" unless new_post
@@ -154,7 +182,7 @@ module Diaspora
 
       # checks if the author of the given post is actually from the person
       # we're currently processing
-      def check_author post
+      def check_author(post)
         guid = post['author']['guid']
         equal = (guid == @person.guid)
 
@@ -166,16 +194,16 @@ module Diaspora
       end
 
       # returns wether the given post is public
-      def check_public post
-        ispublic = (post['public'] == true)
+      def check_public(post)
+        is_public = (post['public'] == true)
 
-        logger.warn "the post (#{post['guid']}) is not public, this is not intended..." unless ispublic
+        logger.warn "the post (#{post['guid']}) is not public, this is not intended..." unless is_public
 
-        ispublic
+        is_public
       end
 
       # see, if the type of the given post is something we can handle
-      def check_type post
+      def check_type(post)
         type_ok = (post['post_type'] == "StatusMessage")
 
         logger.warn "the post (#{post['guid']}) has a type, which cannot be handled (#{post['post_type']})" unless type_ok
@@ -183,7 +211,5 @@ module Diaspora
         type_ok
       end
     end
-
-    ;
-  end;
+  end
 end
