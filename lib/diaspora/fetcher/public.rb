@@ -186,7 +186,7 @@ module Diaspora
 
         logger.warn "the post (#{post['guid']}) is not public, this is not intended..." unless is_public
 
-        ispublic
+        is_public
       end
     end
   end
