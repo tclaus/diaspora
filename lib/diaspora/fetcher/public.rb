@@ -26,7 +26,7 @@ module Diaspora
 
       # perform all actions necessary to fetch the public posts of a person
       # with the given diaspora_id
-      def fetch! diaspora_id
+      def fetch!(diaspora_id)
         @person = Person.by_account_identifier diaspora_id
         return unless qualifies_for_fetching?
 
@@ -61,7 +61,7 @@ module Diaspora
 
         # ok, let's go
         @person.remote? &&
-          @person.fetch_status == Public::Status_Initial
+                @person.fetch_status == Public::Status_Initial
       end
 
       # call the methods to fetch and process the public posts for the person
@@ -111,31 +111,50 @@ module Diaspora
 
           logger.debug "post: #{post.to_s[0..250]}"
 
-          entry = StatusMessage.diaspora_initialize(
-            author: @person,
-            public: true,
-            guid: post["guid"],
-            text: post["text"],
-            provider_display_name: post["provider_display_name"],
-            created_at: ActiveSupport::TimeZone.new("UTC").parse(post["created_at"]).to_datetime,
-          )
-          entry.save
+          status_message = StatusMessage.where(guid: post["guid"]).first
+          if status_message.present?
+            save_photos(post["guid"], post["photos"])
+          else
+            DiasporaFederation::Federation::Fetcher.fetch_public(@person.diaspora_handle,
+                                                                 post["post_type"],
+                                                                 post["guid"])
+          end
 
-          save_photos(entry, post["photos"])
+          status_message = StatusMessage.find_by(guid: post["guid"])
+          save_comments(status_message, post["interactions"]["comments"])
 
         end
         set_fetch_status Public::Status_Processed
       end
 
-      def save_photos(status_message, photos)
+      def save_comments(status_message, comments)
+        return if comments.empty?
+        return if status_message.nil?
+
+        comments.each do |comment|
+          next if Comment.exists?(guid: comment["guid"])
+
+          comment_author = Person.find_or_fetch_by_identifier(comment["author"]["diaspora_id"])
+          if comment_author.present?
+            status_message.comments.create(guid: comment["guid"],
+                                           author: comment_author,
+                                           text: comment["text"],
+                                           created_at: comment["created_at"])
+          end
+        rescue => e
+          logger.error "Error creating a comment: #{e}"
+        end
+      end
+
+      def save_photos(status_message_guid, photos)
         return if photos.empty?
 
         photos.each do |photo|
           sizes = photo["sizes"]
           sizes.each do |photo_size, remote_image_url|
             if photo_size.eql?("raw")
-              next unless photo_exist(remote_image_url)
-              new_photo = Photo.new(author: @person, status_message_guid: status_message.guid)
+              next if photo_exist(remote_image_url)
+              new_photo = Photo.new(author: @person, status_message_guid: status_message_guid)
               new_photo.update_remote_path_by_name(remote_image_url)
               new_photo.height = photo["dimensions"]["height"]
               new_photo.width = photo["dimensions"]["width"]
@@ -156,8 +175,8 @@ module Diaspora
 
       def photo_exist(remote_photo_url)
         name_start = remote_photo_url.rindex "/"
-        photo_path = "#{remote_path.slice(0, name_start)}/"
-        photo_name = remote_path.slice(name_start + 1, remote_photo_url.length)
+        photo_path = "#{remote_photo_url.slice(0, name_start)}/"
+        photo_name = remote_photo_url.slice(name_start + 1, remote_photo_url.length)
         Photo.exists?(remote_photo_path: photo_path, remote_photo_name: photo_name)
       end
 
@@ -168,16 +187,7 @@ module Diaspora
       # @see check_public
       # @see check_type
       def validate(post)
-        check_existing(post) && check_author(post) && check_public(post) && check_type(post)
-      end
-
-      # hopefully there is no post with the same guid somewhere already...
-      def check_existing(post)
-        new_post = (Post.find_by_guid(post['guid']).blank?)
-
-        logger.warn "a post with that guid (#{post['guid']}) already exists" unless new_post
-
-        new_post
+        check_author(post) && check_public(post) && check_type(post)
       end
 
       # checks if the author of the given post is actually from the person
@@ -193,7 +203,7 @@ module Diaspora
         equal
       end
 
-      # returns wether the given post is public
+      # returns weather the given post is public
       def check_public(post)
         is_public = (post['public'] == true)
 
