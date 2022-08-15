@@ -122,8 +122,27 @@ module Diaspora
       set_fetch_status Public::Status_Processed
     end
 
+      def save_photos(status_message, photos)
+        return if photos.empty?
+
+        photos.each do |photo|
+          sizes = photo["sizes"]
+          sizes.each do |photo_size, remote_image_url|
+            if photo_size.eql?("raw")
+              next unless photo_exist(remote_image_url)
+              new_photo = Photo.new(author: @person, status_message_guid: status_message.guid)
+              new_photo.update_remote_path_by_name(remote_image_url)
+              new_photo.height = photo["dimensions"]["height"]
+              new_photo.width = photo["dimensions"]["width"]
+              new_photo.public = true
+              new_photo.save
+            end
+          end
+        end
+      end
+
       # set and save the fetch status for the current person
-      def set_fetch_status status
+      def set_fetch_status(status)
         return if @person.nil?
 
         @person.fetch_status = status
@@ -140,7 +159,7 @@ module Diaspora
     end
 
       # hopefully there is no post with the same guid somewhere already...
-      def check_existing post
+      def check_existing(post)
         new_post = (Post.find_by_guid(post['guid']).blank?)
 
         logger.warn "a post with that guid (#{post['guid']}) already exists" unless new_post
@@ -150,7 +169,7 @@ module Diaspora
 
       # checks if the author of the given post is actually from the person
       # we're currently processing
-      def check_author post
+      def check_author(post)
         guid = post['author']['guid']
         equal = (guid == @person.guid)
 
@@ -162,11 +181,13 @@ module Diaspora
       end
 
       # returns wether the given post is public
-      def check_public post
-        ispublic = (post['public'] == true)
+      def check_public(post)
+        is_public = (post['public'] == true)
 
-        logger.warn "the post (#{post['guid']}) is not public, this is not intended..." unless ispublic
+        logger.warn "the post (#{post['guid']}) is not public, this is not intended..." unless is_public
 
-      ispublic
+        ispublic
+      end
     end
-end; end; end
+  end
+end

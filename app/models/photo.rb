@@ -100,6 +100,10 @@ class Photo < ApplicationRecord
                     "#{AppConfig.pod_uri.to_s.chomp('/')}#{unprocessed_image.url}"
                   end
 
+    update_remote_path_by_name(remote_path)
+  end
+
+  def update_remote_path_by_name(remote_path)
     name_start = remote_path.rindex "/"
     self.remote_photo_path = "#{remote_path.slice(0, name_start)}/"
     self.remote_photo_name = remote_path.slice(name_start + 1, remote_path.length)
