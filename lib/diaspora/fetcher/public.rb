@@ -26,7 +26,7 @@ module Diaspora
 
       # perform all actions necessary to fetch the public posts of a person
       # with the given diaspora_id
-      def fetch! diaspora_id
+      def fetch!(diaspora_id)
         @person = Person.by_account_identifier diaspora_id
         return unless qualifies_for_fetching?
 
@@ -122,15 +122,15 @@ module Diaspora
       set_fetch_status Public::Status_Processed
     end
 
-      def save_photos(status_message, photos)
+      def save_photos(status_message_guid, photos)
         return if photos.empty?
 
         photos.each do |photo|
           sizes = photo["sizes"]
           sizes.each do |photo_size, remote_image_url|
             if photo_size.eql?("raw")
-              next unless photo_exist(remote_image_url)
-              new_photo = Photo.new(author: @person, status_message_guid: status_message.guid)
+              next if photo_exist(remote_image_url)
+              new_photo = Photo.new(author: @person, status_message_guid: status_message_guid)
               new_photo.update_remote_path_by_name(remote_image_url)
               new_photo.height = photo["dimensions"]["height"]
               new_photo.width = photo["dimensions"]["width"]
@@ -180,7 +180,7 @@ module Diaspora
         equal
       end
 
-      # returns wether the given post is public
+      # returns weather the given post is public
       def check_public(post)
         is_public = (post['public'] == true)
 
