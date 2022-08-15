@@ -61,7 +61,7 @@ module Diaspora
 
         # ok, let's go
         @person.remote? &&
-          @person.fetch_status == Public::Status_Initial
+                @person.fetch_status == Public::Status_Initial
       end
 
       # call the methods to fetch and process the public posts for the person

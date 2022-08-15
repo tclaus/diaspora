@@ -4,7 +4,12 @@ namespace :diaspora do
     reset_people_to_initial_status
 
     refetch_people
+  end
 
+  desc "Fetch all public posts from all diaspora pods" do
+    task fetch_public_posts_from_pods: :environment do
+
+    end
   end
 
   def reset_people_to_initial_status

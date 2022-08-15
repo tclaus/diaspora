@@ -70,6 +70,7 @@ class PeopleController < ApplicationController
   # renders the persons user profile page
   def show
     mark_corresponding_notifications_read if user_signed_in?
+    Diaspora::Fetcher::Public.queue_for(@person)
     @presenter = PersonPresenter.new(@person, current_user)
 
     respond_to do |format|
