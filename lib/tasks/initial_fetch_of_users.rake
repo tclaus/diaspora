@@ -20,7 +20,11 @@ namespace :diaspora do
     end
   end
 
+
   def queue_for_fetching(person)
+    return if person.closed_account?
+    return if person.pod.status == 1 # No Error
+
     Diaspora::Fetcher::Public.queue_for(person)
   rescue => e
     puts "Error on #{person.diaspora_handle} with: #{e}"
