@@ -1,0 +1,28 @@
+namespace :diaspora do
+  desc "Force initial fetch of users"
+  task  fetch_for_all_users: :environment do
+    reset_people_to_initial_status
+
+    refetch_people
+
+  end
+
+  def reset_people_to_initial_status
+    people_done = Person.where(fetch_status: Diaspora::Fetcher::Public::Status_Done)
+    people_done.update_all(fetch_status: Diaspora::Fetcher::Public::Status_Initial)
+  end
+
+  def refetch_people
+    initial_state_people = Person.where(fetch_status: Diaspora::Fetcher::Public::Status_Initial)
+    puts "Fetch for #{initial_state_people.count} persons"
+    initial_state_people.find_each do |person|
+      queue_for_fetching(person)
+    end
+  end
+
+  def queue_for_fetching(person)
+    Diaspora::Fetcher::Public.queue_for(person)
+  rescue => e
+    puts "Error on #{person.diaspora_handle} with: #{e}"
+  end
+end
