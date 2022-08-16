@@ -164,6 +164,15 @@
       width: $line-height-computed;
     }
   }
+  .likes {
+    .author-name {
+      margin-right: 3px;
+    }
+
+    .media {
+      margin: 0;
+    }
+  }
 }
 
 .comment .media .entypo-heart {
