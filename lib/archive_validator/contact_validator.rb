@@ -12,7 +12,8 @@ class ArchiveValidator
     def validate
       handle_migrant_contact
       self.valid = account_open?
-    rescue DiasporaFederation::Discovery::DiscoveryError => e
+    rescue DiasporaFederation::Discovery::DiscoveryError,
+            Diaspora::Federation::PodBlocked => e
       messages.push("#{self.class}: failed to fetch person #{diaspora_id}: #{e}")
       self.valid = false
     end
