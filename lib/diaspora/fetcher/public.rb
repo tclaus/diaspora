@@ -61,7 +61,7 @@ module Diaspora
 
         # ok, let's go
         @person.remote? &&
-          @person.fetch_status == Public::Status_Initial
+                @person.fetch_status == Public::Status_Initial
       end
 
       # call the methods to fetch and process the public posts for the person
@@ -111,21 +111,39 @@ module Diaspora
 
           logger.debug "post: #{post.to_s[0..250]}"
 
-          unless StatusMessage.exists?(guid: post["guid"])
-            entry = StatusMessage.diaspora_initialize(
-              author: @person,
-              public: true,
-              guid: post["guid"],
-              text: post["text"],
-              provider_display_name: post["provider_display_name"],
-              created_at: ActiveSupport::TimeZone.new("UTC").parse(post["created_at"]).to_datetime,
-            )
-            entry.save
+          status_message = StatusMessage.where(guid: post["guid"]).first
+          if status_message.present?
+            save_photos(post["guid"], post["photos"])
+          else
+            DiasporaFederation::Federation::Fetcher.fetch_public(@person.diaspora_handle,
+                                                                 post["post_type"],
+                                                                 post["guid"])
           end
-          save_photos(post["guid"], post["photos"])
+
+          status_message = StatusMessage.find_by(guid: post["guid"])
+          save_comments(status_message, post["interactions"]["comments"])
 
         end
         set_fetch_status Public::Status_Processed
+      end
+
+      def save_comments(status_message, comments)
+        return if comments.empty?
+        return if status_message.nil?
+
+        comments.each do |comment|
+          next if Comment.exists?(guid: comment["guid"])
+
+          comment_author = Person.find_or_fetch_by_identifier(comment["author"]["diaspora_id"])
+          if comment_author.present?
+            status_message.comments.create(guid: comment["guid"],
+                                           author: comment_author,
+                                           text: comment["text"],
+                                           created_at: comment["created_at"])
+          end
+        rescue => e
+          logger.error "Error creating a comment: #{e}"
+        end
       end
 
       def save_photos(status_message_guid, photos)
@@ -169,7 +187,7 @@ module Diaspora
       # @see check_public
       # @see check_type
       def validate(post)
-         check_author(post) && check_public(post) && check_type(post)
+        check_author(post) && check_public(post) && check_type(post)
       end
 
       # checks if the author of the given post is actually from the person
