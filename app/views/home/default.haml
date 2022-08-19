@@ -31,7 +31,12 @@
         = t(".be_who_you_want_to_be_info")
 
   .row
-    .col-md-4.col-md-offset-4
+    .col-md-4
+      .landing-info-card
+        %h3.text-center
+          = t(".flyer_link")
+        = t(".flyer_link_info").html_safe
+    .col-md-4
       .landing-info-card
         %h3.text-center
           = t(".societas_features_headline")
