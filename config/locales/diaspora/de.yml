@@ -654,6 +654,10 @@ de:
         <li>Kommentare können geliked werden</li>
         <li>Tags des Tages</li>
         </ul>"
+      flyer_link: "Hilf mit, societas bekannter zu machen."
+      flyer_link_info: "Lade den Flyer mit dem QR Code runter, drucke ihn aus und verteile ihn in der echten Welt.</br> 
+      <a href='societas_online_flyer_a4.pdf'>Flyer format A4</a></br>
+      <a href='societas_online_flyer_letter.pdf'>Flyer format Letter</a>"
     podmin:
       byline: "Du bist drauf und dran, das Internet zu ändern. Lass uns gleich alles einrichten, okay?"
       configuration_info: "Öffne %{database_path} und %{diaspora_path} in deinem Lieblingstexteditor und sieh sie gründlich durch, sie sind ausführlich kommentiert."

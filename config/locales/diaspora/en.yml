@@ -587,6 +587,10 @@ en:
         <li>Comments can be liked</li>
         <li>Tags of the day</li>
         </ul>"
+      flyer_link: "Help to make Societas more known."
+      flyer_link_info: "Download the flyer with the QR code, print it out and distribute it in the real world.</br> 
+      <a href='societas_online_flyer_a4.pdf'>Flyer format A4</a></br>
+      <a href='societas_online_flyer_letter.pdf'>Flyer format Letter</a>"
     podmin:
       headline: "Welcome, friend."
       byline: "You’re about to change the Internet. Let’s get you set up, shall we?"
