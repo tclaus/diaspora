@@ -12,7 +12,7 @@ class LikeService
 
   def create_for_comment(comment_id)
     comment = comment_service.find!(comment_id)
-    post_service.find!(comment.post.id) # checks implicit for visible posts
+    post_service.find!(comment.commentable_id) # checks implicit for visible posts
     user.like_comment!(comment)
   end
 
