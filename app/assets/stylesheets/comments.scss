@@ -27,7 +27,7 @@
 
     margin: 0;
     border-top: 1px dotted $border-grey;
-    padding: 10px 0;
+    padding: 10px 0 0;
 
     .info {
       margin-top: 5px;
@@ -38,6 +38,10 @@
     >.highlighted {
       border-left: 3px solid $link-color;
       padding-left: 3px;
+    }
+
+    .media {
+      margin-bottom: 0;
     }
   }
 
