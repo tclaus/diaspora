@@ -12,6 +12,7 @@ app.models.Comment = Backbone.Model.extend({
     this.likes = this.interactions.likes;
     this.likesCount = this.attributes.likes_count;
     this.userLike = this.interactions.userLike();
+    this.showHeart = false;
   }
 });
 // @license-end

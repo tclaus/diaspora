@@ -6,6 +6,7 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
   initialize : function() {
     this.interactions = new app.models.PostInteractions(_.extend({post: this}, this.get("interactions")));
     this.delegateToInteractions();
+    this.showHeart = true;
   },
 
   delegateToInteractions : function(){
