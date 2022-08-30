@@ -129,4 +129,9 @@ Handlebars.registerHelper('aspectMembershipIndicator', function(contact,in_aspec
   html += '></i>';
   return html;
 });
+
+// Returns a value that defines to show a heart before like text or avatar list
+Handlebars.registerHelper('shouldShowHeart', function(likePresenter) {
+  return likePresenter.showHeart || likePresenter.displayAvatars;
+});
 // @license-end

@@ -19,7 +19,8 @@ app.views.LikesInfo = app.views.Base.extend({
     return _.extend(this.defaultPresenter(), {
       likes : this.model.interactions.likes.toJSON(),
       likesCount : this.model.interactions.likesCount(),
-      displayAvatars: this.displayAvatars
+      displayAvatars: this.displayAvatars,
+      showHeart: this.model.showHeart
     });
   },
 
@@ -29,6 +30,10 @@ app.views.LikesInfo = app.views.Base.extend({
     this.model.interactions.likes.fetch({success: function() {
       this.model.interactions.likes.trigger("change");
     }.bind(this)});
+  },
+
+  showLikeHeart: function() {
+    return this.model.showHeart;
   }
 });
 // @license-end
