@@ -16,6 +16,7 @@ class ArchiveImporter
            DiasporaFederation::Discovery::InvalidDocument,
            DiasporaFederation::Discovery::DiscoveryError,
            DiasporaFederation::Federation::Fetcher::NotFetchable,
+           DiasporaFederation::Entities::Signable::PublicKeyNotFound,
            OwnRelayableImporter::NoParentError,
            Diaspora::Federation::InvalidAuthor,
            ActiveRecord::RecordInvalid => e

@@ -28,7 +28,8 @@ class ArchiveImporter
           person = person.account_migration.newest_person unless person.account_migration.nil?
           next if person.closed_account?
           # TODO: unless person.nil? import subscription: subscription import is not supported yet
-        rescue DiasporaFederation::Discovery::DiscoveryError
+        rescue DiasporaFederation::Discovery::DiscoveryError,
+               Diaspora::Federation::PodBlocked
           # Ignored
         end
       end
