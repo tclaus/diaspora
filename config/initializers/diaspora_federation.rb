@@ -82,6 +82,8 @@ DiasporaFederation.configure do |config|
 
     on :fetch_public_key do |diaspora_id|
       Person.find_or_fetch_by_identifier(diaspora_id).public_key
+    rescue Diaspora::Federation::PodBlocked
+      # do nothing
     end
 
     on :fetch_related_entity do |entity_type, guid|
