@@ -142,7 +142,7 @@
 
   .comments > .comment,
   .comment.new-comment-form-wrapper {
-    padding: 10px 10px 0 10px;
+    padding: 10px 10px 0;
   }
 
   .count,
@@ -173,7 +173,7 @@
       margin: 0;
     }
 
-    a.expand-likes {
+    .expand-likes {
       color: $text-grey;
     }
   }

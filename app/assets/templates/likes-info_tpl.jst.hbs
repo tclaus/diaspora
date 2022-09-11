@@ -1,7 +1,9 @@
 {{#if likesCount}}
   <div class="comment">
     <div class="media">
-      <i class="entypo-heart"></i>
+      {{#if (shouldShowHeart this)}}
+        <i class="entypo-heart"></i>
+      {{/if}}
 
       <div class="bd">
         {{#unless displayAvatars}}
