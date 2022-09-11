@@ -17,6 +17,11 @@
             title: service.provider.titleize, class: "service_icon dim",
             id: "#{service.provider}", maxchar: "#{service.class::MAX_CHARACTERS}"
 
+    .clear
+    #publisher-textarea-wrapper
+      %ul#photodropzone
+    #fileInfo-publisher
+    .clearfix
     .btn-toolbar
       .pull-left#file-upload-publisher
         %i.entypo-camera.middle
@@ -27,8 +32,3 @@
           data: {"disable-with" => t("shared.publisher.posting")}
       .pull-right
         = render partial: "aspects/aspect_dropdown"
-    .clear
-    #publisher-textarea-wrapper
-      %ul#photodropzone
-    #fileInfo-publisher
-    .clearfix

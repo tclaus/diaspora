@@ -123,7 +123,7 @@ end
 
 When /^I visit the stream with aspect "([^"]*)"$/ do |aspect_name|
   # In mobile view aspects are single anchors
-  a_id = @me.aspects.where(name: aspect_name).pluck(:id).first
+  a_id = @me.aspects.where(name: aspect_name).pick(:id)
   visit("/aspects?a_ids[]=#{a_id}")
 end
 

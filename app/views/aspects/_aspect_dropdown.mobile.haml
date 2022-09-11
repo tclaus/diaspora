@@ -1,10 +1,7 @@
 -# Note: all_aspects is a global in the ApplicationController
-:ruby
-  dropdown_css = {"data-toggle": "dropdown"}
 
 .btn-group.aspect-dropdown
-  %button.btn.btn-default.dropdown-toggle{dropdown_css}
-    %i.entypo-lock.small#visibility-icon
+  %button.btn.btn-default.dropdown-toggle{data: {toggle: "dropdown"}}
     %span.text
       = t("all_aspects")
     %span.caret
