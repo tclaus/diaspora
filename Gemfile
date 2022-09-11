@@ -10,8 +10,7 @@ gem "responders", "3.0.1"
 
 # Appserver
 
-gem "unicorn", "6.1.0", require: false
-gem "unicorn-worker-killer", "0.4.5"
+gem "puma", "5.6.5", require: false
 
 # Federation
 
@@ -183,13 +182,6 @@ gem "cld3", "~> 3.4", ">= 3.4.2"
 gem "minitest",  "5.15.0"
 
 gem "versionist", "2.0.1"
-
-# Windows and OSX have an execjs compatible runtime built-in, Linux users should
-# install Node.js or use "therubyracer".
-#
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-
-# gem "therubyracer", :platform => :ruby
 
 group :production do # we don"t install these on travis to speed up test runs
   # Analytics
