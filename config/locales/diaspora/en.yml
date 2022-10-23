@@ -1042,8 +1042,10 @@ en:
   report:
     modal:
       title: "Reporting content"
-      report_only_if_violated_terms: "Reporting content sends an email to all the moderators of this pod. Please only report content that violates"
+      report_send_email: "Reporting content sends an email to all the moderators of this pod."
+      report_only_if_violated_terms: "Please only report content that violates %{link_to_terms}."
       terms_link: "%{pod_name} terms"
+      report_only_if_bad: "Please only report content that you think really isn't appropriate."
       you_can_block: "If it doesn't but you don't want to see it, you can ignore the authors from their profile page. If the content is a comment on your own post, you can delete it directly."
       reason_label: "Please state how the content you are reporting violates our terms of use:"
       placeholder: "This content violates the terms because..."

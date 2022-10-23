@@ -44,3 +44,21 @@ Feature: reporting of posts and comments
     When I go to the report page
     Then I should see a report by "alice@alice.alice" with reason "That's my reason" on comment "Bob comment"
     And "alice@alice.alice" should have received an email with subject "A new comment was marked as offensive"
+
+  Scenario: The correct post is reported
+    Given "bob@bob.bob" has a public post with text "I'm a second post by Bob"
+    And I sign in as "alice@alice.alice"
+    And I am on the public stream page
+    When I hover over the ".stream-element:nth-child(2)"
+    And I click to report the post
+    And I fill in "report-reason-field" with "post 1"
+    And I close the modal
+    And I hover over the ".stream-element:first-child"
+    And I click to report the post
+    Then the "report-reason" field should be filled with ""
+    When I fill in "report-reason-field" with "post 2"
+    And I submit the form
+    And I go to the report page
+    Then I should see "I'm a second post by Bob" within ".content"
+    And I should see "post 2" within ".reason"
+    And I should see "alice" within ".reporter"
