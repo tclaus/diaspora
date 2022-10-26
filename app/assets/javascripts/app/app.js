@@ -159,7 +159,7 @@ var app = {
   },
 
   setupReport: function() {
-    document.getElementById("report-content-form").addEventListener("submit", function(ev) {
+    $("#report-content-form").bind("submit", function(ev) {
       if (ev) { ev.preventDefault(); }
       let form = ev.currentTarget;
       $("#reportModal").modal("hide");
