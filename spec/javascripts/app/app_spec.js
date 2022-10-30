@@ -20,6 +20,7 @@ describe("app", function() {
       spyOn(app, "setupDisabledLinks");
       spyOn(app, "setupForms");
       spyOn(app, "setupAjaxErrorRedirect");
+      spyOn(app, "setupReport");
 
       app.initialize();
 
@@ -33,6 +34,7 @@ describe("app", function() {
       expect(app.setupDisabledLinks).toHaveBeenCalled();
       expect(app.setupForms).toHaveBeenCalled();
       expect(app.setupAjaxErrorRedirect).toHaveBeenCalled();
+      expect(app.setupReport).toHaveBeenCalled();
     });
   });
 

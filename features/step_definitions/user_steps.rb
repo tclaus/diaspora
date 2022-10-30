@@ -28,7 +28,7 @@ Given /^a nsfw user with email "([^\"]*)"$/ do |email|
 end
 
 Given /^a moderator with email "([^\"]*)"$/ do |email|
-  user = create_user(email: email)
+  user = create_user(email: email, username: email.split("@")[0])
   Role.add_moderator(user)
 end
 

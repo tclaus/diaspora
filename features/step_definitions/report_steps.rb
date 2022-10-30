@@ -5,7 +5,7 @@ Given /^the terms of use are enabled$/ do
 end
 
 And /^I should see the report modal/ do
-  step %(I should see "You are about to send an email to all " within "#reportModal")
+  step %(I should see "Reporting content" within "#reportModal")
 end
 
 And /^I should see a report by "([^"]*)" with reason "([^"]*)" on post "([^"]*)"$/ do |reporter, reason, content|
@@ -38,14 +38,8 @@ When(/^I open the reviewed tab on the report page$/) do
   find_link("Reviewed").click
 end
 
-Then(/^I should see the reviewed report with decision No Action$/) do
+Then(/^I should see the reviewed report with decision "([^"]*)"$/) do |decision|
   within("#checked") do
-    find("tr", text: "No Action")
-  end
-end
-
-Then(/^I should see the reviewed report with decision Deleted$/) do
-  within("#checked") do
-    find("tr", text: "Deleted")
+    find("tr", text: decision)
   end
 end

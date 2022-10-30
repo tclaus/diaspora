@@ -54,6 +54,7 @@ var app = {
     this.setupDisabledLinks();
     this.setupForms();
     this.setupAjaxErrorRedirect();
+    this.setupReport();
   },
 
   hasPreload : function(prop) {
@@ -155,6 +156,29 @@ var app = {
 
   _changeLocation: function(href) {
     window.location.assign(href);
+  },
+
+  setupReport: function() {
+    $("#report-content-form").bind("submit", function(ev) {
+      if (ev) { ev.preventDefault(); }
+      let form = ev.currentTarget;
+      $("#reportModal").modal("hide");
+      let textarea = document.getElementById("report-reason-field");
+      let report = {
+        item_id: form.dataset.reportId,
+        item_type: form.dataset.reportType,
+        text: textarea.value
+      };
+
+      new app.models.Report().save({report: report}, {
+        success: function() {
+          app.flashMessages.success(Diaspora.I18n.t("report.status.created"));
+        },
+        error: function() {
+          app.flashMessages.error(Diaspora.I18n.t("report.status.exists"));
+        }
+      });
+    });
   }
 };
 

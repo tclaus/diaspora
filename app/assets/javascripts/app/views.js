@@ -104,25 +104,10 @@ app.views.Base = Backbone.View.extend({
 
   report: function(evt) {
     if (evt) { evt.preventDefault(); }
-    var report = {
-      item_id: this.model.id,
-      item_type: $(evt.currentTarget).data("type"),
-      text: "Not filled"
-    };
-    document.getElementById("report-content-form").addEventListener("submit", function(ev) {
-      if (ev) { ev.preventDefault(); }
-      $("#reportModal").modal("hide");
-      report.text = document.getElementById("report-reason-field").value;
-
-      new app.models.Report().save({report: report}, {
-        success: function() {
-          app.flashMessages.success(Diaspora.I18n.t("report.status.created"));
-        },
-        error: function() {
-          app.flashMessages.error(Diaspora.I18n.t("report.status.exists"));
-        }
-      });
-    });
+    let form = document.getElementById("report-content-form");
+    form.dataset.reportId = this.model.id;
+    form.dataset.reportType = evt.currentTarget.dataset.type;
+    document.getElementById("report-reason-field").value = "";
     $("#reportModal").modal();
   },
 
