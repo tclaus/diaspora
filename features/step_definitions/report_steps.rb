@@ -38,14 +38,8 @@ When(/^I open the reviewed tab on the report page$/) do
   find_link("Reviewed").click
 end
 
-Then(/^I should see the reviewed report with decision No Action$/) do
+Then(/^I should see the reviewed report with decision "([^"]*)"$/) do |decision|
   within("#checked") do
-    find("tr", text: "No Action")
-  end
-end
-
-Then(/^I should see the reviewed report with decision Deleted$/) do
-  within("#checked") do
-    find("tr", text: "Deleted")
+    find("tr", text: decision)
   end
 end

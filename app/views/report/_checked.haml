@@ -1,7 +1,7 @@
 %table.table
   %tr
     %th
-      = t("report.created_at")
+      = t("report.report_created_at")
     %th
       = t("report.reported_by")
     %th
@@ -9,7 +9,7 @@
     %th
       = t("report.type")
     %th
-      = t("report.author")
+      = t("report.reported_author")
     %th
       = t("report.decision")
     %th
@@ -25,11 +25,13 @@
       %td
         = report.item_type
       %td
-        - unless report.originator_diaspora_handle.nil?
-          = link_to(report.originator_diaspora_handle, "/people/#{report.originator_guid}")
+        - if report.reported_author.nil?
+          = t("report.reported_author_unknown")
+        - else
+          = link_to(report.reported_author.diaspora_handle, "/people/#{report.reported_author_guid}")
       %td
-        = t("report.item_deleted") if report.action_deleted?
-        = t("report.item_no_action") if report.action_no_action?
+        = t("report.#{report.action}") if report.action.present?
+        = t("report.decision_unknown") if report.action.nil?
       %td
         - unless report.item.nil?
           = link_to_content(report)

@@ -33,7 +33,7 @@ class ReportController < ApplicationController
 
   def create
     report = current_user.reports.new(report_params)
-    report.originator_diaspora_handle = report.reported_author.diaspora_handle
+    report.reported_author_id = report.reported_author.id
     if report.save
       render json: true, status: :ok
     else
@@ -55,10 +55,10 @@ class ReportController < ApplicationController
   end
 
   def statistics_by_author
-    sql = "select count(*), originator_diaspora_handle, guid from reports
-           left join people on originator_diaspora_handle = people.diaspora_handle
-           where originator_diaspora_handle is not null
-           group by originator_diaspora_handle, guid order by 1 desc"
+    sql = "select count(*), diaspora_handle, guid from reports
+           left join people on reported_author_id = people.id
+           where reported_author_id is not null
+           group by diaspora_handle, guid order by 1 desc"
     ActiveRecord::Base.connection.exec_query sql
   end
 end
