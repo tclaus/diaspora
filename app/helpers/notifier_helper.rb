@@ -14,29 +14,11 @@ module NotifierHelper
     end
   end
 
-  def truncated_post_message(post)
-    if post.respond_to? :message
-      plain_text = post.message.try(:plain_text_without_markdown).presence || post_page_title(post)
-      truncate(plain_text, length: 300)
-    else
-      I18n.t "notifier.a_post_you_shared"
-    end
-  end
-
   # @param comment [Comment] The comment to process.
   # @return [String] The formatted comment.
   def comment_message(comment, opts={})
     if comment.post.public?
       comment.message.plain_text_without_markdown
-    else
-      I18n.t "notifier.a_limited_post_comment"
-    end
-  end
-
-  def truncated_comment_message(comment)
-    if comment.post.public?
-      plain_text = comment.message.plain_text_without_markdown
-      truncate(plain_text, length: 180)
     else
       I18n.t "notifier.a_limited_post_comment"
     end
