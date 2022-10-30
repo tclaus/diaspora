@@ -27,7 +27,8 @@ class Report < ApplicationRecord
   }
 
   def reported_author
-    Person.find(reported_author_id)
+    return Person.find(reported_author_id) if reported_author_id.present?
+    item&.author
   end
 
   def entry_does_not_exist
