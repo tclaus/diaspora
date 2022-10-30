@@ -15,19 +15,19 @@ class Report < ApplicationRecord
   belongs_to :post, optional: true
   belongs_to :comment, optional: true
   belongs_to :item, polymorphic: true
-  delegate :author, to: :item
 
   STATUS_DELETED = "deleted"
-  STATUS_NO_ACTION = "no action"
+  STATUS_NO_ACTION = "no_action"
 
   after_commit :send_report_notification, on: :create
 
   scope :join_originator, -> {
-    joins("LEFT JOIN people ON originator_diaspora_handle = people.diaspora_handle ")
-      .select("reports.*, people.guid as originator_guid")
+    joins("LEFT JOIN people ON reported_author_id = people.id ")
+      .select("reports.*, people.diaspora_handle as reported_author, people.guid as reported_author_guid")
   }
 
   def reported_author
+    return Person.find(reported_author_id) if reported_author_id.present?
     item&.author
   end
 
@@ -60,19 +60,14 @@ class Report < ApplicationRecord
         item.destroy
       end
     end
-    mark_as_reviewed_and_deleted
+    mark_as_reviewed(STATUS_DELETED)
   end
 
   # rubocop:disable Rails/SkipsModelValidations
 
-  def mark_as_reviewed_and_deleted
+  def mark_as_reviewed(with_action=STATUS_NO_ACTION)
     Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: STATUS_DELETED)
-  end
-
-  def mark_as_reviewed
-    Report.where(item_id: item_id, item_type: item_type)
-          .update_all(reviewed: true, action: STATUS_NO_ACTION)
+          .update_all(reviewed: true, action: with_action)
   end
   # rubocop:enable Rails/SkipsModelValidations
 
@@ -84,14 +79,6 @@ class Report < ApplicationRecord
     action&.downcase == STATUS_NO_ACTION.downcase
   end
   # rubocop:enable Rails/SkipsModelValidations
-
-  def action_deleted?
-    action&.downcase == STATUS_DELETED.downcase
-  end
-
-  def action_no_action?
-    action&.downcase == STATUS_NO_ACTION.downcase
-  end
 
   def send_report_notification
     Workers::Mail::ReportWorker.perform_async(id)
