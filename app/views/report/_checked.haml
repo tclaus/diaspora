@@ -30,7 +30,8 @@
         - else
           = link_to(report.reported_author.diaspora_handle, "/people/#{report.reported_author_guid}")
       %td
-        = t("report.#{report.action}")
+        = t("report.#{report.action}") if report.action.present?
+        = t("report.decision_unknown") if report.action.nil?
       %td
         - unless report.item.nil?
           = link_to_content(report)

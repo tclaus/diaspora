@@ -2,7 +2,7 @@ class AddActionFieldsToReports < ActiveRecord::Migration[6.1]
 
   def change
     change_table :reports, bulk: true do |t|
-      t.numeric :reported_author_id, index: true
+      t.integer :reported_author_id, index: true
       t.string :action
     end
 
