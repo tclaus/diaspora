@@ -135,6 +135,7 @@ gem "omniauth-tumblr",                "1.2"
 gem "omniauth-twitter",               "1.4.0"
 gem "omniauth-wordpress",             "0.2.2"
 gem "twitter",                        "8.0.0"
+gem 'one_signal', '~> 1.2', '>= 1.2.2'
 
 # OpenID Connect
 gem "openid_connect", "2.3.0"
