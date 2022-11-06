@@ -11,7 +11,6 @@ module Workers
 
       NotificationService.new.notify(object, recipient_user_ids)
     rescue ActiveRecord::RecordNotFound # Already deleted before the job could run
-      # Ignored
     end
   end
 end
