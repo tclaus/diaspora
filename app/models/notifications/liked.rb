@@ -20,7 +20,7 @@ module Notifications
 
       return unless like.target_type == "Post" && target_author.local? && actor != target_author
 
-      concatenate_or_create(target_author.owner, like.target, actor).email_the_user(like, actor)
+      concatenate_or_create(target_author.owner, like.target, actor).send_push_notification(like, actor)
     end
   end
 end

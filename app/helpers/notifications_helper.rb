@@ -51,9 +51,9 @@ module NotificationsHelper
   end
 
   def notification_people_link(note, people=nil)
-    actors =people || note.actors
+    actors = people || note.actors
     number_of_actors = actors.size
-    sentence_translations = {:two_words_connector => " #{t('notifications.index.and')} ", :last_word_connector => ", #{t('notifications.index.and')} " }
+    sentence_translations = {two_words_connector: " #{I18n.t('notifications.index.and')} ", last_word_connector: ", #{I18n.t('notifications.index.and')} "}
     actor_links = actors.collect{ |person|
       person_link(person, :class => 'hovercardable')
     }

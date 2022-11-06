@@ -23,7 +23,7 @@ module Notifications
       recipient_ids = message.conversation.participants.local.where.not(id: message.author_id).pluck(:owner_id)
       User.where(id: recipient_ids).find_each do |recipient|
         message.increase_unread(recipient)
-        new(recipient: recipient).email_the_user(message, message.author)
+        new(recipient: recipient).send_push_notification(message, message.author)
       end
     end
   end

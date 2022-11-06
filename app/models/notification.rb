@@ -13,13 +13,13 @@ class Notification < ApplicationRecord
   has_many :actors, class_name: "Person", through: :notification_actors, source: :person
   belongs_to :target, polymorphic: true
 
-  after_create do
-    pn = PushNotificationService.new
-    pn.deliver_message(User.find(recipient_id), notification_message_for(self) )
-  end
-
   def self.for(recipient, opts={})
     where(opts.merge!(recipient_id: recipient.id)).order("updated_at DESC")
+  end
+
+  def send_push_notification(target, actor)
+    PushNotificationService.new.deliver_message(recipient_id, notification_message_for(self))
+    email_the_user(target, actor)
   end
 
   def email_the_user(target, actor)
