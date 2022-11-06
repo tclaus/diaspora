@@ -5,18 +5,12 @@
 #   the COPYRIGHT file.
 #
 class Notification < ApplicationRecord
-  include NotificationsHelper
   include Diaspora::Fields::Guid
 
   belongs_to :recipient, class_name: "User"
   has_many :notification_actors, dependent: :delete_all
   has_many :actors, class_name: "Person", through: :notification_actors, source: :person
   belongs_to :target, polymorphic: true
-
-  after_create do
-    pn = PushNotificationService.new
-    pn.deliver_message(User.find(recipient_id), notification_message_for(self) )
-  end
 
   def self.for(recipient, opts={})
     where(opts.merge!(recipient_id: recipient.id)).order("updated_at DESC")
