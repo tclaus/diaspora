@@ -20,7 +20,7 @@ module Notifications
         relevant_mentions.each do |mention|
           recipient = mention.person.owner
           unless exists?(recipient: recipient, target: mention)
-            create_notification(recipient, mention, actor).try(:email_the_user, mention, actor)
+            create_notification(recipient, mention, actor).try(:send_push_notification, mention, actor)
           end
         end
       end
