@@ -1268,6 +1268,10 @@ de:
     manage:
       no_tags: "Du folgst keinen Tags."
       title: "Gefolgte Tags verwalten"
+    popular_tags:
+      title: "Beliebte Tags für Heute"
+      no_tags: "Keine Posts sind mit diesem Tag markiert"
+      tag_count: "%{count} individuelle Authoren"
   tags:
     name_too_long: "Bitte kürze deinen Tag-Namen auf weniger als %{count} Zeichen. Im Moment enthält er %{current_length} Zeichen"
     show:
