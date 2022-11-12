@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_31_174032) do
+ActiveRecord::Schema.define(version: 2023_06_04_015559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -343,7 +343,7 @@ ActiveRecord::Schema.define(version: 2022_03_31_174032) do
     t.integer "response_time", default: -1
     t.string "software"
     t.string "error"
-    t.integer "port"
+    t.integer "port", null: false
     t.boolean "blocked", default: false
     t.boolean "scheduled_check", default: false, null: false
     t.index ["checked_at"], name: "index_pods_on_checked_at"
@@ -467,9 +467,10 @@ ActiveRecord::Schema.define(version: 2022_03_31_174032) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "user_id", null: false
+    t.integer "reported_author_id"
     t.string "action"
-    t.string "originator_diaspora_handle"
     t.index ["item_id"], name: "index_reports_on_item_id"
+    t.index ["reported_author_id"], name: "index_reports_on_reported_author_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -613,7 +614,6 @@ ActiveRecord::Schema.define(version: 2022_03_31_174032) do
     t.string "export"
     t.datetime "exported_at"
     t.boolean "exporting", default: false
-    t.boolean "strip_exif", default: true
     t.string "exported_photos_file"
     t.datetime "exported_photos_at"
     t.boolean "exporting_photos", default: false
