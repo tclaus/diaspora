@@ -1278,7 +1278,6 @@ en:
     manage:
       title: "Manage followed tags"
       no_tags: "You aren't following any tags."
-    
   popular_tags:
     title: "Popular tags for this day"
     no_tags: "No posts are tagged on this day"
