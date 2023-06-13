@@ -1358,6 +1358,10 @@ de:
       export_in_progress: "Wir verarbeiten momentan deine Daten - schau etwas später noch einmal vorbei."
       export_photos_in_progress: "Wir sind gerade dabei, deine Fotos zu verarbeiten. Bitte guck in ein paar Augenblicken noch mal vorbei."
       following: "Folgen-Einstellungen"
+      import:
+        headline: "Posts importieren"
+        body: "Überträgt ihre Interaktionen in diesen Pod."
+        warning: "Ihr bisheriger Account auf dem alten Pod wird mit dem Import geschlossen."
       last_exported_html: "(zuletzt %{timeago} aktualisiert)"
       liked: "jemandem dein Beitrag gefällt"
       mentioned: "du in einem Beitrag erwähnt wirst"
@@ -1383,6 +1387,8 @@ de:
       your_email: "Deine E-Mail-Adresse"
       your_email_private: "Deine E-Mail wird niemals von anderen Nutzern gesehen werden."
       your_handle: "Deine diaspora* ID"
+      change_stream_language: "Sprache des Streams anpassen"
+      export_data_subline: "Erstellt eine Datei, die ihre sämtlichen Interaktionen enthält."
     getting_started:
       awesome_take_me_to_diaspora: "Super! Bring mich zu diaspora*"
       community_welcome: "diaspora*s Gemeinschaft ist froh, dich an Bord zu haben!"
