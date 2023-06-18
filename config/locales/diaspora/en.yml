@@ -1362,10 +1362,15 @@ en:
         description: "web+diaspora:// is a new web protocol that we have introduced. Any link to a diaspora* page on an external website that uses this protocol can be opened in the pod on which your diaspora* account is registered. Click the button below to set your browser to use %{pod_url} to recognise external web+diaspora:// links."
         browser: "This protocol is currently in the experimental stage and the success of interactions using it will depend on your browser. If you want to manage or remove this handler, you will do this via your browser settings. The button below will always be enabled, and you need to set the handler separately in each browser you use."
         register: "Register web+diaspora:// handler on this browser"
+      change_stream_language: "Change stream language"
+      export_data_subline: "Creates a file with every interaction."
+      import:
+        headline: "Imports your export file to this pod."
+        body: "Transfers all interactions as they would come from here. Your old account wilkl be closed after import."
+        warning: "Your old account will be closed with this import"
 
     privacy_settings:
       title: "Privacy settings"
-      strip_exif: "Strip metadata such as location, author, and camera model from uploaded images (recommended)"
       ignored_users: "Ignored users"
       stop_ignoring: "Stop ignoring"
       no_user_ignored_message: "You are not currently ignoring any other user"
