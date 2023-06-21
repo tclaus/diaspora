@@ -11,7 +11,7 @@
           = t("users.import_modal.title")
         .modal-body
           %p
-            = simple_format(t("users.import_modal.subtext", {accountname: current_user.diaspora_handle}))
+            = simple_format(t("users.import_modal.subtext", accountname: current_user.diaspora_handle))
           %ol
             %li
               = t("users.import_modal.list1")
