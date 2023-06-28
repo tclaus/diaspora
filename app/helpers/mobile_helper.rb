@@ -40,10 +40,10 @@ module MobileHelper
   end
 
   def mobile_translate_icon(post)
-    link_to "",
+    link_to content_tag(:i, "", class: "fa-solid fa-language fa-xl"),
             "#",
-            data:  {url: post_translation_path(post.id)},
-            class: "entypo-share translate-action active"
+            data:  {url: post_translation_path(post.id), reset: false},
+            class: "translate-action active"
   end
 
   # rubocop:disable Rails/ContentTag
