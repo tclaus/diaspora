@@ -70,6 +70,7 @@ gem "bootstrap-switch-rails", "3.3.3" # 3.3.4 and 3.3.5 is broken, see https://g
 gem "font-awesome-sass",      "~> 6.4"
 gem "sassc-rails",            "2.1.2"
 gem "sprockets-rails",        "3.4.2"
+gem "font-awesome-sass",      "~> 6.4"
 
 # Database
 
