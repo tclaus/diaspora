@@ -81,16 +81,13 @@
 
     onTranslate: function(evt) {
       evt.preventDefault();
-      var link = $(evt.target).closest(".translate-action"),
-          href = link.attr("data-url");
-      var resetTextMarker = "";
-      if (link.children().length > 0) {
-        // then reset to original language
-        resetTextMarker = "&reset=true";
-      }
+      let link = $(evt.target).closest(".translate-action"),
+          href = link.data("url");
+      let resetTextMarker = "";
+      resetTextMarker = link.data("reset")
 
       $.ajax({
-        url: href + "?format=mobile" + resetTextMarker,
+        url: href + "?format=mobile&reset=" + resetTextMarker,
         dataType: "json",
         type: "GET",
         beforeSend: function() {
@@ -99,14 +96,16 @@
 
         success: function(response) {
           Diaspora.Mobile.PostActions.toggleActive(link);
-          var el = link.closest(".stream-element").find(".mobile-content").first();
+          let el = link.closest(".stream-element").find(".mobile-content").first();
           el.children("p, blockquote").remove();
           el.prepend(response.translatedText);
 
-          if (resetTextMarker === "") {
+          if (resetTextMarker === "false") {
+            link.data("reset", "true")
             link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
           } else {
-            link.children().remove();
+            link.data("reset", "false")
+            link.children("span").remove()
           }
         },
 
