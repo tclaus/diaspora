@@ -84,7 +84,7 @@
       let link = $(evt.target).closest(".translate-action"),
           href = link.data("url");
       let resetTextMarker = "";
-      resetTextMarker = link.data("reset")
+      resetTextMarker = link.data("reset");
 
       $.ajax({
         url: href + "?format=mobile&reset=" + resetTextMarker,
@@ -101,11 +101,11 @@
           el.prepend(response.translatedText);
 
           if (resetTextMarker === "false") {
-            link.data("reset", "true")
+            link.data("reset", "true");
             link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
           } else {
-            link.data("reset", "false")
-            link.children("span").remove()
+            link.data("reset", "false");
+            link.children("span").remove();
           }
         },
 
