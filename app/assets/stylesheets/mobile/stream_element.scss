@@ -13,12 +13,12 @@
       font-weight: bold;
     }
   }
+}
 
-  .post-action a i {
-    vertical-align: middle;
-    margin-top: 2px;
-    color: #999;
-  }
+a i {
+  color: $text-grey;
+  margin-top: 2px;
+  vertical-align: middle;
 }
 
 a i {
