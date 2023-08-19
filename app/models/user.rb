@@ -576,9 +576,7 @@ class User < ApplicationRecord
     self[:disable_mail] = true
     self[:email] = "deletedaccount_#{self[:id]}@example.org"
 
-    if (self[:failed_attempts].nil?)
-      self[:failed_attempts] = 0
-    end
+    self[:failed_attempts] = 0 if self[:failed_attempts].nil?
 
     random_password = SecureRandom.hex(20)
     self.password = random_password
