@@ -81,10 +81,9 @@
 
     onTranslate: function(evt) {
       evt.preventDefault();
-      let link = $(evt.target).closest(".translate-action"),
-          href = link.data("url");
-      let resetTextMarker = "";
-      resetTextMarker = link.data("reset");
+      let link = $(evt.target).closest(".translate-action");
+      let href = link.data("url");
+      let resetTextMarker = link.attr("data-reset");
 
       $.ajax({
         url: href + "?format=mobile&reset=" + resetTextMarker,
@@ -101,10 +100,10 @@
           el.prepend(response.translatedText);
 
           if (resetTextMarker === "false") {
-            link.data("reset", "true");
+            link.attr("data-reset",true);
             link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
           } else {
-            link.data("reset", "false");
+            link.attr("data-reset",false);
             link.children("span").remove();
           }
         },
