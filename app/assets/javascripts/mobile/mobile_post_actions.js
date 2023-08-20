@@ -100,10 +100,10 @@
           el.prepend(response.translatedText);
 
           if (resetTextMarker === "false") {
-            link.attr("data-reset",true);
+            link.attr("data-reset", true);
             link.append("<span class='count'>" + response.detectedSourceLanguage + "</span>");
           } else {
-            link.attr("data-reset",false);
+            link.attr("data-reset", false);
             link.children("span").remove();
           }
         },
