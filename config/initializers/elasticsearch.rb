@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'faraday/typhoeus'
 
 ES_CLIENT =
   if AppConfig.elasticsearch.enable_host?
@@ -6,6 +7,7 @@ ES_CLIENT =
                               transport_options: { ssl: { verify: false } },
                               ca_fingerprint: AppConfig.elasticsearch.cert_fingerprint,
                               logger: Logging.logger["elasticsearch"])
+
   elsif AppConfig.elasticsearch.enable_cloud?
     Elasticsearch::Client.new(cloud_id: AppConfig.elasticsearch.cloud_id.to_s,
                               user:     AppConfig.elasticsearch.user.to_s,
