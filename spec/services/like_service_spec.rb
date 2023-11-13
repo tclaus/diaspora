@@ -81,48 +81,50 @@ describe LikeService do
     end
   end
 
-  describe "#destroy_post_likes" do
-    let(:like) { LikeService.new(bob).create_for_post(post.id) }
+  describe "#destroy" do
+    context "for post like" do
+      let(:like) { LikeService.new(bob).create_for_post(post.id) }
 
-    it "lets the user destroy their own like" do
-      result = LikeService.new(bob).destroy(like.id)
-      expect(result).to be_truthy
+      it "lets the user destroy their own like" do
+        result = LikeService.new(bob).destroy(like.id)
+        expect(result).to be_truthy
+      end
+
+      it "doesn't let the parent author destroy others likes" do
+        result = LikeService.new(alice).destroy(like.id)
+        expect(result).to be_falsey
+      end
+
+      it "doesn't let someone destroy others likes" do
+        result = LikeService.new(eve).destroy(like.id)
+        expect(result).to be_falsey
+      end
+
+      it "fails if the like doesn't exist" do
+        expect {
+          LikeService.new(bob).destroy("unknown id")
+        }.to raise_error ActiveRecord::RecordNotFound
+      end
     end
 
-    it "doesn't let the parent author destroy others likes" do
-      result = LikeService.new(alice).destroy(like.id)
-      expect(result).to be_falsey
-    end
+    context "for comment like" do
+      let(:like) { LikeService.new(bob).create_for_comment(alice_comment.id) }
 
-    it "doesn't let someone destroy others likes" do
-      result = LikeService.new(eve).destroy(like.id)
-      expect(result).to be_falsey
-    end
+      it "let the user destroy its own comment like" do
+        result = LikeService.new(bob).destroy(like.id)
+        expect(result).to be_truthy
+      end
 
-    it "fails if the like doesn't exist" do
-      expect {
-        LikeService.new(bob).destroy("unknown id")
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
-  end
+      it "doesn't let the parent author destroy other comment likes" do
+        result = LikeService.new(alice).destroy(like.id)
+        expect(result).to be_falsey
+      end
 
-  describe "#destroy_comment_likes" do
-    let(:like) { LikeService.new(bob).create_for_comment(alice_comment.id) }
-
-    it "let the user destroy its own comment like" do
-      result = LikeService.new(bob).destroy(like.id)
-      expect(result).to be_truthy
-    end
-
-    it "doesn't let the parent author destroy other comment likes" do
-      result = LikeService.new(alice).destroy(like.id)
-      expect(result).to be_falsey
-    end
-
-    it "fails if the like doesn't exist" do
-      expect {
-        LikeService.new(alice).destroy("unknown id")
-      }.to raise_error ActiveRecord::RecordNotFound
+      it "fails if the like doesn't exist" do
+        expect {
+          LikeService.new(alice).destroy("unknown id")
+        }.to raise_error ActiveRecord::RecordNotFound
+      end
     end
   end
 
@@ -243,7 +245,9 @@ describe LikeService do
       LikeService.new(alice).unlike_post(post.id)
       expect(post.likes.length).to eq(0)
     end
+  end
 
+  describe "#unlike_comment" do
     it "removes the like for a comment" do
       comment = CommentService.new(alice).create(post.id, "I like my own post")
       LikeService.new(alice).create_for_comment(comment.id)

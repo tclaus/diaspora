@@ -43,7 +43,7 @@ Feature: reactions mobile post
     And I click on selector "a.comment-action"
     And I confirm the alert after I click on selector "a.remove"
     Then I should see "0 comments" within ".show-comments"
-  
+
   Scenario: liking and unliking a comment
     When I click on selector "a.comment-action.inactive"
     And I fill in the following:

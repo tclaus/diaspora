@@ -22,8 +22,8 @@
     .media { margin: 5px; }
   }
 
+  .comments > .comment,
   .comment.new-comment-form-wrapper {
-
     margin: 0;
     border-top: 1px dotted $border-grey;
     padding: 10px 0 0;
@@ -37,10 +37,6 @@
     >.highlighted {
       border-left: 3px solid $link-color;
       padding-left: 3px;
-    }
-
-    .media {
-      margin-bottom: 0;
     }
   }
 
@@ -56,8 +52,6 @@
       opacity: 1;
     }
   }
-
-  .comment.new-comment-form-wrapper { padding-bottom: 0; }
 
   .submit-button {
     margin-top: 10px;
@@ -81,6 +75,25 @@
     // scss-lint:disable ImportantRule
     display: block !important;
     // scss-lint:enable ImportantRule
+  }
+}
+
+.likes-on-comment {
+  &.likes {
+    margin-top: 6px;
+  }
+
+  .media {
+    margin: 0 0 2px;
+
+    &:not(.display-avatars) .entypo-heart {
+      display: none;
+    }
+  }
+
+  .expand-likes {
+    display: inline-block;
+    margin-bottom: 4px;
   }
 }
 

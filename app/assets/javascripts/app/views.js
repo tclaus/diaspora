@@ -4,6 +4,7 @@ app.views.Base = Backbone.View.extend({
 
   initialize : function() {
     this.setupRenderEvents();
+    this.setupReport();
   },
 
   presenter : function(){
@@ -102,12 +103,41 @@ app.views.Base = Backbone.View.extend({
     this.model.set(_.inject(this.formAttrs, _.bind(setValueFromField, this), {}));
   },
 
+  setupReport: function() {
+    const reportForm = document.getElementById("report-content-form");
+    if (reportForm) {
+      reportForm.addEventListener("submit", this.onSubmitReport);
+    }
+  },
+
+  onSubmitReport: function(ev) {
+    if (ev) { ev.preventDefault(); }
+    const form = ev.currentTarget;
+    $("#reportModal").modal("hide");
+    const textarea = document.getElementById("report-reason-field");
+    const report = {
+      item_id: form.dataset.reportId,
+      item_type: form.dataset.reportType,
+      text: textarea.value
+    };
+
+    new app.models.Report().save({report: report}, {
+      success: function() {
+        app.flashMessages.success(Diaspora.I18n.t("report.status.created"));
+      },
+      error: function() {
+        app.flashMessages.error(Diaspora.I18n.t("report.status.exists"));
+      }
+    });
+  },
+
   report: function(evt) {
     if (evt) { evt.preventDefault(); }
-    let form = document.getElementById("report-content-form");
+    const form = document.getElementById("report-content-form");
     form.dataset.reportId = this.model.id;
     form.dataset.reportType = evt.currentTarget.dataset.type;
     document.getElementById("report-reason-field").value = "";
+    document.getElementById("report-reason-field").focus();
     $("#reportModal").modal();
   },
 
@@ -115,7 +145,7 @@ app.views.Base = Backbone.View.extend({
 
   destroyModel: function(evt) {
     evt && evt.preventDefault();
-    var url = this.model.urlRoot + "/" + this.model.id;
+    const url = this.model.urlRoot + "/" + this.model.id;
 
     if( confirm(_.result(this, "destroyConfirmMsg")) ) {
       this.$el.addClass("deleting");

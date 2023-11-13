@@ -116,9 +116,6 @@
 
   .no-comments { text-align: center; }
 
-  a {
-    color: $link-color;
-  }
   .count {
     float: left;
     i {
@@ -142,8 +139,9 @@
 
   .comments > .comment,
   .comment.new-comment-form-wrapper {
-    padding: 10px 10px 0;
+    padding: 10px;
   }
+  .comments > .comment { padding-bottom: 0; }
 
   .count,
   .interaction-avatars {
@@ -165,24 +163,18 @@
     }
   }
   .likes {
-    .author-name {
-      margin-right: 3px;
-    }
+    font-size: 12px;
+    line-height: 16px;
 
-    .media {
-      margin: 0;
-    }
-
-    .expand-likes {
-      color: $text-grey;
-    }
+    .bd { display: inline-block; }
+    img { display: inline; }
   }
-}
 
-.comment .media .entypo-heart {
-  display: inline-block;
-  font-size: 16px;
-  line-height: 18px;
-  margin-right: 5px;
-  vertical-align: top;
+  .display-avatars .entypo-heart {
+    display: inline-block;
+    font-size: 16px;
+    line-height: 18px;
+    margin-right: 5px;
+    vertical-align: top;
+  }
 }

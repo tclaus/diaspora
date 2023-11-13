@@ -7,13 +7,13 @@ app.models.Post = Backbone.Model.extend(_.extend({}, app.models.formatDateMixin,
     this.interactions = new app.models.PostInteractions(_.extend({post: this}, this.get("interactions")));
     this.translation = new app.models.Translation(this.get("translation"), {post: this});
     this.delegateToInteractions();
-    this.showHeart = true;
   },
 
   delegateToInteractions : function(){
     this.comments = this.interactions.comments;
     this.likes = this.interactions.likes;
-    this.comment = function() {
+
+    this.comment = function(){
       this.interactions.comment.apply(this.interactions, arguments);
     };
   },

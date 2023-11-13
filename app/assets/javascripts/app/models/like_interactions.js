@@ -44,6 +44,8 @@ app.models.LikeInteractions = Backbone.Model.extend({
     var self = this;
     this.userLike().destroy({
       success: function() {
+        // TODO: unlike always sets participation to false in the UI, even if there are more participations left
+        //  in the backend (from manually participating, other likes or comments)
         self.post.set({participation: false});
         self.trigger("change");
         self.set({"likes_count": self.get("likes_count") - 1});
