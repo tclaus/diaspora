@@ -1,0 +1,9 @@
+= render partial: "admins/stats/stats_bar"
+
+%h2
+  Most active users
+.row
+  .col-md-6
+    %h3
+      Most active User (30 days)
+    = render partial: "admins/stats/most_active_user_list", locals: {list: most_active_users[:week]}

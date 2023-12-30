@@ -11,3 +11,5 @@
       = link_to "Posts", post_stats_path
     %button.btn.btn-default{class: current_page?(tag_stats_path) && 'active'}
       = link_to "Tags", tag_stats_path
+    %button.btn.btn-default{class: current_page?(user_stats_path) && 'active'}
+      = link_to "Posts by user", user_stats_path
