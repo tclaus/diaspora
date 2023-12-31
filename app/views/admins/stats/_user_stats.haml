@@ -3,7 +3,15 @@
 %h2
   Most active users
 .row
-  .col-md-6
+  .col-md-4
     %h3
-      Most active User (30 days)
+      7 days
     = render partial: "admins/stats/most_active_user_list", locals: {list: most_active_users[:week]}
+  .col-md-4
+    %h3
+      30 days
+    = render partial: "admins/stats/most_active_user_list", locals: {list: most_active_users[:month]}
+  .col-md-4
+    %h3
+      180 days
+    = render partial: "admins/stats/most_active_user_list", locals: {list: most_active_users[:halfyear]}

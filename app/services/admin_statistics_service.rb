@@ -4,6 +4,7 @@ class AdminStatisticsService
   DAY = 1
   WEEKDAYS = 7
   MONTHDAYS = 30
+  HALFYEAR = 180
   YEAR = 365
 
   def total_stat_numbers_cached
@@ -41,6 +42,8 @@ class AdminStatisticsService
   def most_active_users
     users = {}
     users[:week] = most_active_users_since(WEEKDAYS)
+    users[:month] = most_active_users_since(MONTHDAYS)
+    users[:halfyear] = most_active_users_since(HALFYEAR)
     users
   end
 
