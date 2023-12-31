@@ -7,8 +7,9 @@
         Posts count
   %tbody
     - list.rows.each do |author_id, count|
+      - person = Person.find(author_id)
       %tr
         %th{scope: "row"}
-          = "#{Person.find(author_id).diaspora_handle}"
+          = person_link(person, :class => 'hovercardable')
         %th
           = "#{count}"

@@ -229,7 +229,8 @@ class AdminStatisticsService
     and provider_display_name is null
     group by author_id
     having count(*) > #{min_having}
-    order by count(*) DESC"
+    order by count(*) DESC
+    limit 25"
 
     ActiveRecord::Base.connection.exec_query sql
   end
