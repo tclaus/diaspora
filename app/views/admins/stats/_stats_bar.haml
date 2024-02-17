@@ -5,9 +5,11 @@
   %h2
     Pod Statistics
   .btn-group{role: "group"}
-    %button.btn.btn-default{class: current_page?(pod_stats_path) && 'active'}
+    %button.btn.btn-default{class: current_page?(pod_stats_path) && "active"}
       = link_to "Stats", pod_stats_path
-    %button.btn.btn-default{class: current_page?(post_stats_path) && 'active'}
+    %button.btn.btn-default{class: current_page?(post_stats_path) && "active"}
       = link_to "Posts", post_stats_path
-    %button.btn.btn-default{class: current_page?(tag_stats_path) && 'active'}
+    %button.btn.btn-default{class: current_page?(tag_stats_path) && "active"}
       = link_to "Tags", tag_stats_path
+    %button.btn.btn-default{class: current_page?(user_stats_path) && "active"}
+      = link_to "Posts by user", user_stats_path

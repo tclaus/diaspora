@@ -62,6 +62,10 @@ class AdminsController < Admin::AdminController
     @popular_tags = statistics_service.popular_tags_cached
   end
 
+  def user_stats
+    @most_active_users = statistics_service.most_active_users
+  end
+
   private
 
   class UserSearch

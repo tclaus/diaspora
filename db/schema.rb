@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_04_015559) do
+ActiveRecord::Schema.define(version: 2023_12_31_081523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 2023_06_04_015559) do
     t.string "language_id"
     t.index ["author_id", "root_guid"], name: "index_posts_on_author_id_and_root_guid", unique: true
     t.index ["author_id"], name: "index_posts_on_person_id"
+    t.index ["created_at", "author_id"], name: "index_posts_on_created_at"
     t.index ["created_at", "id"], name: "index_posts_on_created_at_and_id"
     t.index ["guid"], name: "index_posts_on_guid", unique: true
     t.index ["id", "type"], name: "index_posts_on_id_and_type"
