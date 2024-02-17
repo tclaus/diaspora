@@ -1,0 +1,15 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th{scope: "col"}
+        Username
+      %th{scope: "col"}
+        Posts count
+  %tbody
+    - list.rows.each do |author_id, count|
+      - person = Person.find(author_id)
+      %tr
+        %th{scope: "row"}
+          = person_link(person, class: "hovercardable")
+        %th
+          = count

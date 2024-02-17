@@ -55,6 +55,7 @@ de:
       sidekiq_monitor: "Sidekiq-Monitor"
       user_search: "Benutzersuche"
       weekly_user_stats: "Wöchentliche Benutzerstatistik"
+      tags_board: "Tag Liste"
     dashboard:
       fetching_diaspora_version: "Ermittle neueste diaspora*-Version"
       pod_status: "Pod-Status"

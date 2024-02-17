@@ -4,6 +4,7 @@ class AdminStatisticsService
   DAY = 1
   WEEKDAYS = 7
   MONTHDAYS = 30
+  HALFYEAR = 180
   YEAR = 365
 
   def total_stat_numbers_cached
@@ -35,6 +36,15 @@ class AdminStatisticsService
     tags[:week] = popular_tags_since(WEEKDAYS)
     tags[:month] = popular_tags_since(MONTHDAYS)
     tags
+  end
+
+  # Retrieves a list of most active user
+  def most_active_users
+    users = {}
+    users[:week] = most_active_users_since(WEEKDAYS)
+    users[:month] = most_active_users_since(MONTHDAYS)
+    users[:halfyear] = most_active_users_since(HALFYEAR)
+    users
   end
 
   def posts_stats_cached
@@ -211,4 +221,17 @@ class AdminStatisticsService
         .count
   end
 
+  def most_active_users_since(last_days)
+    min_having = 1
+    sql = "SELECT author_id, count(*) count FROM public.posts
+    where author_id in (select id from people where owner_id is not null and closed_account = false)
+    and created_at > '#{Time.zone.today - last_days}'
+    and provider_display_name is null
+    group by author_id
+    having count(*) > #{min_having}
+    order by count(*) DESC
+    limit 25"
+
+    ActiveRecord::Base.connection.exec_query sql
+  end
 end

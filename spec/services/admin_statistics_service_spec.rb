@@ -98,6 +98,13 @@ describe "AdminStatisticsService" do
         expect(stats[:total][:users]).not_to be_nil
       end
     end
+
+    context "most active user" do
+      it "has user stats for weeks" do
+        stats = service.most_active_users
+        expect(stats[:week]).not_to be_nil
+      end
+    end
   end
 
 
