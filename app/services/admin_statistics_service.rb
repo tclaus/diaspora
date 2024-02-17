@@ -234,5 +234,4 @@ class AdminStatisticsService
 
     ActiveRecord::Base.connection.exec_query sql
   end
-
 end

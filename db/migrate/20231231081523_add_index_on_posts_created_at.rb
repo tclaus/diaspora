@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexOnPostsCreatedAt < ActiveRecord::Migration[6.1]
   def change
     # Adds a index on created_at with autor_id for statistics

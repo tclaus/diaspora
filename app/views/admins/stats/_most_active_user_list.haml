@@ -10,6 +10,6 @@
       - person = Person.find(author_id)
       %tr
         %th{scope: "row"}
-          = person_link(person, :class => 'hovercardable')
+          = person_link(person, class: "hovercardable")
         %th
-          = "#{count}"
+          = count
