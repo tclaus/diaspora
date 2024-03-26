@@ -1349,7 +1349,15 @@ en:
       request_export_photos: "Request my photos"
       request_export_photos_update: "Refresh my photos"
       export_photos_in_progress: "We are currently processing your photos. Please check back in a few moments."
-
+      
+      import:
+        headline: "Import another account into %{accountname}"
+        body: "diaspora* allows you to migrate from one pod to another.
+               To do this, first export your data and photos from the pod you want to move from. Then, import those data and photo archives into this account.
+               Your old account on the other pod will be deleted once this process has completed."
+        warning: "There is no way back; that account can’t be restored if you change your mind."
+        account: "Import another account..."
+      
       close_account:
         dont_go: "Hey, please don’t go!"
         make_diaspora_better: "We’d love you to stay and help us make diaspora* better instead of leaving. If you really do want to leave, however, here’s what will happen next:"
