@@ -11,6 +11,5 @@ app.models.Pod = Backbone.Model.extend({
         self.set(newAttributes);
       });
   }
-
 });
 // @license-end

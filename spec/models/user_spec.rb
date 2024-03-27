@@ -968,6 +968,7 @@ describe User, type: :model do
             otp_backup_codes
             otp_required_for_login
             otp_secret
+            failed_attempts
           ]
         )
       end
