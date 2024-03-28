@@ -113,3 +113,5 @@ de:
       not_saved:
         one: "%{resource} konnte wegen einem Fehler nicht gespeichert werden:"
         other: "%{resource} konnte wegen %{count} Fehlern nicht gespeichert werden:"
+  post_count: "Anzahl Posts"
+  comment_count: "Anzahl Kommentare"

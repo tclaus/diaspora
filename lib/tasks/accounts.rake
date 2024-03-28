@@ -49,4 +49,10 @@ namespace :accounts do
 
     response[0] == "y"
   end
+
+  def import_user(user, start_time, args)
+    ImportService.new.import_by_files(user, args[:archive_path], args[:photos_path],
+                                      args.slice(:import_settings, :import_profile))
+    puts "\n Migration completed in #{Time.now.getlocal - start_time} seconds. (Photos might still be processed in)"
+  end
 end
