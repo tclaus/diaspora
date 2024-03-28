@@ -109,6 +109,15 @@ describe Diaspora::Fetcher::Public do
 
         stub_request(:get, "https://remote-testpod.net/fetch/post/#{post_data['guid']}")
           .to_return(status: 200, body: payload)
+
+        stub_request(:get, "https://remote-testpod.net/fetch/status_message/0ffef04549e81bfa").
+                with(
+                        headers: {
+                                'Accept'=>'*/*',
+                                'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                                'User-Agent'=>'DiasporaFederation/1.1.0'
+                        }).
+                to_return(status: 200, body: "", headers: {})
       end
     end
 
