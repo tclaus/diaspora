@@ -106,7 +106,7 @@ app.views.StreamPost = app.views.Post.extend({
   },
 
   translationEnabled: function() {
-    return gon.translationEnabled;
+    return gon.translationEnabled && app.currentUser.authenticated();
   },
 
   removeTranslation: function(evt) {
