@@ -40,6 +40,8 @@ module MobileHelper
   end
 
   def mobile_translate_icon(post)
+    return if current_user&.blank?
+
     link_to content_tag(:i, "", class: "fa-solid fa-language fa-xl"),
             "#",
             data:  {url: post_translation_path(post.id), reset: false},
