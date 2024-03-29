@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   # roll up likes into a nested resource above
   resources :comments, :only => [:create, :destroy] do
     resources :likes, :only => [:create, :destroy, :index]
+    get :translation, only: :show
   end
 
   # Streams

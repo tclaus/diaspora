@@ -35,9 +35,9 @@ class PostsController < ApplicationController
   def translation
     post = post_service.find!(params[:post_id])
     translation = if params[:reset] != "true"
-                    translation_service.translate_for_post(post)
+                    translation_service.translate_message(post)
                   else
-                    reset_translation(post)
+                    reset_translation(post.text)
                   end
     respond_to do |format|
       format.json { render json: translation, status: :ok }
@@ -84,19 +84,19 @@ class PostsController < ApplicationController
 
   private
 
-  def reset_translation(post)
+  def reset_translation(text)
     {
-      translatedText:         post.text.to_s,
+      translatedText:         text.to_s,
       detectedSourceLanguage: ""
     }
   end
 
-  def post_service
-    @post_service ||= PostService.new(current_user)
-  end
-
   def translation_service
     @translation_service ||= TranslationService.new
+  end
+
+  def post_service
+    @post_service ||= PostService.new(current_user)
   end
 
   def set_format_if_malformed_from_status_net

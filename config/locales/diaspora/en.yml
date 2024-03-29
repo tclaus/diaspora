@@ -1485,3 +1485,7 @@ en:
     disabled: "Not available"
     open: "Open"
     closed: "Closed"
+  translation:
+    authkey_not_provided: "Translation authentication key not provided"
+    translation:
+      error: "Error while translating"

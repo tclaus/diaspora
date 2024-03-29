@@ -54,7 +54,36 @@ class CommentsController < ApplicationController
     end
   end
 
+  def translation
+    comment = comment_service.find!(params[:comment_id])
+    translation = if params[:reset] != "true"
+      translation_service.translate_message(comment)
+    else
+      reset_translation(comment.text)
+    end
+    respond_to do |format|
+      format.json { render json: translation, status: :ok }
+      format.mobile {
+        render json: {
+                translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
+                detectedSourceLanguage: translation[:detectedSourceLanguage]
+        }, status: :ok
+      }
+    end
+  end
+
   private
+
+  def reset_translation(text)
+    {
+            translatedText:         text.to_s,
+            detectedSourceLanguage: ""
+    }
+  end
+
+  def translation_service
+    @translation_service ||= TranslationService.new
+  end
 
   def comment_service
     @comment_service ||= CommentService.new(current_user)
