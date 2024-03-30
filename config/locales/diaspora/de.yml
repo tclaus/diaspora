@@ -1540,6 +1540,10 @@ de:
       start_import: "Start and Import"
   will_paginate:
     previous_label: "&laquo; voriges"
+  translation:
+    authkey_not_provided: "Übersetzungsdienst hat keinen API-Schlüssel"
+    translation:
+      error: "Fehler während der Übersetzung"
 
 
     next_label: nächstes &raquo;
