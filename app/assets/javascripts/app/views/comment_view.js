@@ -34,7 +34,7 @@ app.views.Comment = app.views.Content.extend({
       userLike: this.model.interactions.userLike(),
       translatedFormattedText: function() {
         if (this.translatedText) {
-          return app.helpers.textFormatter(this.translatedText, this.model.get("mentioned_people"));
+          return app.helpers.textFormatter(this.translatedText, this.mentioned_people);
         }
         return undefined;
       }

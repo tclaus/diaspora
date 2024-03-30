@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
     comments = comment_service.find_for_post(params[:post_id])
     respond_with do |format|
       format.json { render json: CommentPresenter.as_collection(comments, :as_json, current_user), status: :ok }
-      format.mobile { render layout: false, locals: {comments: comments} }
+      format.mobile { render layout: false, locals: { comments: comments } }
     end
   end
 
@@ -56,18 +56,20 @@ class CommentsController < ApplicationController
 
   def translation
     comment = comment_service.find!(params[:comment_id])
-    translation = if params[:reset] != "true"
-      translation_service.translate_message(comment)
-    else
-      reset_translation(comment.text)
-    end
+    translation = if params[:reset] == "true"
+                    reset_translation(comment.text)
+                  else
+                    translation_service.translate_message(comment)
+                  end
     respond_to do |format|
       format.json { render json: translation, status: :ok }
       format.mobile {
         render json: {
-                translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
-                detectedSourceLanguage: translation[:detectedSourceLanguage]
-        }, status: :ok
+                        translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText])
+                                                                         .markdownified,
+                        detectedSourceLanguage: translation[:detectedSourceLanguage]
+        },
+               status:  :ok
       }
     end
   end
@@ -76,8 +78,8 @@ class CommentsController < ApplicationController
 
   def reset_translation(text)
     {
-            translatedText:         text.to_s,
-            detectedSourceLanguage: ""
+      translatedText: text.to_s,
+      detectedSourceLanguage: ""
     }
   end
 
@@ -93,7 +95,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.json { render json: CommentPresenter.new(comment), status: 201 }
       format.html { head :created }
-      format.mobile { render partial: "comment", locals: {comment: comment} }
+      format.mobile { render partial: "comment", locals: { comment: comment } }
     end
   end
 

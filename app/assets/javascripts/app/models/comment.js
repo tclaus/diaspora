@@ -13,7 +13,6 @@ app.models.Comment = Backbone.Model.extend({
     this.likesCount = this.attributes.likes_count;
     this.userLike = this.interactions.userLike();
     this.translation = new app.models.Translation(this.get("translation"), {message: this});
-
   },
 
   translate: function() {

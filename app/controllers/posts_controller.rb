@@ -25,35 +25,35 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html do
         gon.post = presenter.with_initial_interactions
-        render locals: {post: presenter}
+        render locals: { post: presenter }
       end
-      format.mobile { render locals: {post: post} }
+      format.mobile { render locals: { post: post } }
       format.json { render json: presenter.with_interactions }
     end
   end
 
   def translation
-    post = post_service.find!(params[:post_id])
-    translation = if params[:reset] != "true"
-                    translation_service.translate_message(post)
-                  else
+    post        = post_service.find!(params[:post_id])
+    translation = if params[:reset] == "true"
                     reset_translation(post.text)
+                  else
+                    translation_service.translate_message(post)
                   end
     respond_to do |format|
       format.json { render json: translation, status: :ok }
       format.mobile {
         render json: {
-          translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
-          detectedSourceLanguage: translation[:detectedSourceLanguage]
-        }, status: :ok
+                translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
+                detectedSourceLanguage: translation[:detectedSourceLanguage]
+        }, status:   :ok
       }
     end
   end
 
   def oembed
     post_id = OEmbedPresenter.id_from_url(params.delete(:url))
-    post = post_service.find!(post_id)
-    oembed = params.slice(:format, :maxheight, :minheight)
+    post    = post_service.find!(post_id)
+    oembed  = params.slice(:format, :maxheight, :minheight)
     render json: OEmbedPresenter.new(post, oembed)
   rescue
     head :not_found
@@ -86,8 +86,8 @@ class PostsController < ApplicationController
 
   def reset_translation(text)
     {
-      translatedText:         text.to_s,
-      detectedSourceLanguage: ""
+       translatedText:         text.to_s,
+       detectedSourceLanguage: ""
     }
   end
 
