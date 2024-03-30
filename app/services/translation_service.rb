@@ -12,8 +12,8 @@ class TranslationService
     end
   end
 
-  def translate_for_post(post)
-    translation = translate_text(post.text.to_s)
+  def translate_message(message)
+    translation = translate_text(message.text.to_s)
     {
       translatedText:         translation.text,
       detectedSourceLanguage: translation.detected_source_language
