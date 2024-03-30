@@ -33,11 +33,22 @@
       </a>
     </div>
     <div class="collapsible comment-content markdown-content">
-      {{{text}}}
+      {{#if translatedText}}
+        {{{translatedFormattedText}}}
+      {{else}}
+        {{{text}}}
+      {{/if}}
     </div>
 
     {{#if loggedIn}}
       <div class="info">
+        {{#if translationEnabled}}
+          {{#if translatedText}}
+            <a href="#" class="comment-translate">{{t "stream.backToOriginal" lang=detectedSourceLanguage}}</a>
+          {{else}}
+            <a href="#" class="comment-translate">{{t "stream.translate"}}</a>
+          {{/if}}
+        {{/if}}
         <a href="#" class="like" rel='nofollow'>
           {{~#if userLike~}}
             {{~t "stream.unlike"~}}

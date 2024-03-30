@@ -14,7 +14,8 @@ app.views.Comment = app.views.Content.extend({
     return _.extend({}, app.views.Content.prototype.events, {
       "click .comment_delete": "destroyModel",
       "click .comment_report": "report",
-      "click .like": "toggleLike"
+      "click .like": "toggleLike",
+      "click .comment-translate": "translateComment"
     });
   },
 
@@ -22,6 +23,7 @@ app.views.Comment = app.views.Content.extend({
     this.templateName = options.templateName || this.templateName;
     this.model.interactions.on("change", this.render, this);
     this.model.on("change", this.render, this);
+    this.model.set("translationEnabled", this.translationEnabled());
   },
 
   presenter: function() {
@@ -29,8 +31,48 @@ app.views.Comment = app.views.Content.extend({
       canRemove: this.canRemove(),
       text: app.helpers.textFormatter(this.model.get("text"), this.model.get("mentioned_people")),
       likesCount: this.model.attributes.likesCount,
-      userLike: this.model.interactions.userLike()
+      userLike: this.model.interactions.userLike(),
+      translatedFormattedText: function() {
+        if (this.translatedText) {
+          return app.helpers.textFormatter(this.translatedText, this.mentioned_people);
+        }
+        return undefined;
+      }
     });
+  },
+
+  translateComment: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
+    if (this.hasTranslation()) {
+      this.removeTranslation();
+    } else {
+      this.model.translate();
+    }
+  },
+
+  translationEnabled: function() {
+    return gon.translationEnabled && app.currentUser.authenticated();
+  },
+
+  removeTranslation: function(evt) {
+    if (evt) {
+      evt.preventDefault();
+    }
+    this.model.removeTranslation();
+  },
+
+  hasTranslation: function() {
+    return !(this.model.translatedText() === undefined);
+  },
+
+  translatedText: function() {
+    return this.model.translatedText();
+  },
+
+  detectedSourceLanguage: function() {
+    return this.model.detectedSourceLanguage();
   },
 
   ownComment: function() {

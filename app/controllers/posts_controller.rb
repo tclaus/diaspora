@@ -5,7 +5,7 @@
 #   the COPYRIGHT file.
 
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i(destroy mentionable)
+  before_action :authenticate_user!, only: %i[destroy mentionable]
   before_action :set_format_if_malformed_from_status_net, only: :show
 
   respond_to :html, :mobile, :json
@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   end
 
   rescue_from Diaspora::NotMine do
-    render plain: I18n.t("posts.show.forbidden"), status: 403
+    render plain: I18n.t("posts.show.forbidden"), status: :forbidden
   end
 
   def show
@@ -33,11 +33,11 @@ class PostsController < ApplicationController
   end
 
   def translation
-    post = post_service.find!(params[:post_id])
-    translation = if params[:reset] != "true"
-                    translation_service.translate_for_post(post)
+    post        = post_service.find!(params[:post_id])
+    translation = if params[:reset] == "true"
+                    reset_translation(post.text)
                   else
-                    reset_translation(post)
+                    translation_service.translate_message(post)
                   end
     respond_to do |format|
       format.json { render json: translation, status: :ok }
@@ -45,17 +45,17 @@ class PostsController < ApplicationController
         render json: {
           translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
           detectedSourceLanguage: translation[:detectedSourceLanguage]
-        }, status: :ok
+        }, status:   :ok
       }
     end
   end
 
   def oembed
     post_id = OEmbedPresenter.id_from_url(params.delete(:url))
-    post = post_service.find!(post_id)
-    oembed = params.slice(:format, :maxheight, :minheight)
+    post    = post_service.find!(post_id)
+    oembed  = params.slice(:format, :maxheight, :minheight)
     render json: OEmbedPresenter.new(post, oembed)
-  rescue
+  rescue StandardError
     head :not_found
   end
 
@@ -84,19 +84,19 @@ class PostsController < ApplicationController
 
   private
 
-  def reset_translation(post)
+  def reset_translation(text)
     {
-      translatedText:         post.text.to_s,
+      translatedText:         text.to_s,
       detectedSourceLanguage: ""
     }
   end
 
-  def post_service
-    @post_service ||= PostService.new(current_user)
-  end
-
   def translation_service
     @translation_service ||= TranslationService.new
+  end
+
+  def post_service
+    @post_service ||= PostService.new(current_user)
   end
 
   def set_format_if_malformed_from_status_net

@@ -12,6 +12,31 @@ app.models.Comment = Backbone.Model.extend({
     this.likes = this.interactions.likes;
     this.likesCount = this.attributes.likes_count;
     this.userLike = this.interactions.userLike();
+    this.translation = new app.models.Translation(this.get("translation"), {message: this});
+  },
+
+  translate: function() {
+    var self = this;
+    self.translation.fetch({
+      success: function(response) {
+        self.set("translatedText", response.get("translatedText"));
+        self.set("detectedSourceLanguage", response.get("detectedSourceLanguage"));
+        self.translation.trigger("change");
+        self.trigger("change");
+      },
+      error: function(model, response) {
+        this.app.flashMessages.handleAjaxError(response);
+      }
+    });
+  },
+
+  translatedText: function() {
+    return this.get("translatedText");
+  },
+
+  removeTranslation: function() {
+    this.unset("translatedText");
   }
+
 });
 // @license-end

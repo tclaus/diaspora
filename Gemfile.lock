@@ -821,7 +821,7 @@ DEPENDENCIES
   cucumber-rails (= 2.6.1)
   cuprite (= 0.14.3)
   database_cleaner-active_record (= 2.1.0)
-  deepl-rb (~> 2.3)
+  deepl-rb (~> 2.5)
   devise (= 4.9.2)
   devise-two-factor (= 4.1.0)
   devise_lastseenable (= 0.0.6)

@@ -54,7 +54,38 @@ class CommentsController < ApplicationController
     end
   end
 
+  def translation
+    comment = comment_service.find!(params[:comment_id])
+    translation = if params[:reset] == "true"
+                    reset_translation(comment.text)
+                  else
+                    translation_service.translate_message(comment)
+                  end
+    respond_to do |format|
+      format.json { render json: translation, status: :ok }
+      format.mobile {
+        render json:   {
+                 translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText])
+                                                                  .markdownified,
+                 detectedSourceLanguage: translation[:detectedSourceLanguage]
+               },
+               status: :ok
+      }
+    end
+  end
+
   private
+
+  def reset_translation(text)
+    {
+      translatedText:         text.to_s,
+      detectedSourceLanguage: ""
+    }
+  end
+
+  def translation_service
+    @translation_service ||= TranslationService.new
+  end
 
   def comment_service
     @comment_service ||= CommentService.new(current_user)
@@ -62,7 +93,7 @@ class CommentsController < ApplicationController
 
   def respond_create_success(comment)
     respond_to do |format|
-      format.json { render json: CommentPresenter.new(comment), status: 201 }
+      format.json { render json: CommentPresenter.new(comment), status: :created }
       format.html { head :created }
       format.mobile { render partial: "comment", locals: {comment: comment} }
     end
