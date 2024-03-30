@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
     comments = comment_service.find_for_post(params[:post_id])
     respond_with do |format|
       format.json { render json: CommentPresenter.as_collection(comments, :as_json, current_user), status: :ok }
-      format.mobile { render layout: false, locals: { comments: comments } }
+      format.mobile { render layout: false, locals: {comments: comments} }
     end
   end
 
@@ -64,12 +64,12 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.json { render json: translation, status: :ok }
       format.mobile {
-        render json: {
-                        translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText])
-                                                                         .markdownified,
-                        detectedSourceLanguage: translation[:detectedSourceLanguage]
-        },
-               status:  :ok
+        render json:   {
+                 translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText])
+                                                                  .markdownified,
+                 detectedSourceLanguage: translation[:detectedSourceLanguage]
+               },
+               status: :ok
       }
     end
   end
@@ -78,7 +78,7 @@ class CommentsController < ApplicationController
 
   def reset_translation(text)
     {
-      translatedText: text.to_s,
+      translatedText:         text.to_s,
       detectedSourceLanguage: ""
     }
   end
@@ -93,9 +93,9 @@ class CommentsController < ApplicationController
 
   def respond_create_success(comment)
     respond_to do |format|
-      format.json { render json: CommentPresenter.new(comment), status: 201 }
+      format.json { render json: CommentPresenter.new(comment), status: :created }
       format.html { head :created }
-      format.mobile { render partial: "comment", locals: { comment: comment } }
+      format.mobile { render partial: "comment", locals: {comment: comment} }
     end
   end
 

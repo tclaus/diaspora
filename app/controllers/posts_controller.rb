@@ -5,7 +5,7 @@
 #   the COPYRIGHT file.
 
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i(destroy mentionable)
+  before_action :authenticate_user!, only: %i[destroy mentionable]
   before_action :set_format_if_malformed_from_status_net, only: :show
 
   respond_to :html, :mobile, :json
@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   end
 
   rescue_from Diaspora::NotMine do
-    render plain: I18n.t("posts.show.forbidden"), status: 403
+    render plain: I18n.t("posts.show.forbidden"), status: :forbidden
   end
 
   def show
@@ -25,9 +25,9 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html do
         gon.post = presenter.with_initial_interactions
-        render locals: { post: presenter }
+        render locals: {post: presenter}
       end
-      format.mobile { render locals: { post: post } }
+      format.mobile { render locals: {post: post} }
       format.json { render json: presenter.with_interactions }
     end
   end
@@ -43,8 +43,8 @@ class PostsController < ApplicationController
       format.json { render json: translation, status: :ok }
       format.mobile {
         render json: {
-                translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
-                detectedSourceLanguage: translation[:detectedSourceLanguage]
+          translatedText:         Diaspora::MessageRenderer.new(translation[:translatedText]).markdownified,
+          detectedSourceLanguage: translation[:detectedSourceLanguage]
         }, status:   :ok
       }
     end
@@ -55,7 +55,7 @@ class PostsController < ApplicationController
     post    = post_service.find!(post_id)
     oembed  = params.slice(:format, :maxheight, :minheight)
     render json: OEmbedPresenter.new(post, oembed)
-  rescue
+  rescue StandardError
     head :not_found
   end
 
@@ -86,8 +86,8 @@ class PostsController < ApplicationController
 
   def reset_translation(text)
     {
-       translatedText:         text.to_s,
-       detectedSourceLanguage: ""
+      translatedText:         text.to_s,
+      detectedSourceLanguage: ""
     }
   end
 
