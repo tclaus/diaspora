@@ -38,7 +38,7 @@ gem "rqrcode", "2.2.0"
 
 # Captcha
 
-gem "invisible_captcha", "~> 2.0"
+gem "invisible_captcha", "~> 2.3"
 
 # Background processing
 

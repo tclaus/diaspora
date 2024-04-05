@@ -42,14 +42,7 @@
             </p>
           </section>
           <% if AppConfig.settings.captcha.enable? %>
-          <section>
-            <p>
-              <label for="user_captcha"><%= t("simple_captcha.label") %></label>
-            </p>
-            <div class="captcha">
-              <%= show_simple_captcha object: "user", code_type: "numeric", class: "simple-captcha-image", input_html: {class: "form-control captcha-input"} %>
-            </div>
-          </section>
+              <%= f.invisible_captcha :subtitle %>
           <% end %>
           <%= invite_hidden_tag(invite) %>
         </div>
