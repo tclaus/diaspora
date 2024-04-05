@@ -8,17 +8,17 @@ app.pages.AdminPods = app.views.Base.extend({
     "click #show_all_pods": "showAllPods",
     "click #show_active_pods": "showActivePods",
     "click #show_blocked_pods": "showBlockedPods",
-    "click #show_invalid_pods": "showInvalidPods",
+    "click #show_invalid_pods": "showInvalidPods"
   },
 
   initialize: function() {
     this.pods = new app.collections.Pods(app.parsePreload("pods"));
     this.rows = []; // contains the table row views
-    this.podfilter = 'active';
+    this.podfilter = "active";
   },
 
   showAllPods: function() {
-    this.podfilter = '';
+    this.podfilter = "";
     this.postRenderTemplate();
     this.$("#show_all_pods").addClass("active");
     this.$("#show_active_pods").removeClass("active");
@@ -27,7 +27,7 @@ app.pages.AdminPods = app.views.Base.extend({
   },
 
   showActivePods: function() {
-    this.podfilter = 'active';
+    this.podfilter = "active";
     this.postRenderTemplate();
     this.$("#show_all_pods").removeClass("active");
     this.$("#show_active_pods").addClass("active");
@@ -36,7 +36,7 @@ app.pages.AdminPods = app.views.Base.extend({
   },
 
   showBlockedPods: function() {
-    this.podfilter = 'blocked';
+    this.podfilter = "blocked";
     this.postRenderTemplate();
     this.$("#show_all_pods").removeClass("active");
     this.$("#show_active_pods").removeClass("active");
@@ -45,7 +45,7 @@ app.pages.AdminPods = app.views.Base.extend({
   },
 
   showInvalidPods: function() {
-    this.podfilter = 'invalid';
+    this.podfilter = "invalid";
     this.postRenderTemplate();
     this.$("#show_all_pods").removeClass("active");
     this.$("#show_active_pods").removeClass("active");
@@ -61,12 +61,11 @@ app.pages.AdminPods = app.views.Base.extend({
     var fragment = document.createDocumentFragment();
     this.$("tbody").empty();
 
-    this.pods.each(function (pod) {
-      if (self.podfilter === '' ||
-        self.podfilter === 'active' && pod.get("status") === "no_errors" ||
-        self.podfilter === 'blocked' && pod.get("blocked") === true ||
-        self.podfilter === 'invalid' && pod.get("status") !== "no_errors") {
-
+    this.pods.each(function(pod) {
+      if (self.podfilter === "" ||
+        self.podfilter === "active" && pod.get("status") === "no_errors" ||
+        self.podfilter === "blocked" && pod.get("blocked") === true ||
+        self.podfilter === "invalid" && pod.get("status") !== "no_errors") {
         self.rows.push(new app.views.PodEntry({
           parent: fragment,
           model: pod
