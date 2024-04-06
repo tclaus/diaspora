@@ -71,6 +71,9 @@ de:
         ssl_enabled: SSL aktiviert
         ssl_disabled: SSL deaktiviert
         added: Hinzugefügt
+        allPodsFilter: Alle
+        blockedPodsFilter: Blockiert
+        invalidPodsFilter: Mit Fehlern
         status: Status
         states:
           unchecked: Nicht überprüft
