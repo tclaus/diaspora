@@ -121,7 +121,7 @@ class Post < ApplicationRecord
   def self.excluding_hidden_shareables(user)
     scope = left_outer_joins(author: [:pod])
             .where("(pods.blocked = false or pods.blocked is null)")
-    if user.has_hidden_shareables_of_type?
+    if user.hidden_shareables_of_type?
       scope = scope.where('posts.id NOT IN (?)', user.hidden_shareables["#{self.base_class}"])
     end
     scope

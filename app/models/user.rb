@@ -11,11 +11,11 @@ class User < ApplicationRecord
   include Querying
   include SocialActions
 
-  scope :logged_in_since, ->(time) { where('last_seen > ?', time) }
-  scope :monthly_actives, ->(time = Time.now) { logged_in_since(time - 1.month) }
-  scope :daily_actives, ->(time = Time.now) { logged_in_since(time - 1.day) }
-  scope :yearly_actives, ->(time = Time.now) { logged_in_since(time - 1.year) }
-  scope :halfyear_actives, ->(time = Time.now) { logged_in_since(time - 6.month) }
+  scope :logged_in_since, ->(time) { where("last_seen > ?", time) }
+  scope :monthly_actives, ->(time=Time.now) { logged_in_since(time - 1.month) }
+  scope :daily_actives, ->(time=Time.now) { logged_in_since(time - 1.day) }
+  scope :yearly_actives, ->(time=Time.now) { logged_in_since(time - 1.year) }
+  scope :halfyear_actives, ->(time=Time.now) { logged_in_since(time - 6.months) }
   scope :active, -> { joins(:person).where(people: {closed_account: false}) }
 
   attr_encrypted :otp_secret, if: false, prefix: "plain_"
@@ -27,17 +27,17 @@ class User < ApplicationRecord
 
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :lockable, :lastseenable, :lock_strategy => :none, :unlock_strategy => :none
+         :lockable, :lastseenable, lock_strategy: :none, unlock_strategy: :none
 
   before_validation :strip_and_downcase_username
-  before_validation :set_current_language, :on => :create
+  before_validation :set_current_language, on: :create
   before_validation :set_default_color_theme, on: :create
 
   validates :username, presence: true, uniqueness: true, format: {with: /\A[A-Za-z0-9_.\-]+\z/},
                        length: {maximum: 32}, exclusion: {in: AppConfig.settings.username_blacklist}
-  validates_inclusion_of :language, :in => AVAILABLE_LANGUAGE_CODES
+  validates :language, inclusion: {in: AVAILABLE_LANGUAGE_CODES}
   validates :color_theme, inclusion: {in: AVAILABLE_COLOR_THEMES}, allow_blank: true
-  validates_format_of :unconfirmed_email, :with  => Devise.email_regexp, :allow_blank => true
+  validates :unconfirmed_email, format: {with: Devise.email_regexp, allow_blank: true}
 
   validate :unconfirmed_email_quasiuniqueness
 
@@ -56,32 +56,32 @@ class User < ApplicationRecord
            :first_name, :last_name, :full_name, :gender, :participations, to: :person
   delegate :id, :guid, to: :person, prefix: true
 
-  has_many :aspects, -> { order('order_id ASC') }
+  has_many :aspects, -> { order("order_id ASC") }
 
   belongs_to :auto_follow_back_aspect, class_name: "Aspect", optional: true
   belongs_to :invited_by, class_name: "User", optional: true
 
   has_many :invited_users, class_name: "User", inverse_of: :invited_by, foreign_key: :invited_by_id
 
-  has_many :aspect_memberships, :through => :aspects
+  has_many :aspect_memberships, through: :aspects
 
   has_many :contacts
-  has_many :contact_people, :through => :contacts, :source => :person
+  has_many :contact_people, through: :contacts, source: :person
 
   has_many :services
 
   has_many :user_preferences
 
   has_many :tag_followings
-  has_many :followed_tags, -> { order('tags.name') }, :through => :tag_followings, :source => :tag
+  has_many :followed_tags, -> { order("tags.name") }, through: :tag_followings, source: :tag
 
   has_many :blocks
-  has_many :ignored_people, :through => :blocks, :source => :person
+  has_many :ignored_people, through: :blocks, source: :person
 
   has_many :conversation_visibilities, through: :person
   has_many :conversations, through: :conversation_visibilities
 
-  has_many :notifications, :foreign_key => :recipient_id
+  has_many :notifications, foreign_key: :recipient_id
 
   has_many :reports
 
@@ -104,15 +104,15 @@ class User < ApplicationRecord
   end
 
   def self.all_sharing_with_person(person)
-    User.joins(:contacts).where(:contacts => {:person_id => person.id})
+    User.joins(:contacts).where(contacts: {person_id: person.id})
   end
 
   def unread_notifications
-    notifications.where(:unread => true)
+    notifications.where(unread: true)
   end
 
   def unread_message_count
-    ConversationVisibility.where(person_id: self.person_id).sum(:unread)
+    ConversationVisibility.where(person_id: person_id).sum(:unread)
   end
 
   def process_invite_acceptence(invite)
@@ -121,7 +121,7 @@ class User < ApplicationRecord
   end
 
   def invitation_code
-    InvitationCode.find_or_create_by(user_id: self.id)
+    InvitationCode.find_or_create_by(user_id: id)
   end
 
   def hidden_shareables
@@ -129,25 +129,25 @@ class User < ApplicationRecord
   end
 
   def add_hidden_shareable(key, share_id, opts={})
-    if self.hidden_shareables.has_key?(key)
-      self.hidden_shareables[key] << share_id
+    if hidden_shareables.has_key?(key)
+      hidden_shareables[key] << share_id
     else
-      self.hidden_shareables[key] = [share_id]
+      hidden_shareables[key] = [share_id]
     end
-    self.save unless opts[:batch]
-    self.hidden_shareables
+    save unless opts[:batch]
+    hidden_shareables
   end
 
   def remove_hidden_shareable(key, share_id)
-    if self.hidden_shareables.has_key?(key)
-      self.hidden_shareables[key].delete(share_id)
-    end
+    return unless hidden_shareables.has_key?(key)
+
+    hidden_shareables[key].delete(share_id)
   end
 
   def is_shareable_hidden?(shareable)
     shareable_type = shareable.class.base_class.name
-    if self.hidden_shareables.has_key?(shareable_type)
-      self.hidden_shareables[shareable_type].include?(shareable.id.to_s)
+    if hidden_shareables.has_key?(shareable_type)
+      hidden_shareables[shareable_type].include?(shareable.id.to_s)
     else
       false
     end
@@ -156,62 +156,60 @@ class User < ApplicationRecord
   def toggle_hidden_shareable(share)
     share_id = share.id.to_s
     key = share.class.base_class.to_s
-    if self.hidden_shareables.has_key?(key) && self.hidden_shareables[key].include?(share_id)
-      self.remove_hidden_shareable(key, share_id)
-      self.save
+    if hidden_shareables.has_key?(key) && hidden_shareables[key].include?(share_id)
+      remove_hidden_shareable(key, share_id)
+      save
       false
     else
-      self.add_hidden_shareable(key, share_id)
-      self.save
+      add_hidden_shareable(key, share_id)
+      save
       true
     end
   end
 
-  def has_hidden_shareables_of_type?(t = Post)
-    share_type = t.base_class.to_s
-    self.hidden_shareables[share_type].present?
+  def hidden_shareables_of_type?(type=Post)
+    share_type = type.base_class.to_s
+    hidden_shareables[share_type].present?
   end
 
   # Copy the method provided by Devise to be able to call it later
   # from a Sidekiq job
-  alias_method :send_reset_password_instructions!, :send_reset_password_instructions
+  alias send_reset_password_instructions! send_reset_password_instructions
 
   def send_reset_password_instructions
-    Workers::ResetPassword.perform_async(self.id)
+    Workers::ResetPassword.perform_async(id)
   end
 
   def update_user_preferences(pref_hash)
-    if self.disable_mail
-      UserPreference::VALID_EMAIL_TYPES.each{|x| self.user_preferences.find_or_create_by(email_type: x)}
+    if disable_mail
+      UserPreference::VALID_EMAIL_TYPES.each {|x| user_preferences.find_or_create_by(email_type: x) }
       self.disable_mail = false
-      self.save
+      save
     end
 
     pref_hash.keys.each do |key|
-      if pref_hash[key] == 'true'
-        self.user_preferences.find_or_create_by(email_type: key)
+      if pref_hash[key] == "true"
+        user_preferences.find_or_create_by(email_type: key)
       else
         block = user_preferences.find_by(email_type: key)
-        if block
-          block.destroy
-        end
+        block.destroy if block
       end
     end
   end
 
   def strip_and_downcase_username
-    if username.present?
-      username.strip!
-      username.downcase!
-    end
+    return unless username.present?
+
+    username.strip!
+    username.downcase!
   end
 
   def disable_getting_started
-    self.update_attribute(:getting_started, false) if self.getting_started?
+    update_attribute(:getting_started, false) if getting_started?
   end
 
   def set_current_language
-    self.language = I18n.locale.to_s if self.language.blank?
+    self.language = I18n.locale.to_s if language.blank?
   end
 
   def set_default_color_theme
@@ -232,6 +230,7 @@ class User < ApplicationRecord
 
   def confirm_email(token)
     return false if token.blank? || token != confirm_email_token
+
     self.email = unconfirmed_email
     save
   end
@@ -250,10 +249,10 @@ class User < ApplicationRecord
   end
 
   def update_post(post, post_hash={})
-    if self.owns? post
-      post.update(post_hash)
-      self.dispatch_post(post)
-    end
+    return unless owns? post
+
+    post.update(post_hash)
+    dispatch_post(post)
   end
 
   def add_to_streams(post, aspects_to_insert)
@@ -263,10 +262,10 @@ class User < ApplicationRecord
   end
 
   def aspects_from_ids(aspect_ids)
-    if aspect_ids == "all" || aspect_ids == :all
-      self.aspects
+    if ["all", :all].include?(aspect_ids)
+      aspects
     else
-      aspects.where(:id => aspect_ids).to_a
+      aspects.where(id: aspect_ids).to_a
     end
   end
 
@@ -289,13 +288,13 @@ class User < ApplicationRecord
   # @param [Post] post
   def liked?(target)
     if target.likes.loaded?
-      if self.like_for(target)
-        return true
+      if like_for(target)
+        true
       else
-        return false
+        false
       end
     else
-      Like.exists?(:author_id => self.person.id, :target_type => target.class.base_class.to_s, :target_id => target.id)
+      Like.exists?(author_id: person.id, target_type: target.class.base_class.to_s, target_id: target.id)
     end
   end
 
@@ -355,14 +354,16 @@ class User < ApplicationRecord
   ######### Mailer #######################
   def mail(job, *args)
     return unless job.present?
-    pref = job.to_s.gsub('Workers::Mail::', '').underscore
-    if(self.disable_mail == false && !self.user_preferences.exists?(:email_type => pref))
-      job.perform_async(*args)
-    end
+
+    pref = job.to_s.gsub("Workers::Mail::", "").underscore
+    return unless disable_mail == false && !user_preferences.exists?(email_type: pref)
+
+    job.perform_async(*args)
   end
 
   def send_confirm_email
     return if unconfirmed_email.blank?
+
     Workers::Mail::ConfirmEmail.perform_async(id)
   end
 
@@ -383,7 +384,7 @@ class User < ApplicationRecord
     end
 
     params.stringify_keys!
-    params.slice!(*(Profile.column_names+['tag_string', 'date']))
+    params.slice!(*(Profile.column_names + %w[tag_string date]))
     if profile.update(params)
       deliver_profile_update
       true
@@ -392,8 +393,8 @@ class User < ApplicationRecord
     end
   end
 
-  def update_profile_with_omniauth( user_info )
-    update_profile( self.profile.from_omniauth_hash( user_info ) )
+  def update_profile_with_omniauth(user_info)
+    update_profile(profile.from_omniauth_hash(user_info))
   end
 
   def deliver_profile_update(opts={})
@@ -429,13 +430,13 @@ class User < ApplicationRecord
     errors.delete :person
     return if errors.size > 0
 
-    self.set_person(Person.new((opts[:person] || {}).except(:id)))
-    self.generate_keys
+    set_person(Person.new((opts[:person] || {}).except(:id)))
+    generate_keys
     self
   end
 
   def set_person(person)
-    person.diaspora_handle = "#{self.username}#{User.diaspora_id_host}"
+    person.diaspora_handle = "#{username}#{User.diaspora_id_host}"
     self.person = person
   end
 
@@ -444,10 +445,10 @@ class User < ApplicationRecord
   end
 
   def seed_aspects
-    self.aspects.create(:name => I18n.t('aspects.seed.family'))
-    self.aspects.create(:name => I18n.t('aspects.seed.friends'))
-    self.aspects.create(:name => I18n.t('aspects.seed.work'))
-    aq = self.aspects.create(:name => I18n.t('aspects.seed.acquaintances'))
+    aspects.create(name: I18n.t("aspects.seed.family"))
+    aspects.create(name: I18n.t("aspects.seed.friends"))
+    aspects.create(name: I18n.t("aspects.seed.work"))
+    aq = aspects.create(name: I18n.t("aspects.seed.acquaintances"))
 
     if AppConfig.settings.autofollow_on_join?
       begin
@@ -463,9 +464,11 @@ class User < ApplicationRecord
 
   def send_welcome_message
     return unless AppConfig.settings.welcome_message.enabled? && AppConfig.admins.account?
+
     sender_username = AppConfig.admins.account.get
     sender = User.find_by(username: sender_username)
     return if sender.nil?
+
     conversation = sender.build_conversation(
       participant_ids: [sender.person.id, person.id],
       subject:         AppConfig.settings.welcome_message.subject.get,
@@ -480,7 +483,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Role.is_admin?(self.person)
+    Role.is_admin?(person)
   end
 
   def moderator?
@@ -500,19 +503,16 @@ class User < ApplicationRecord
   end
 
   def mine?(target)
-    if target.present? && target.respond_to?(:user_id)
-      return self.id == target.user_id
-    end
+    return id == target.user_id if target.present? && target.respond_to?(:user_id)
 
     false
   end
 
-
   # Ensure that the unconfirmed email isn't already someone's email
   def unconfirmed_email_quasiuniqueness
-    if User.exists?(["id != ? AND email = ?", id, unconfirmed_email])
-      errors.add(:unconfirmed_email, I18n.t("errors.messages.taken"))
-    end
+    return unless User.exists?(["id != ? AND email = ?", id, unconfirmed_email])
+
+    errors.add(:unconfirmed_email, I18n.t("errors.messages.taken"))
   end
 
   def guard_unconfirmed_email
@@ -530,6 +530,7 @@ class User < ApplicationRecord
   # Whenever email is set, clear all unconfirmed emails which match
   def remove_invalid_unconfirmed_emails
     return unless saved_change_to_email?
+
     # rubocop:disable Rails/SkipsModelValidations
     User.where(unconfirmed_email: email).update_all(unconfirmed_email: nil, confirm_email_token: nil)
     # rubocop:enable Rails/SkipsModelValidations
@@ -537,13 +538,13 @@ class User < ApplicationRecord
 
   # Generate public/private keys for User and associated Person
   def generate_keys
-    key_size = (Rails.env == "test" ? 512 : 4096)
+    key_size = (Rails.env.test? ? 512 : 4096)
 
     self.serialized_private_key = OpenSSL::PKey::RSA.generate(key_size).to_s if serialized_private_key.blank?
 
-    if self.person && self.person.serialized_public_key.blank?
-      self.person.serialized_public_key = OpenSSL::PKey::RSA.new(self.serialized_private_key).public_key.to_s
-    end
+    return unless person && person.serialized_public_key.blank?
+
+    person.serialized_public_key = OpenSSL::PKey::RSA.new(serialized_private_key).public_key.to_s
   end
 
   def no_person_with_same_username
@@ -566,9 +567,9 @@ class User < ApplicationRecord
     clearable_fields.each do |field|
       self[field] = nil
     end
-    [:getting_started,
-     :show_community_spotlight_in_stream,
-     :post_default_public].each do |field|
+    %i[getting_started
+       show_community_spotlight_in_stream
+       post_default_public].each do |field|
       self[field] = false
     end
     self.remove_export = true
@@ -581,7 +582,7 @@ class User < ApplicationRecord
     random_password = SecureRandom.hex(20)
     self.password = random_password
     self.password_confirmation = random_password
-    self.save(:validate => false)
+    save(validate: false)
   end
 
   def sign_up
@@ -590,18 +591,18 @@ class User < ApplicationRecord
 
   def flag_for_removal(remove_after)
     # flag inactive user for future removal
-    if AppConfig.settings.maintenance.remove_old_users.enable?
-      self.remove_after = remove_after
-      self.save
-    end
+    return unless AppConfig.settings.maintenance.remove_old_users.enable?
+
+    self.remove_after = remove_after
+    save
   end
 
   def after_database_authentication
     # remove any possible remove_after timestamp flag set by maintenance.remove_old_users
-    unless self.remove_after.nil?
-      self.remove_after = nil
-      self.save
-    end
+    return if remove_after.nil?
+
+    self.remove_after = nil
+    save
   end
 
   def remember_me
@@ -611,10 +612,10 @@ class User < ApplicationRecord
   private
 
   def clearable_fields
-    attributes.keys - %w(id username encrypted_password created_at updated_at locked_at
+    attributes.keys - %w[id username encrypted_password created_at updated_at locked_at
                          serialized_private_key getting_started
                          disable_mail show_community_spotlight_in_stream
                          email remove_after export exporting
-                         exported_photos_file exporting_photos)
+                         exported_photos_file exporting_photos]
   end
 end
