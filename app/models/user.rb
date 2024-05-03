@@ -167,8 +167,8 @@ class User < ApplicationRecord
     end
   end
 
-  def has_hidden_shareables_of_type?(t=Post)
-    share_type = t.base_class.to_s
+  def hidden_shareables_of_type?(type=Post)
+    share_type = type.base_class.to_s
     hidden_shareables[share_type].present?
   end
 
