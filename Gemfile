@@ -180,7 +180,7 @@ gem "logging-rails", "0.6.0", require: "logging/rails"
 gem "rubyzip", "2.3.2", require: "zip"
 
 # Detect language of post
-gem "cld3", "~> 3.4", ">= 3.4.2"
+gem 'cld3', '~> 3.7'
 
 # Post translations
 gem "deepl-rb", "~> 2.5"

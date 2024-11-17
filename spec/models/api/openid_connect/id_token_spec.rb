@@ -13,7 +13,7 @@ describe Api::OpenidConnect::IdToken, type: :model do
         DiasporaFederation.callbacks.trigger(:fetch_person_for_webfinger, alice.diaspora_handle).to_json
       }
 
-      it "issuer value must much the one we provided in OpenID discovery routine" do
+      it "issuer value must match the one we provided in OpenID discovery routine" do
         openid_issuer = webfinger[:links].find {|l| l[:rel] == OpenIDConnect::Discovery::Provider::Issuer::REL_VALUE }
         expect(decoded_hash["iss"]).to eq(openid_issuer[:href])
       end
