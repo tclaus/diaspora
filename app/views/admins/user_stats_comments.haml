@@ -1,0 +1,6 @@
+.container
+  .row
+  .col-md-3
+    = render partial: "admins/admin_bar"
+  .col-md-9
+    = render partial: "admins/stats/user_stats_comments", locals: {most_active_users: @most_active_users}

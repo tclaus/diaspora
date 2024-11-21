@@ -4,7 +4,7 @@
       %th{scope: "col"}
         Username
       %th{scope: "col"}
-        Posts count
+        Messages count
   %tbody
     - list.rows.each do |author_id, count|
       - person = Person.find(author_id)
