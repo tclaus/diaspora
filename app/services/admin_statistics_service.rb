@@ -40,11 +40,18 @@ class AdminStatisticsService
 
   # Retrieves a list of most active user
   def most_active_users
-    users = {}
-    users[:week] = most_active_users_since(WEEKDAYS)
-    users[:month] = most_active_users_since(MONTHDAYS)
-    users[:halfyear] = most_active_users_since(HALFYEAR)
-    users
+    Rails.cache.fetch("admin/stats/user_posts_comments", expires_in: 1.hour) do
+      users = {by_posts:    {week: nil, month: nil, halfyear: nil},
+               by_comments: {week: nil, month: nil, halfyear: nil}}
+      users[:by_posts][:week] = most_active_users_by_posts_since(WEEKDAYS)
+      users[:by_posts][:month] = most_active_users_by_posts_since(MONTHDAYS)
+      users[:by_posts][:halfyear] = most_active_users_by_posts_since(HALFYEAR)
+
+      users[:by_comments][:week] = most_active_users_by_comments_since(WEEKDAYS)
+      users[:by_comments][:month] = most_active_users_by_comments_since(MONTHDAYS)
+      users[:by_comments][:halfyear] = most_active_users_by_comments_since(HALFYEAR)
+      users
+    end
   end
 
   def posts_stats_cached
@@ -221,12 +228,11 @@ class AdminStatisticsService
         .count
   end
 
-  def most_active_users_since(last_days)
+  def most_active_users_by_posts_since(last_days)
     min_having = 1
     sql = "SELECT author_id, count(*) count FROM public.posts
     where author_id in (select id from people where owner_id is not null and closed_account = false)
     and created_at > '#{Time.zone.today - last_days}'
-    and provider_display_name is null
     group by author_id
     having count(*) > #{min_having}
     order by count(*) DESC
@@ -234,4 +240,18 @@ class AdminStatisticsService
 
     ActiveRecord::Base.connection.exec_query sql
   end
+
+  def most_active_users_by_comments_since(last_days)
+    min_having = 1
+    sql = "SELECT author_id, count(*) count FROM public.comments
+    where author_id in (select id from people where owner_id is not null and closed_account = false)
+    and created_at > '#{Time.zone.today - last_days}'
+    group by author_id
+    having count(*) > #{min_having}
+    order by count(*) DESC
+    limit 25"
+
+    ActiveRecord::Base.connection.exec_query sql
+  end
+
 end
