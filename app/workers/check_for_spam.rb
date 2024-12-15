@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+#
 require "net/http"
 require "uri"
 require "json"
 
 module Workers
-  class CheckForSpamJob < Base
+  class CheckForSpam < Base
     sidekiq_options queue: :urgent
 
     def perform(record_type, record_guid)
