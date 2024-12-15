@@ -40,6 +40,7 @@ class Post < ApplicationRecord
 
   after_create do
     self.touch(:interacted_at)
+    Workers::CheckForSpamJob.perform_async(self.class.name, self.guid)
   end
 
   before_destroy do

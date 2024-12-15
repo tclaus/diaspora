@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_08_182536) do
+ActiveRecord::Schema.define(version: 2024_12_15_195645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,8 @@ ActiveRecord::Schema.define(version: 2024_04_08_182536) do
     t.integer "likes_count", default: 0, null: false
     t.string "commentable_type", limit: 60, default: "Post", null: false
     t.string "thread_parent_guid"
+    t.boolean "spam"
+    t.datetime "spam_checked_on"
     t.index ["author_id"], name: "index_comments_on_person_id"
     t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
     t.index ["guid"], name: "index_comments_on_guid", unique: true
@@ -410,6 +412,8 @@ ActiveRecord::Schema.define(version: 2024_04_08_182536) do
     t.integer "open_graph_cache_id"
     t.text "tumblr_ids"
     t.string "language_id"
+    t.boolean "spam"
+    t.datetime "spam_checked_on"
     t.index ["author_id", "root_guid"], name: "index_posts_on_author_id_and_root_guid", unique: true
     t.index ["author_id"], name: "index_posts_on_person_id"
     t.index ["created_at", "author_id"], name: "index_posts_on_created_at"

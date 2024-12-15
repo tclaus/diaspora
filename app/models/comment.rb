@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+:bo# frozen_string_literal: true
 
 #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
 #   licensed under the Affero General Public License version 3 or later.  See
@@ -55,6 +55,8 @@ class Comment < ApplicationRecord
     parent.update_comments_counter
     parent.touch(:interacted_at) if parent.respond_to?(:interacted_at)
   end
+
+  after_create_commit -> { Workers::CheckForSpamJob.perform_async(self.class.name, self.guid) }
 
   after_destroy do
     self.parent.update_comments_counter
