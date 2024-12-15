@@ -10,12 +10,12 @@ module Workers
 
     def perform(record_type, record_guid)
       record_class = record_type.constantize
-      message = record_class.find(guid: record_guid)
-      logger.info("Check for spam on: #{message.model_name} with id #{record_guid}")
+      message = record_class.find_by(guid: record_guid)
+      logger.info("Check for spam on #{message.model_name} with id #{record_guid}")
 
       logger.error("Can not find #{record_type} with gui #{record_guid}") if message.nil?
 
-      prompt            = message.content.to_plain_text
+      prompt            = message.text
       uri               = URI.parse("http://127.0.0.1:8000/check")
       http              = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl      = true if uri.scheme == "https"
