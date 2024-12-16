@@ -9,6 +9,17 @@ class LanguageService
     @user = user
   end
 
+
+  # Detects the language of a post and updates the post with the identified language ID.
+  #
+  # This method is designed to identify the language of a given post by analyzing its textual content.
+  # It starts by retrieving the root post if the given post is a reshare. If the root post or its text
+  # content is not available, the method exits without performing any further actions.
+  #
+  #
+  # @param post [Post] the post object for which the language needs to be detected and updated
+  # @return [void] does not return a value, updates the post's language record where relevant
+  # - Updates the post's `language_id` field in the database when a reliable result is found.
   def detect_post_language(post)
     original_post = root_post(post)
     return if original_post.nil?
@@ -18,22 +29,20 @@ class LanguageService
     result = nil
     result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
-    return unless result
-    if result.reliable?
-      post.language_id = result.language.to_s.split("_").first
-    end
+    post.update_columns(language_id: result.language.to_s.split("_").first) if result&.reliable?
   end
 
+  # Detects the language of a comment and updates the post with the identified language ID.
+  # @param comment [Comment]
+  # @return [void] does not return a value, updates the post's language record where relevant
+  #   - Updates the post's `language_id` field in the database when a reliable result is found.
   def detect_comment_language(comment)
 
     return if comment.text.nil?
 
     result = nil
     result = language_for_text(comment.text.to_s) if comment.text.present?
-    return unless result
-    if result.reliable?
-      comment.language_id = result.language.to_s.split("_").first
-    end
+    comment.update_columns(language_id: result.language.to_s.split("_").first) if result&.reliable?
   end
 
   def language_for_public

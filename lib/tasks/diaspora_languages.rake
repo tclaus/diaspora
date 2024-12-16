@@ -7,7 +7,6 @@ namespace :diaspora do
     Post.where(language_id: nil).find_in_batches do |posts|
       posts.each do |post|
         language_service.detect_post_language(post)
-        post.save(touch: false)
       end
     end
   end
@@ -17,7 +16,6 @@ namespace :diaspora do
     Comment.where(language_id: nil).find_in_batches do |comments|
       comments.each do |comment|
         language_service.detect_comment_language(comment)
-        comment.save(touch: false)
       end
     end
   end
