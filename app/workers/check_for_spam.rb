@@ -11,9 +11,15 @@ module Workers
     def perform(record_type, record_guid)
       record_class = record_type.constantize
       message = record_class.find_by(guid: record_guid)
-      logger.info("Check for spam on #{message.model_name} with id #{record_guid}")
+      check_for_spam(message)
+    end
 
-      logger.error("Can not find #{record_type} with gui #{record_guid}") if message.nil?
+    def check_for_spam(message)
+      return if message_is_non_english(message)
+
+      logger.info("Check for spam on #{message.model_name} with id #{message.guid}")
+
+      logger.error("Can not find #{message.model_name} with gui #{record_guid}") if message.nil?
 
       prompt            = message.text
       uri               = URI.parse("http://127.0.0.1:8000/check")
@@ -27,17 +33,26 @@ module Workers
       result   = JSON.parse(response.body)
 
       if defined?(result["spam"])
-         logger.warn("Spam received on #{message.model_name} with id #{record_guid}") if result["spam"]
+         logger.warn("Spam received on #{message.model_name} with id #{message.guid}") if result["spam"]
 
         message.update(spam_checked_on: Time.now, spam: result["spam"])
         # TODO: Remove? Mail?
         # comment.destroy if result["spam"]
       else
-        # retry
+        logger.warn("Could not generate spam detection on #{message.model_name} with id #{message.guid}")
       end
 
     rescue StandardError => e
-      # retry
+      logger.error("Error with #{e.inspect}")
     end
+
+    private
+
+    # Only posts with english texts should be tested for spams for now
+    # All other languages do not work
+    def message_is_non_english(message)
+      message.language_id != "en"
+    end
+
   end
 end

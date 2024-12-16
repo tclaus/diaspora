@@ -3,7 +3,7 @@
 require "cld3"
 
 class LanguageService
-  CLD = CLD3::NNetLanguageIdentifier.new(50, 780)
+  CLD = CLD3::NNetLanguageIdentifier.new(10, 780)
 
   def initialize(user=nil)
     @user = user
@@ -21,6 +21,18 @@ class LanguageService
     return unless result
     if result.reliable?
       post.language_id = result.language.to_s.split("_").first
+    end
+  end
+
+  def detect_comment_language(comment)
+
+    return if comment.text.nil?
+
+    result = nil
+    result = language_for_text(comment.text.to_s) if comment.text.present?
+    return unless result
+    if result.reliable?
+      comment.language_id = result.language.to_s.split("_").first
     end
   end
 
