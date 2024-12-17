@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :diaspora do
   desc "Checks and qualifies posts for spam"
   task detect_spam_on_posts: :environment do

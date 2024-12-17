@@ -5,10 +5,9 @@ require "cld3"
 class LanguageService
   CLD = CLD3::NNetLanguageIdentifier.new(10, 780)
 
-  def initialize(user=nil)
+  def initialize(user = nil)
     @user = user
   end
-
 
   # Detects the language of a post and updates the post with the identified language ID.
   #
@@ -38,14 +37,12 @@ class LanguageService
   # @return [void] does not return a value, updates the post's language record where relevant
   #   - Updates the post's `language_id` field in the database when a reliable result is found.
   def detect_comment_language(comment)
-
     return if comment.text.nil?
 
     result = nil
     result = language_for_text(comment.text.to_s) if comment.text.present?
     update_record(comment, result)
   end
-
 
   def language_for_public
     return default_language if @user.nil?
@@ -64,7 +61,7 @@ class LanguageService
     return unless result&.reliable?
 
     language_id = result.language.to_s.split("_").first
-    message.update_columns(language_id: language_id) if message.persisted?
+    message.update_columns(language_id: language_id) if message.persisted? # rubocop:disable Rails/SkipsModelValidations
     message.language_id = language_id unless message.persisted?
   end
 
@@ -73,7 +70,7 @@ class LanguageService
   end
 
   def default_language
-    default_language = I18n.locale.to_s
+    default_language    = I18n.locale.to_s
     exclusive_languages = %w[en de fr es ru] # exclusive languages
     return [default_language] if exclusive_languages.include?(default_language)
 
@@ -97,7 +94,7 @@ class LanguageService
                     .first
     return if reference.nil? || reference.first.nil?
 
-    post_language = PostLanguage.new
+    post_language          = PostLanguage.new
     post_language.language = reference.first
     post_language.reliable = true
     post_language

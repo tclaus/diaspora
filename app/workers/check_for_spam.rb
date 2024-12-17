@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 require "net/http"
 require "uri"
 require "json"
@@ -13,7 +13,6 @@ module Workers
       message      = record_class.find_by(guid: record_guid)
       check_for_spam(message)
     end
-
 
     # Checks the given message for spam and updates its spam status.
     # The method sends the content of the message to an external spam detection service.
@@ -29,30 +28,36 @@ module Workers
     # @return [void]
     def check_for_spam(message)
       return if message_is_non_english(message)
-      return if hasMinSize?(message) # Maybe set this as a configurable value
+      return if min_size?(message) # Maybe set this as a configurable value
 
-      logger.info("Check for spam on #{message.model_name} with id #{message.guid}")
-      logger.error("Can not find #{message.model_name} with gui #{record_guid}") if message.nil?
-
+      log_info_texts(message)
       result = query_spam_detector(message)
 
-      if defined?(result["spam"])
-        logger.warn("Spam received on #{message.model_name} with id #{message.guid}") if result["spam"]
-
-        message.update_columns(spam_checked_on: Time.now, spam: result["spam"])
-        # TODO: Remove? Mail? - Sind schon etwas unzuverläsig.. Meldung machen?
-        # comment.destroy if result["spam"]
-      else
-        logger.warn("Could not generate spam detection on #{message.model_name} with id #{message.guid}")
-      end
-
+      handle_result(message, result)
     rescue StandardError => e
       logger.error("Error with #{e.inspect}")
     end
 
     private
 
-    def hasMinSize?(message)
+    def handle_result(message, result)
+      if defined?(result["spam"])
+        logger.warn("Spam received on #{message.model_name} with id #{message.guid}") if result["spam"]
+
+        message.update_columns(spam_checked_on: Time.zone.now, spam: result["spam"]) # rubocop:disable Rails/SkipsModelValidations
+        # TODO: Remove? Mail? - Sind schon etwas unzuverläsig.. Meldung machen?
+        # comment.destroy if result["spam"]
+      else
+        logger.warn("Could not generate spam detection on #{message.model_name} with id #{message.guid}")
+      end
+    end
+
+    def log_info_texts(message)
+      logger.info("Check for spam on #{message.model_name} with id #{message.guid}")
+      logger.error("Can not find #{message.model_name} with gui #{record_guid}") if message.nil?
+    end
+
+    def min_size?(message)
       message.text.to_s.length > 25
     end
 
@@ -72,9 +77,7 @@ module Workers
       request           = Net::HTTP::Post.new(uri.request_uri)
       request.set_form_data({prompt: prompt})
       response = http.request(request)
-      result   = JSON.parse(response.body)
+      JSON.parse(response.body)
     end
-
-
   end
 end
