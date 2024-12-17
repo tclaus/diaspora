@@ -56,6 +56,8 @@ class Comment < ApplicationRecord
     parent.touch(:interacted_at) if parent.respond_to?(:interacted_at)
   end
 
+  after_create_commit -> { Workers::CheckForSpam.perform_async(self.class.name, guid) }
+
   after_destroy do
     self.parent.update_comments_counter
     participation = author.participations.find_by(target_id: post.id)

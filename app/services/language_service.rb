@@ -3,12 +3,22 @@
 require "cld3"
 
 class LanguageService
-  CLD = CLD3::NNetLanguageIdentifier.new(50, 780)
+  CLD = CLD3::NNetLanguageIdentifier.new(10, 780)
 
-  def initialize(user=nil)
+  def initialize(user = nil)
     @user = user
   end
 
+  # Detects the language of a post and updates the post with the identified language ID.
+  #
+  # This method is designed to identify the language of a given post by analyzing its textual content.
+  # It starts by retrieving the root post if the given post is a reshare. If the root post or its text
+  # content is not available, the method exits without performing any further actions.
+  #
+  #
+  # @param post [Post] the post object for which the language needs to be detected and updated
+  # @return [void] does not return a value, updates the post's language record where relevant
+  # - Updates the post's `language_id` field in the database when a reliable result is found.
   def detect_post_language(post)
     original_post = root_post(post)
     return if original_post.nil?
@@ -18,10 +28,20 @@ class LanguageService
     result = nil
     result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
-    return unless result
-    if result.reliable?
-      post.language_id = result.language.to_s.split("_").first
-    end
+
+    update_record(post, result)
+  end
+
+  # Detects the language of a comment and updates the post with the identified language ID.
+  # @param comment [Comment]
+  # @return [void] does not return a value, updates the post's language record where relevant
+  #   - Updates the post's `language_id` field in the database when a reliable result is found.
+  def detect_comment_language(comment)
+    return if comment.text.nil?
+
+    result = nil
+    result = language_for_text(comment.text.to_s) if comment.text.present?
+    update_record(comment, result)
   end
 
   def language_for_public
@@ -37,12 +57,20 @@ class LanguageService
 
   private
 
+  def update_record(message, result)
+    return unless result&.reliable?
+
+    language_id = result.language.to_s.split("_").first
+    message.update_columns(language_id: language_id) if message.persisted? # rubocop:disable Rails/SkipsModelValidations
+    message.language_id = language_id unless message.persisted?
+  end
+
   def user_defined_language
     @user.stream_languages.pluck(:language_id)
   end
 
   def default_language
-    default_language = I18n.locale.to_s
+    default_language    = I18n.locale.to_s
     exclusive_languages = %w[en de fr es ru] # exclusive languages
     return [default_language] if exclusive_languages.include?(default_language)
 
@@ -57,7 +85,7 @@ class LanguageService
     post
   end
 
-  # If a post can not be get a used language directly, it look to the other posts from same user.
+  # If for a post can not detect a used language directly, it looks to the other posts from same user.
   def language_by_heuristic(post)
     reference = Post.where("author_id = posts.author_id and language_id is not null")
                     .group(:language_id)
@@ -66,7 +94,7 @@ class LanguageService
                     .first
     return if reference.nil? || reference.first.nil?
 
-    post_language = PostLanguage.new
+    post_language          = PostLanguage.new
     post_language.language = reference.first
     post_language.reliable = true
     post_language

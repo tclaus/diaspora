@@ -41,6 +41,7 @@ class Post < ApplicationRecord
   after_create do
     self.touch(:interacted_at)
   end
+  after_create_commit -> { Workers::CheckForSpam.perform_async(self.class.name, guid) }
 
   before_destroy do
     reshares.update_all(root_guid: nil) # rubocop:disable Rails/SkipsModelValidations
