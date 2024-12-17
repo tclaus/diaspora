@@ -53,7 +53,7 @@ module Workers
     private
 
     def hasMinSize?(message)
-      message.text.to_s.length < 25
+      message.text.to_s.length > 25
     end
 
     # Only posts with english texts should be tested for spams for now
