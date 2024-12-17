@@ -29,7 +29,8 @@ class LanguageService
     result = nil
     result = language_for_text(original_post.text.to_s) if original_post.text.present?
     result = language_by_heuristic(post) if result.nil?
-    post.update_columns(language_id: result.language.to_s.split("_").first) if result&.reliable?
+
+    update_record(post, result)
   end
 
   # Detects the language of a comment and updates the post with the identified language ID.
@@ -42,8 +43,9 @@ class LanguageService
 
     result = nil
     result = language_for_text(comment.text.to_s) if comment.text.present?
-    comment.update_columns(language_id: result.language.to_s.split("_").first) if result&.reliable?
+    update_record(comment, result)
   end
+
 
   def language_for_public
     return default_language if @user.nil?
@@ -57,6 +59,14 @@ class LanguageService
   end
 
   private
+
+  def update_record(message, result)
+    return unless result&.reliable?
+
+    language_id = result.language.to_s.split("_").first
+    message.update_columns(language_id: language_id) if message.persisted?
+    message.language_id = language_id unless message.persisted?
+  end
 
   def user_defined_language
     @user.stream_languages.pluck(:language_id)
@@ -78,7 +88,7 @@ class LanguageService
     post
   end
 
-  # If a post can not be get a used language directly, it look to the other posts from same user.
+  # If for a post can not detect a used language directly, it looks to the other posts from same user.
   def language_by_heuristic(post)
     reference = Post.where("author_id = posts.author_id and language_id is not null")
                     .group(:language_id)
