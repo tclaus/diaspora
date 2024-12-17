@@ -28,7 +28,7 @@ module Workers
     # @return [void]
     def check_for_spam(message)
       return if message_is_non_english(message)
-      return if min_size?(message) # Maybe set this as a configurable value
+      return unless min_size?(message) # Maybe set this as a configurable value
 
       log_info_texts(message)
       result = query_spam_detector(message)
@@ -58,7 +58,7 @@ module Workers
     end
 
     def min_size?(message)
-      message.text.to_s.length > 25
+      message.text.to_s.length > 30
     end
 
     # Only posts with english texts should be tested for spams for now
