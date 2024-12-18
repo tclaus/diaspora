@@ -8,7 +8,7 @@ class Person < ApplicationRecord
   include Diaspora::Fields::Guid
   include Diaspora::Federation
 
-  require 'spam/spam_rating'
+  require "spam/spam_rating"
 
   # NOTE API V1 to be extracted
   acts_as_api
@@ -30,6 +30,9 @@ class Person < ApplicationRecord
   delegate :last_name, :full_name, :image_url, :tag_string, :bio, :location,
            :gender, :birthday, :formatted_birthday, :tags, :searchable,
            :public_details?, to: :profile
+
+  delegate :spam_evaluation, :spam_score, :spam_status, :spam_label_class, to: :spam_rating
+
   accepts_nested_attributes_for :profile
 
   before_validation :downcase_diaspora_handle
@@ -460,12 +463,8 @@ class Person < ApplicationRecord
     !pod.nil? && pod.blocked
   end
 
-  def spam_score
-    spam_rating.spam_score
-  end
-
-  def spam_evaluation
-    spam_rating.spam_evaluation
+  def update_spam_score
+    update_columns(spam_score: spam_score) # rubocop:disable Rails/SkipsModelValidations
   end
 
   private

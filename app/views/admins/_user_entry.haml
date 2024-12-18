@@ -33,7 +33,8 @@
           %dt= t("username")
           %dd= person.username
           %dt= t("spam_evaluation")
-          %dd= "#{person.spam_evaluation}, #{person.spam_score}"
+          %dd
+            %span{class: "label #{person.spam_label_class}"}= "#{person.spam_evaluation}, #{person.spam_score.round(2)}"
           %dt= t("post_count")
           %dd= person.post_count
           %dt= t("comment_count")
