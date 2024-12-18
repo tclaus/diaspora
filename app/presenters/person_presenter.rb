@@ -126,7 +126,6 @@ class PersonPresenter < BasePresenter
     else
       attrs.merge!(profile: ProfilePresenter.new(profile).public_hash)
     end
-
     attrs
   end
 

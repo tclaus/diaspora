@@ -84,6 +84,7 @@ module Diaspora
         where("#{table_name}.#{order} < ?", max_time).order("#{table_name}.#{order} DESC")
       end
 
+      # @param user [User]
       def owned_by_user(user)
         user.person.public_send(table_name)
       end
