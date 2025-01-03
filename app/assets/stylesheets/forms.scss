@@ -32,36 +32,6 @@ textarea {
 }
 // scss-lint:enable QualifyingElement
 
-.upload-btn-wrapper {
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-
-  input[type=file] {
-    font-size: 100px;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-  }
-}
-// scss-lint:enable QualifyingElement
-
-.upload-btn-wrapper {
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-
-  input[type=file] {
-    font-size: 100px;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-  }
-}
-// scss-lint:enable QualifyingElement
-
 textarea {
   resize: vertical;
 }

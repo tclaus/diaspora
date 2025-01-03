@@ -159,7 +159,7 @@ class UsersController < ApplicationController
     elsif user_data[:color_theme]
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
     elsif user_data[:export] || user_data[:exported_photos_file]
-      upload_export_files(user_data)
+      process_user_import_files(user_data)
     elsif user_data[:stream_languages]
       change_stream_languages(user_data[:stream_languages])
     else
@@ -225,17 +225,24 @@ class UsersController < ApplicationController
     end
   end
 
-  def upload_export_files(user_data)
+  def process_user_import_files(user_data)
     logger.info "Start importing account"
+    import_files    = copy_import_files(user_data)
+    import_is_valid = import_parameter?(import_files)
 
-    import_parameters = copy_import_files(user_data)
-
-    if import_parameter?(import_parameters)
+    if import_is_valid
       flash.now[:notice] = t("users.import.import_has_been_scheduled")
+      Workers::ImportUser.perform_async(@user.id, import_files)
     else
       flash.now[:error] = t("users.import.import_has_no_files_received")
     end
-    Workers::ImportUser.perform_async(@user.id, import_parameters)
+  end
+
+  def import_parameter?(import_files)
+    profile_exists = import_files[:profile_path] && File.exist?(import_files[:profile_path])
+    photos_exist = import_files[:photos_path] && File.exist?(import_files[:photos_path])
+
+    profile_exists || photos_exist
   end
 
   def copy_import_files(user_data)
@@ -245,20 +252,19 @@ class UsersController < ApplicationController
     }
   end
 
+  # @param tmp_file [ActionDispatch]
   def copy_import_file(tmp_file)
     return if tmp_file.blank?
 
-    file_path_to_save_to = Rails.public_path.join("uploads", "users",
-                                           "#{current_user.username}_#{tmp_file.original_filename}")
-    FileUtils.cp tmp_file.path, file_path_to_save_to
-    file_path_to_save_to
-  end
-
-  def change_stream_languages(stream_languages)
-    language_ids = stream_languages.delete_if {|id| id == "" }
-    languages = language_ids.map {|id| {user_id: @user.id, language_id: id} }
-    StreamLanguage.where(user_id: @user.id).destroy_all
-    @user.stream_languages.create(languages)
+    begin
+      file_path_to_save_to = Rails.root.join("private", "uploads", "users",
+                                             "#{current_user.username}_#{tmp_file.original_filename}")
+      FileUtils.cp tmp_file.path, file_path_to_save_to
+      file_path_to_save_to
+    rescue StandardError => e
+      logger.error "Failed to copy file: #{e.message}"
+      nil
+    end
   end
 
   def change_settings(user_data, successful="users.update.settings_updated", error="users.update.settings_not_updated")

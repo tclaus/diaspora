@@ -9,9 +9,13 @@ namespace :accounts do
            .map {|name| [name, args[name]] }.to_h
     process_arguments(args)
     start_time = Time.now.getlocal
-    if args[:new_user_name].present?
-      import_profile = ImportProfileService.new
-      import_profile.import_by_files(args[:archive_path], args[:photos_path], args[:new_user_name])
+    if args[:new_user_name].present? && (args[:archive_path].present? || args[:photos_path].present?)
+      user = User.find_by(username: args[:new_username])
+      if user.nil?
+        puts("Username #{args[:new_username]} should exist before uploading photos.")
+      else
+        import_user(user, start_time, args)
+      end
     else
       puts "Must set a user name and a archive file path or photos file path"
     end

@@ -1,7 +1,7 @@
-.modal.fade{id: "importAccountModal",
+.modal.fade{id:       "importAccountModal",
             tabindex: "-1",
-            role: "dialog",
-            aria: {labelledby: "importAccountModalLabel", hidden: "true"}}
+            role:     "dialog",
+            aria:     {labelledby: "importAccountModalLabel", hidden: "true"}}
   .modal-dialog
     .modal-content
       .modal-header
@@ -32,7 +32,7 @@
             If the pod of the account you are importing is offline, your contacts and posts will still be imported,
             but your contacts will receive a notification as if you started sharing with them.
           = form_for current_user,
-                     url: edit_user_path,
+                     url:  edit_user_path,
                      html: {method: :put, multipart: true, class: "form-horizontal"} do |f|
             .row
               .col-md-12
@@ -40,7 +40,7 @@
                   .btn.btn-primary
                     = t("users.import_modal.select_profile_archive")
                   = f.file_field :export, accept: "application/json, application/zip, application/gzip",
-                    id: "profile-file-btn"
+                                          id:     "profile-file-btn"
                   %span#profile-file-chosen
                     = t("users.import_modal.no_profile_file_set")
             .row
@@ -49,7 +49,7 @@
                   .btn.btn-primary
                     = t("users.import_modal.select_photo_archive")
                   = f.file_field :exported_photos_file, accept: "application/zip",
-                    id: "photos-file-btn"
+                                                        id:     "photos-file-btn"
                   %span#photos-file-chosen
                     = t("users.import_modal.no_photos_file_set")
             %h4
@@ -61,8 +61,8 @@
                 .btn.btn-default{data: {dismiss: "modal"}}
                   = t("users.import_modal.cancel")
                 = f.submit t("users.import_modal.start_import"),
-                class: "btn btn-primary.pull-right",
-                id: "upload_profile_files",
-                disabled: true
+                           class:    "btn btn-primary.pull-right",
+                           id:       "upload_profile_files",
+                           disabled: true
 
 = javascript_include_tag "archive-uploader"
