@@ -28,9 +28,6 @@
           %p
             = t("users.import_modal.old_pod_offline")
 
-          %p
-            If the pod of the account you are importing is offline, your contacts and posts will still be imported,
-            but your contacts will receive a notification as if you started sharing with them.
           = form_for current_user,
                      url:  edit_user_path,
                      html: {method: :put, multipart: true, class: "form-horizontal"} do |f|
@@ -58,7 +55,7 @@
               = t("users.import_modal.original_account_will_be_deleted")
             %p
               .clearfix
-                .btn.btn-default{data: {dismiss: "modal"}}
+                .btn.btn-default{data: {dismiss: "modal"}, id: "cancel-import"}
                   = t("users.import_modal.cancel")
                 = f.submit t("users.import_modal.start_import"),
                            class:    "btn btn-primary.pull-right",
