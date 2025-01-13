@@ -1,0 +1,12 @@
+= render partial: "admins/stats/stats_bar"
+
+%h2
+  User suspected for spam (en language only)
+.row
+  .col
+    - if highest_spam_suspecs.empty?
+      = "No suspicious users found."
+
+    - else
+      %h3
+      = render partial: "admins/stats/person_list", locals: {highest_spam_suspecs: highest_spam_suspecs}

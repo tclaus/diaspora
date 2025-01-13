@@ -1,0 +1,22 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th{scope: "col"}
+        Diaspora_handle
+      %th{scope: "col"}
+        Spam-Score
+      %th{scope: "col"}
+        Posts
+      %th{scope: "col"}
+        Comments
+  %tbody
+    - highest_spam_suspecs.each do |suspect|
+      %tr
+        %td
+          = suspect.diaspora_handle
+        %td
+          = suspect.spam_score.round(3)
+        %td
+          = suspect.posts.count
+        %td
+          = suspect.comments.count

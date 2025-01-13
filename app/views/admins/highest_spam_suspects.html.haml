@@ -1,0 +1,7 @@
+.container
+  .row
+  .col-md-3
+    = render partial: "admins/admin_bar"
+  .col-md-9
+    = render partial: "admins/stats/highest_spam_suspects",
+             locals:  {highest_spam_suspecs: @highest_spam_suspecs}

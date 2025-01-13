@@ -113,10 +113,6 @@ class UsersController < ApplicationController
     redirect_to edit_user_path
   end
 
-  def import_parameter?(import_parameters)
-    import_parameters[:profile_path] || import_parameters[:photos_path]
-  end
-
   private
 
   def user_params
