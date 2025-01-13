@@ -15,3 +15,5 @@
       = link_to "Posts by user", user_stats_posts_path
     %button.btn.btn-default{class: current_page?(user_stats_comments_path) && "active"}
       = link_to "Comments by user", user_stats_comments_path
+    %button.btn.btn-default{class: current_page?(top_10_highest_spammers_path) && "active"}
+      = link_to "Spam Suspects", top_10_highest_spammers_path

@@ -8,6 +8,8 @@ class Person < ApplicationRecord
   include Diaspora::Fields::Guid
   include Diaspora::Federation
 
+  require "spam/spam_rating"
+
   # NOTE API V1 to be extracted
   acts_as_api
   api_accessible :backbone do |t|
@@ -28,6 +30,9 @@ class Person < ApplicationRecord
   delegate :last_name, :full_name, :image_url, :tag_string, :bio, :location,
            :gender, :birthday, :formatted_birthday, :tags, :searchable,
            :public_details?, to: :profile
+
+  delegate :spam_evaluation, :spam_score, :spam_status, :spam_label_class, to: :spam_rating
+
   accepts_nested_attributes_for :profile
 
   before_validation :downcase_diaspora_handle
@@ -185,7 +190,7 @@ class Person < ApplicationRecord
         comments.id IS NOT NULL AS is_commenter,
         likes.id IS NOT NULL AS is_liker,
         contacts.id IS NOT NULL AS is_contact
-        SQL
+      SQL
              )
       .order(Arel.sql(<<-SQL
         is_author DESC,
@@ -194,7 +199,7 @@ class Person < ApplicationRecord
         is_contact DESC,
         profiles.full_name,
         people.diaspora_handle
-        SQL
+      SQL
                      ))
   }
 
@@ -458,7 +463,15 @@ class Person < ApplicationRecord
     !pod.nil? && pod.blocked
   end
 
+  def update_spam_score
+    update_columns(spam_score: spam_score) # rubocop:disable Rails/SkipsModelValidations
+  end
+
   private
+
+  def spam_rating
+    @spam_rating ||= Spam::SpamRating.new(self)
+  end
 
   def fix_profile
     logger.info "fix profile for account: #{diaspora_handle}"

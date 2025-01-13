@@ -45,11 +45,17 @@ module Workers
         logger.warn("Spam received on #{message.model_name} with id #{message.guid}") if result["spam"]
 
         message.update_columns(spam_checked_on: Time.zone.now, spam: result["spam"]) # rubocop:disable Rails/SkipsModelValidations
-        # TODO: Remove? Mail? - Sind schon etwas unzuverläsig.. Meldung machen?
-        # comment.destroy if result["spam"]
+        update_author_spam_score(message)
       else
         logger.warn("Could not generate spam detection on #{message.model_name} with id #{message.guid}")
       end
+    end
+
+    def update_author_spam_score(message)
+      return if message.spam.nil?
+
+      author = message.author
+      author.update_spam_score
     end
 
     def log_info_texts(message)

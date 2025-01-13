@@ -1539,3 +1539,4 @@ en:
     authkey_not_provided: "Translation authentication key not provided"
     translation:
       error: "Error while translating"
+  spam_evaluation: "Spam evaluation"
