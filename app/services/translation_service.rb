@@ -15,8 +15,8 @@ class TranslationService
   def translate_message(message)
     translation = translate_text(message)
     {
-            translatedText:         translation[:text],
-            detectedSourceLanguage: translation[:detected_source_language]
+      translatedText:         translation[:text],
+      detectedSourceLanguage: translation[:detected_source_language]
     }
   end
 
@@ -32,8 +32,8 @@ class TranslationService
   def enabled_for_locale?
     local_language = I18n.locale.to_s.split("_").first.downcase
     begin
-      supported_languages.any? { |supported_language| supported_language.code.downcase.eql?(local_language) }
-    rescue
+      supported_languages.any? {|supported_language| supported_language.code.downcase.eql?(local_language) }
+    rescue StandardError
       false
     end
   end
@@ -45,8 +45,8 @@ class TranslationService
     unless translated_text.nil?
       increment_hits(translated_text)
       return {
-              text:                     translated_text.translated_text,
-              detected_source_language: translated_text.original_language_id
+        text:                     translated_text.translated_text,
+        detected_source_language: translated_text.original_language_id
       }
     end
 
@@ -66,8 +66,8 @@ class TranslationService
     translated_text = DeepL.translate message.text, nil, target_language
     store_translation(translated_text, message, target_language)
     {
-            text:                     translated_text.text,
-            detected_source_language: translated_text.detected_source_language
+      text:                     translated_text.text,
+      detected_source_language: translated_text.detected_source_language
     }
   end
 
