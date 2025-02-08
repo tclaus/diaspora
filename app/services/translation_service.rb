@@ -32,7 +32,7 @@ class TranslationService
   def enabled_for_locale?
     local_language = I18n.locale.to_s.split("_").first.downcase
     begin
-      supported_languages.any? {|supported_language| supported_language.code.downcase.eql?(local_language) }
+      supported_languages.any? {|supported_language|supported_language.code.downcase.eql?(local_language) }
     rescue StandardError
       false
     end
