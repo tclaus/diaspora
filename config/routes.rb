@@ -146,7 +146,7 @@ Rails.application.routes.draw do
     get :tag_stats, as: "tag_stats"
     get :user_stats_posts, as: "user_stats_posts"
     get :user_stats_comments, as: "user_stats_comments"
-    get :top_10_highest_spam_suspects, as: "top_10_highest_spammers"
+    get :highest_spam_suspects, as: "highest_spammers"
     get :dashboard, as: "admin_dashboard"
     get "add_invites/:invite_code_id" => "admins#add_invites", :as => "add_invites"
   end

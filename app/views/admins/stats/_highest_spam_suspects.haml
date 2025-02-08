@@ -4,9 +4,9 @@
   User suspected for spam (en language only)
 .row
   .col
-    - if top_10_highest_spam_suspecs.empty?
+    - if highest_spam_suspecs.empty?
       = "No suspicious users found."
 
     - else
       %h3
-      = render partial: "admins/stats/person_list", locals: {top_10_highest_spam_suspecs: top_10_highest_spam_suspecs}
+      = render partial: "admins/stats/person_list", locals: {highest_spam_suspecs: highest_spam_suspecs}
