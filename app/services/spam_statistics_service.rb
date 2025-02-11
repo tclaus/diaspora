@@ -2,7 +2,6 @@
 
 class SpamStatisticsService
   def self.highest_spam_score_people
-
     Person.left_joins(:posts, :comments) # Use left_joins to calculate counts properly
           .where(spam_score: 0.6..)
           .where.not(owner_id: nil)
