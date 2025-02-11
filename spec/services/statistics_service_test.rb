@@ -9,7 +9,7 @@ class StatisticsServiceTest < ActiveSupport::TestCase
       Person.create(spam_score: i * 0.1) # Spam scores: 0.1, 0.2, ..., 1.5
     end
 
-    result = SpamStatisticsService.top_10_highest_spam_score_people
+    result = SpamStatisticsService.highest_spam_score_people
 
     # Assert: Check if the result contains only 10 records
     assert_equal 10, result.count
@@ -23,7 +23,7 @@ class StatisticsServiceTest < ActiveSupport::TestCase
     Person.delete_all
     Person.create(spam_score: 0.4)
 
-    result = SpamStatisticsService.top_10_highest_spam_score_people
+    result = SpamStatisticsService.highest_spam_score_people
 
     # Assert: Check if the result is an ActiveRecord::Relation
     assert_instance_of ActiveRecord::Relation, result

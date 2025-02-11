@@ -70,8 +70,8 @@ class AdminsController < Admin::AdminController
     @most_active_users = statistics_service.most_active_users
   end
 
-  def top_10_highest_spam_suspects
-    @top_10_highest_spam_suspecs = SpamStatisticsService.top_10_highest_spam_score_people
+  def highest_spam_suspects
+    @highest_spam_suspecs = SpamStatisticsService.highest_spam_score_people
   end
 
   private

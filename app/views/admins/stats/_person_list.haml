@@ -10,7 +10,7 @@
       %th{scope: "col"}
         Comments
   %tbody
-    - top_10_highest_spam_suspecs.each do |suspect|
+    - highest_spam_suspecs.each do |suspect|
       %tr
         %td
           = suspect.diaspora_handle
