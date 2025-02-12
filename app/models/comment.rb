@@ -45,6 +45,7 @@ class Comment < ApplicationRecord
 
   before_save do
     self.text.strip! unless self.text.nil?
+    update_text_language
   end
 
   after_save do
@@ -62,6 +63,18 @@ class Comment < ApplicationRecord
     self.parent.update_comments_counter
     participation = author.participations.find_by(target_id: post.id)
     participation.unparticipate! if participation.present?
+  end
+
+  def update_text_language
+    investigate_language if text_changed?
+  end
+
+  def investigate_language
+    language_service.detect_comment_language(self)
+  end
+
+  def language_service
+    @@language_service ||= LanguageService.new
   end
 
   def text= text
