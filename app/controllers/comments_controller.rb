@@ -37,6 +37,9 @@ class CommentsController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       render plain: I18n.t("comments.create.error"), status: :not_found
       return
+    rescue ActiveRecord::RecordInvalid => e
+      render plain: e.message, status: :bad_request
+      return
     end
 
     if comment
