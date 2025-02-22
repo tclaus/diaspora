@@ -103,6 +103,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     I18n.locale = :en
+    stub_request(:post, "http://127.0.0.1:8000/check")
     stub_request(:post, "https://pubsubhubbub.appspot.com/")
     stub_request(
       :get,
