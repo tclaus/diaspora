@@ -6,6 +6,7 @@
 
 class RegistrationsController < Devise::RegistrationsController
   before_action :check_registrations_open_or_valid_invite!, except: :registrations_closed
+  invisible_captcha only: %i[create update], honeypot: :subtitle
 
   layout -> { request.format == :mobile ? "application" : "with_header_with_footer" }
 
