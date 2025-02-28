@@ -28,6 +28,7 @@ class User < ApplicationRecord
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :lastseenable, lock_strategy: :none, unlock_strategy: :none
+  devise :confirmable
 
   before_validation :strip_and_downcase_username
   before_validation :set_current_language, on: :create

@@ -102,8 +102,10 @@ class Comment < ApplicationRecord
 
   def min_time_delay
     return unless author.local?
+    last_comment = last_created_comment
+    return unless last_comment
 
-    return if last_created_comment.created_at < 1.minute.ago
+    return if last_comment.created_at < 1.minute.ago
 
     logger.info "Comment created too quickly"
     errors.add(:base, "Comments can only be created once per minute")
