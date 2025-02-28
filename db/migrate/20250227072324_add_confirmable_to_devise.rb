@@ -1,5 +1,7 @@
 # frozen_string_literal: true
+
 class AddConfirmableToDevise < ActiveRecord::Migration[6.1]
+  # rubocop:disable Rails/*
   def change
     add_column :users, :confirmation_token, :string
     add_column :users, :confirmed_at, :datetime
@@ -8,4 +10,5 @@ class AddConfirmableToDevise < ActiveRecord::Migration[6.1]
 
     User.update_all(confirmed_at: Time.current)
   end
+  # rubocop:enable Rails/*
 end

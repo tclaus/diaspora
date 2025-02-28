@@ -52,7 +52,7 @@ class RegistrationsController < Devise::RegistrationsController
     params.require(:user).permit(
       :username, :email, :getting_started, :password, :password_confirmation, :language, :disable_mail,
       :show_community_spotlight_in_stream, :auto_follow_back, :auto_follow_back_aspect_id,
-      :remember_me, :subtitle
+      :remember_me
     )
   end
 end
