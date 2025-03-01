@@ -614,7 +614,7 @@ class User < ApplicationRecord
   end
 
   def account_migration_pending?
-    AccountMigration..exists?(new_person_id: id, completed_at: nil)
+    AccountMigration.exists?(new_person_id: id, completed_at: nil)
   end
 
   private
