@@ -38,6 +38,9 @@ class Post < ApplicationRecord
 
   validates_uniqueness_of :id
 
+  # don't allow mass creation of posts in a reasonable ammount of time
+  validate :min_time_delay, on: :create
+
   after_create do
     self.touch(:interacted_at)
   end
@@ -214,5 +217,22 @@ class Post < ApplicationRecord
     as_json(
       include: {author: {methods: %i[full_name diaspora_handle], only: %i[full_name diaspora_handle]}}
     )
+  end
+
+  def min_time_delay
+    return unless author.local?
+    last_post = last_created_post
+    return unless last_post
+
+    return if last_post.created_at < 30.seconds.ago
+
+    logger.info "Post created too quickly"
+    errors.add(:base, "Post created too quickly")
+  end
+
+  def last_created_post
+    Post.where(author_id: author)
+           .order(created_at: :desc)
+           .first
   end
 end
