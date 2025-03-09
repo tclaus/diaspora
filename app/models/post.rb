@@ -18,8 +18,8 @@ class Post < ApplicationRecord
   include Diaspora::MentionsContainer
 
   include Elasticsearch::Model
-  after_save    { Workers::PostIndexer.perform_async({operation: "index", record_id: id }.stringify_keys)}
-  after_destroy { Workers::PostIndexer.perform_async({operation: "delete", record_id: id }.stringify_keys) }
+  after_save { Workers::PostIndexer.perform_async({operation: "index", record_id: id}.stringify_keys) }
+  after_destroy { Workers::PostIndexer.perform_async({operation: "delete", record_id: id}.stringify_keys) }
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
@@ -38,7 +38,7 @@ class Post < ApplicationRecord
 
   validates_uniqueness_of :id
 
-  # don't allow mass creation of posts in a reasonable ammount of time
+  # don't allow mass creation of posts in a reasonable amount of time
   validate :min_time_delay, on: :create
 
   after_create do
@@ -224,7 +224,8 @@ class Post < ApplicationRecord
     last_post = last_created_post
     return unless last_post
 
-    return if last_post.created_at < 30.seconds.ago
+    delay = calculate_delay
+    return if last_post.created_at < delay.seconds.ago
 
     logger.info "Post created too quickly"
     errors.add(:base, "Post created too quickly")
@@ -232,7 +233,22 @@ class Post < ApplicationRecord
 
   def last_created_post
     Post.where(author_id: author)
-           .order(created_at: :desc)
-           .first
+        .order(created_at: :desc)
+        .first
+  end
+
+  def calculate_delay
+    spam_score = author.spam_score
+
+    case spam_score
+    when 0
+      0
+    when 0.5..0.8
+      30
+    when 0.8..1
+      60
+    else
+      10
+    end
   end
 end
