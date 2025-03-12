@@ -39,7 +39,7 @@ class Post < ApplicationRecord
   validates_uniqueness_of :id
 
   # don't allow mass creation of posts in a reasonable amount of time
-  validate :min_time_delay, on: :create
+  validate :min_time_delay, on: :create, if: -> { Rails.env.production? }
 
   after_create do
     self.touch(:interacted_at)
