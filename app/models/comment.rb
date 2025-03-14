@@ -31,7 +31,7 @@ class Comment < ApplicationRecord
   validates :text, :presence => true, :length => {:maximum => 65535}
 
   # don't allow mass creation of comments in a reasonable ammount of time
-  validate :min_time_delay, on: :create
+  validate :min_time_delay, on: :create, if: -> { Rails.env.production? }
 
   has_many :reports, as: :item
   has_many :comments, foreign_key: :thread_parent_guid, primary_key: :guid

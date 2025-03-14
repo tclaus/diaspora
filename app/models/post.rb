@@ -18,8 +18,8 @@ class Post < ApplicationRecord
   include Diaspora::MentionsContainer
 
   include Elasticsearch::Model
-  after_save    { Workers::PostIndexer.perform_async({operation: "index", record_id: id }.stringify_keys)}
-  after_destroy { Workers::PostIndexer.perform_async({operation: "delete", record_id: id }.stringify_keys) }
+  after_save { Workers::PostIndexer.perform_async({operation: "index", record_id: id}.stringify_keys) }
+  after_destroy { Workers::PostIndexer.perform_async({operation: "delete", record_id: id}.stringify_keys) }
 
   has_many :participations, dependent: :delete_all, as: :target, inverse_of: :target
   has_many :participants, through: :participations, source: :author
@@ -37,6 +37,9 @@ class Post < ApplicationRecord
   belongs_to :open_graph_cache, optional: true
 
   validates_uniqueness_of :id
+
+  # don't allow mass creation of posts in a reasonable amount of time
+  validate :min_time_delay, on: :create, if: -> { Rails.env.production? }
 
   after_create do
     self.touch(:interacted_at)
@@ -214,5 +217,38 @@ class Post < ApplicationRecord
     as_json(
       include: {author: {methods: %i[full_name diaspora_handle], only: %i[full_name diaspora_handle]}}
     )
+  end
+
+  def min_time_delay
+    return unless author.local?
+    last_post = last_created_post
+    return unless last_post
+
+    delay = calculate_delay
+    return if last_post.created_at < delay.seconds.ago
+
+    logger.info "Post created too quickly"
+    errors.add(:base, "Post created too quickly")
+  end
+
+  def last_created_post
+    Post.where(author_id: author)
+        .order(created_at: :desc)
+        .first
+  end
+
+  def calculate_delay
+    spam_score = author.spam_score
+
+    case spam_score
+    when 0
+      0
+    when 0.5..0.8
+      30
+    when 0.8..1
+      60
+    else
+      10
+    end
   end
 end
