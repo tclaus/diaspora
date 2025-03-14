@@ -2,7 +2,7 @@
 
 
 namespace "comments" do
-  desc "Extract thread information from comments"
+  desc "Extract thread information from comment-signatures"
   task migrate_threaded: :environment do
     puts "Extracts threaded information from comments when fetched from a system that supports threaded comments"
     extract_and_migrate_threaded_information
@@ -27,20 +27,24 @@ namespace "comments" do
     end
   end
 
-  def extract_thread_parent_guid(possible_comment_to_migrate)
-    thread_parent_guid = possible_comment_to_migrate.additional_data[:thread_parent_guid]
-    if thread_parent_guid.present?
-      comment = possible_comment_to_migrate.comment
-      comment&.thread_parent_guid = thread_parent_guid
-      comment&.save(touch: false)
-    end
-  end
-
   def write_progress(migrated_comments)
     if migrated_comments % 100 == 0
       puts "Finished #{migrated_comments}"
     end
   end
 
+  def extract_thread_parent_guid(possible_comment_to_migrate)
+    thread_parent_guid = possible_comment_to_migrate.additional_data["thread_parent_guid"]
+    return unless thread_parent_guid.present?
+
+    update_thread_parent_guid(possible_comment_to_migrate.comment, thread_parent_guid)
+  end
+
+  def update_thread_parent_guid(comment, thread_parent_guid)
+    return unless comment
+
+    comment.thread_parent_guid = thread_parent_guid
+    comment.save(touch: false)
+  end
 end
 
