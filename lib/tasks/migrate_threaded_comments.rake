@@ -24,6 +24,7 @@ namespace "comments" do
 
       migrated_comments+=1
       write_progress(migrated_comments)
+      puts "Finished all. #{migrated_comments}"
     end
   end
 
@@ -34,7 +35,7 @@ namespace "comments" do
   end
 
   def extract_thread_parent_guid(possible_comment_to_migrate)
-    thread_parent_guid = possible_comment_to_migrate.additional_data["thread_parent_guid"]
+    thread_parent_guid = possible_comment_to_migrate.additional_data[:thread_parent_guid]
     return unless thread_parent_guid.present?
 
     update_thread_parent_guid(possible_comment_to_migrate.comment, thread_parent_guid)

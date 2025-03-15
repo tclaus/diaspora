@@ -33,8 +33,8 @@ module Diaspora
     config.autoload_paths      += %W[#{config.root}/app]
     config.autoload_once_paths += %W[#{config.root}/lib]
 
-    # Allow to decode Time from serialized columns
-    config.active_record.yaml_column_permitted_classes = [Time]
+    # Allow to decode Time and Symbols from serialized columns
+    config.active_record.yaml_column_permitted_classes = [Time, Symbol]
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
