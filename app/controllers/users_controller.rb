@@ -34,6 +34,15 @@ class UsersController < ApplicationController
     render :edit
   end
 
+  def import_profile
+    @user = current_user
+
+    if user_import_profile_params
+      import_user_profile(user_import_profile_params)
+    end
+  end
+
+
   def destroy
     if params[:user] && params[:user][:current_password] && current_user.valid_password?(params[:user][:current_password])
       current_user.close_account!
@@ -115,7 +124,14 @@ class UsersController < ApplicationController
 
   private
 
-  def user_params
+    def user_import_profile_params
+      params.fetch(:user).permit(
+              :exported_photos_file,
+              :export
+      )
+    end
+
+    def user_params
     params.fetch(:user).permit(
       :email,
       :language,
@@ -154,13 +170,26 @@ class UsersController < ApplicationController
       change_post_default(user_data)
     elsif user_data[:color_theme]
       change_settings(user_data, "users.update.color_theme_changed", "users.update.color_theme_not_changed")
-    elsif user_data[:export] || user_data[:exported_photos_file]
-      process_user_import_files(user_data)
-    elsif user_data[:stream_languages]
-      change_stream_languages(user_data[:stream_languages])
     else
       change_settings(user_data)
     end
+  end
+
+  def import_user_profile(user_data)
+    if user_data[:export] || user_data[:exported_photos_file]
+      update_importing_flag(user_data)
+      process_user_import_files(user_data)
+    end
+  end
+
+  def update_importing_flag(user_data)
+    @user.update(importing: true) if user_data[:export]
+    @user.update(importing_photos: true) if user_data[:exported_photos_file]
+  end
+
+  def reset_importing_flag(user_data)
+    @user.update(importing: false) if user_data[:export]
+    @user.update(importing_photos: false) if user_data[:exported_photos_file]
   end
 
   def change_password(password_params)
@@ -230,6 +259,7 @@ class UsersController < ApplicationController
       flash.now[:notice] = t("users.import.import_has_been_scheduled")
       Workers::ImportUser.perform_async(@user.id, import_files)
     else
+      reset_importing_flag(user_data)
       flash.now[:error] = t("users.import.import_has_no_files_received")
     end
   end

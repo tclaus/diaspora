@@ -14,8 +14,6 @@ const getFilename = function(files) {
   }
   return "";
 };
-const profileFileButton = document.getElementById("profile-file-btn");
-const profileFileChosen = document.getElementById("profile-file-chosen");
 
 $("#profile-file-btn").on("change", function() {
   profileFileChosen.text(getFilename(this.files));
@@ -35,3 +33,20 @@ $("#cancel-import").on("click", function() {
   photosFileChosen.text("");
 });
 
+$('#upload_profile_files').on('click', function(e) {
+  e.preventDefault();
+  $.ajax({
+    type: 'POST',
+    url: '/user/import_profile',
+    data: new FormData(e.target.form),
+    processData: false,
+    contentType: false,
+    complete: function () {
+      $('#importAccountModal').modal('hide');
+      location.reload();
+    },
+    error: function (xhr, status, error) {
+      alert('An error ocured: ' + error);
+    }
+  });
+});
