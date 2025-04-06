@@ -969,6 +969,8 @@ describe User, type: :model do
             otp_required_for_login
             otp_secret
             failed_attempts
+            importing
+            importing_photos
           ]
         )
       end
